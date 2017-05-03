@@ -1,0 +1,130 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<module version="1.0">
+
+  <!--  Configure to use French by default  -->
+  <application>
+    <locale-config>
+      <default-locale>fr</default-locale>
+      <supported-locale>fr</supported-locale>
+    </locale-config>
+    <message-bundle var='adafrMsg'>adafr</message-bundle>
+  </application>
+
+  <!--  When a user is created, send him a welcome message.  -->
+  <on-event name="user-create">
+    <action>#{userMail.send}</action>
+    <property name="template">/mail/welcome-message.xhtml</property>
+  </on-event>
+
+  <!--  When a user is created, add a permission to the wiki.  -->
+  <on-event name="user-create">
+    <action>#{permission.create}</action>
+    <property name="entity_type">awa_wiki_space</property>
+    <property name="entity_id">1</property>
+  </on-event>
+
+  <!--  When a user is created, add a permission to the blog.  -->
+  <on-event name="user-create">
+    <action>#{permission.create}</action>
+    <property name="entity_type">awa_blog</property>
+    <property name="entity_id">1</property>
+  </on-event>
+
+  <managed-bean>
+    <description>Bean used to create a new permission for the current user.</description>
+    <managed-bean-name>permission</managed-bean-name>
+    <managed-bean-class>AWA.Permissions.Beans.Permission_Bean</managed-bean-class>
+    <managed-bean-scope>request</managed-bean-scope>
+  </managed-bean>
+
+  <managed-bean>
+    <description>This bean describes a blog post for the creation or the update</description>
+    <managed-bean-name>newsList</managed-bean-name>
+    <managed-bean-class>AWA.Blogs.Beans.Post_List_Bean</managed-bean-class>
+    <managed-bean-scope>request</managed-bean-scope>
+    <managed-property>
+      <property-name>tag</property-name>
+      <property-class>String</property-class>
+      <value>Actualités</value>
+    </managed-property>
+  </managed-bean>
+
+  <managed-bean>
+    <description>Les posts les plus récents</description>
+    <managed-bean-name>recentPostList</managed-bean-name>
+    <managed-bean-class>AWA.Blogs.Beans.Post_List_Bean</managed-bean-class>
+    <managed-bean-scope>request</managed-bean-scope>
+    <managed-property>
+      <property-name>page_size</property-name>
+      <property-class>Integer</property-class>
+      <value>3</value>
+    </managed-property>
+  </managed-bean>
+
+  <managed-bean>
+    <description>A wiki block displayed on all public pages.</description>
+    <managed-bean-name>wikiView</managed-bean-name>
+    <managed-bean-class>AWA.Wikis.Beans.Wiki_View_Bean</managed-bean-class>
+    <managed-bean-scope>request</managed-bean-scope>
+    <managed-property>
+      <property-name>image_prefix</property-name>
+      <property-class>String</property-class>
+      <value>#{contextPath}/images/</value>
+    </managed-property>
+    <managed-property>
+      <property-name>page_prefix</property-name>
+      <property-class>String</property-class>
+      <value>#{contextPath}/wikis/view/</value>
+    </managed-property>
+    <managed-property>
+      <property-name>page_prefix</property-name>
+      <property-class>String</property-class>
+      <value>#{contextPath}/wikis/view/</value>
+    </managed-property>
+  </managed-bean>
+
+  <filter-mapping>
+    <filter-name>service</filter-name>
+    <url-pattern>/index.html</url-pattern>
+    <url-pattern>/actualites.html</url-pattern>
+    <url-pattern>/contact.html</url-pattern>
+    <url-pattern>/ressources.html</url-pattern>
+  </filter-mapping>
+
+  <context-param>
+    <param-name>no-cache.header.cache-control</param-name>
+    <param-value>no-cache</param-value>
+    <description>
+       Add a Cache-Control: no-cache header in the response.
+    </description>
+  </context-param>
+
+  <!-- Add a Cache-Control: no-cache header in the response.  -->
+  <filter-mapping>
+    <filter-name>no-cache</filter-name>
+    <url-pattern>/wikis/*</url-pattern>
+    <url-pattern>/blogs/*</url-pattern>
+    <url-pattern>/microblog/*</url-pattern>
+    <url-pattern>/reviews/*</url-pattern>
+    <url-pattern>/workspaces/*</url-pattern>
+    <url-pattern>/questions/*</url-pattern>
+    <url-pattern>/storages/*</url-pattern>
+    <url-pattern>/index.html</url-pattern>
+    <url-pattern>/actualites.html</url-pattern>
+    <url-pattern>/contact.html</url-pattern>
+  </filter-mapping>
+
+  <servlet-mapping>
+    <servlet-name>measures</servlet-name>
+    <url-pattern>/statistics.xml</url-pattern>
+  </servlet-mapping>
+
+  <!-- Serve PDF, SVG and ICO files.  -->
+  <servlet-mapping>
+    <servlet-name>files</servlet-name>
+    <url-pattern>*.pdf</url-pattern>
+    <url-pattern>*.svg</url-pattern>
+    <url-pattern>*.ico</url-pattern>
+  </servlet-mapping>
+
+</module>
