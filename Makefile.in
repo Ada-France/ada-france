@@ -1,0 +1,23 @@
+NAME=adafr
+LIBNAME=lib
+
+PLUGINS=
+
+include rules.mk
+
+# Model generation arguments with Dynamo
+# --package XXX.XXX.Models db uml/xxx.zargo
+DYNAMO_ARGS=db
+
+package:
+	$(DYNAMO) dist $(distdir) package.xml
+
+post-build:
+	for i in  ; do \
+	   $(MAKE) -C plugins/$$i ; \
+	done
+
+post-generate:
+	for i in  ; do \
+	   $(MAKE) -C plugins/$$i generate ; \
+	done
