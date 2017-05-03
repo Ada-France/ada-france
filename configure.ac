@@ -9,14 +9,15 @@ ADAFR_MAJOR_VERSION=0
 ADAFR_MINOR_VERSION=1
 ADAFR_MICRO_VERSION=0
 ADAFR_VERSION=$ADAFR_MAJOR_VERSION.$ADAFR_MINOR_VERSION.$ADAFR_MICRO_VERSION
+
 AM_GNAT_CHECK_GPRBUILD
+AM_GNAT_CHECK_INSTALL
+
 # checking for local tools
 AC_PROG_CC
 AC_PROG_MAKE_SET
 AC_PROG_INSTALL
 AC_PROG_LN_S
-
-AC_CHECK_PROGS(GNATMAKE, gnatmake, "")
 
 # Set the version number of GtkAda
 AC_SUBST(ADAFR_VERSION)
@@ -33,6 +34,7 @@ AC_MSG_CHECKING([number of processors])
 NR_CPUS=`getconf _NPROCESSORS_CONF 2>/dev/null || getconf NPROCESSORS_CONF 2>/dev/null || echo 1`
 AC_MSG_RESULT($NR_CPUS)
 AC_SUBST(NR_CPUS)
+
 ##########################################
 # Check to enable/disable shared library
 ##########################################
@@ -105,5 +107,5 @@ AM_GNAT_FIND_PROJECT([ada-awa],[Ada Web Application],[awa],
 AC_SUBST(AWA_DIR)
 
 AC_OUTPUT(
-Makefile adafr.gpr tests.gpr rules.mk
+Makefile adafr.gpr rules.mk
 )
