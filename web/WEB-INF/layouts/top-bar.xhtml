@@ -1,0 +1,41 @@
+<nav xmlns:c="http://java.sun.com/jstl/core"
+     class="navbar navbar-default">
+  <div class="navbar-header">
+      <a class="navbar-brand" href="#{contextPath}/index.html">Ada-France</a>
+      <a class="navbar-brand" href="https://twitter.com/adafrance" rel="nofollow" target="_blank"
+         title="Ada-France sur Twitter">
+          <img src="#{contextPath}/images/Twitter_Social_Icon_Rounded_Square_Color.png" alt="Twitter" width="29" height="29"/>
+      </a>
+      <a class="navbar-brand" href="https://www.facebook.com/adafrance" rel="nofollow" target="_blank"
+         title="Ada-France sur Facebook">
+          <img src="#{contextPath}/images/FB-f-Logo__blue_29.png" alt="Facebook" width="29" height="29"/>
+      </a>
+    <a class="navbar-brand" href="https://groups.google.com/forum/?fromgroups#%21forum/fr.comp.lang.ada"
+       title="Groupe fr.comp.lang.ada" rel="nofollow" target="_blank">
+        <img src="#{contextPath}/images/logo_groups_128px.png"  alt="Facebook" width="29" height="29"/>
+    </a>
+  </div>
+  <div class="collapse navbar-collapse navbar-right" id="mainmenu">
+    <ul class="nav navbar-nav">
+        <c:choose>
+            <c:when test="#{user.isLogged}">
+                <li>
+                    <a href="#{contextPath}/workspaces/main.html"
+                       title="#{layoutMsg.layout_workspace_title}">
+                        Administration
+                    </a>
+                </li>
+                <li id='awa-logout'>
+                                        <a href="#{contextPath}/auth/logout.html"
+                                           title="#{layoutMsg.layout_logout_title}">
+                                        #{layoutMsg.layout_logout_label}
+                                    </a>
+                </li>
+            </c:when>
+        </c:choose>
+      <li><a href="#{contextPath}/wikis/view/1/Main">Ressources</a></li>
+      <li><a href="#{contextPath}/actualites.html">Actualités</a></li>
+      <li><a href="#{contextPath}/contact.html">Contact</a></li>
+    </ul>
+  </div>
+</nav>
