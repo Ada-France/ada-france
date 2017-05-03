@@ -1,0 +1,37 @@
+<ui:composition xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:c="http://java.sun.com/jstl/core"
+                template="/WEB-INF/layouts/layout.xhtml">
+    <ui:param name="title" value="Ada France"/>
+    <ui:param name="pageStyle" value=""/>
+    <!-- Main page body -->
+    <ui:define name="pageBody">
+        <div id='awa-content'>
+            <div id="wrap">
+                <div class="main">
+                    <div class="container">
+                        <h1>Contact</h1>
+                    </div>
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <address>
+                                    <strong>Ada france</strong>
+                                    <span>c/o J-P. Rosen</span>
+                                    <span>115, avenue du Maine</span>
+                                    <span>75014 Paris</span>
+                                    <span>France</span>
+                                </address>
+                                <address>
+                                    <strong>Email</strong>
+                                    <a href="mailto:contact@ada-france.org">contact@ada-france.org</a>
+                                </address>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </ui:define>
+</ui:composition>
