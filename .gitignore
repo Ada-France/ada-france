@@ -1,0 +1,10 @@
+.initialized
+*~
+*.log
+*.db
+config.status
+adafr.properties
+adafr.gpr
+Makefile
+autom4te.cache
+rules.mk
