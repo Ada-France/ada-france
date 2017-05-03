@@ -17,7 +17,7 @@
 -----------------------------------------------------------------------
 with Ada.Exceptions;
 
-with Util.Log.loggers;
+with Util.Log.Loggers;
 
 with AWS.Config.Set;
 with ASF.Server.Web;
@@ -56,7 +56,7 @@ begin
    delay 365.0 * 24.0 * 3600.0;
    App.Close;
 exception
-   when E: others =>
+   when E : others =>
       Log.Error ("Exception in server: " &
                  Ada.Exceptions.Exception_Name (E) & ": " &
                  Ada.Exceptions.Exception_Message (E));

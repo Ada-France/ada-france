@@ -1,5 +1,5 @@
 -----------------------------------------------------------------------
---  adafr -- 
+--  adafr -- Ada France site
 -----------------------------------------------------------------------
 --  Copyright (C) 2017 Ada France
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
