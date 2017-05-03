@@ -1,0 +1,3 @@
+[submodule "ada-awa"]
+	path = ada-awa
+	url = git@github.com:stcarrez/ada-awa.git
