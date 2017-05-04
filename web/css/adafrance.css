@@ -75,6 +75,9 @@ address span {
 }
 
 /* Adaptations from AWA */
+.awa-login-yahoo, .awa-login-orange {
+    display: none;
+}
 div.awa-error {
    margin-top: 1em;
 }
