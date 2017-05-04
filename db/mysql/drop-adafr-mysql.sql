@@ -36,13 +36,22 @@ DROP TABLE IF EXISTS `awa_comment`;
 DROP TABLE IF EXISTS `awa_workspace_member`;
 DROP TABLE IF EXISTS `awa_workspace_feature`;
 DROP TABLE IF EXISTS `awa_workspace`;
+DROP TABLE IF EXISTS `awa_invitation`;
 /* Copied from awa-drop-mysql.sql*/
 /* File generated automatically by dynamo */
 DROP TABLE IF EXISTS `awa_user`;
 DROP TABLE IF EXISTS `awa_session`;
 DROP TABLE IF EXISTS `awa_email`;
 DROP TABLE IF EXISTS `awa_access_key`;
+DROP TABLE IF EXISTS `awa_permission`;
 DROP TABLE IF EXISTS `awa_acl`;
+DROP TABLE IF EXISTS `awa_oauth_session`;
+DROP TABLE IF EXISTS `awa_callback`;
+DROP TABLE IF EXISTS `awa_application`;
 DROP TABLE IF EXISTS `awa_queue`;
 DROP TABLE IF EXISTS `awa_message_type`;
 DROP TABLE IF EXISTS `awa_message`;
+/* Copied from ado-drop-mysql.sql*/
+/* File generated automatically by dynamo */
+DROP TABLE IF EXISTS `sequence`;
+DROP TABLE IF EXISTS `entity_type`;
