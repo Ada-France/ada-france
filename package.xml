@@ -3,8 +3,13 @@
    <dist>
      <install mode='copy'>
          <include name="bin/*-server"/>
+         <include name="bin/*.sh"/>
+         <include name="etc/init.d/*.sh"/>
          <include name="config/*.xml"/>
-         <include name="adafr*.properties"/>
+         <fileset dir="prod">
+            <include name="adafr*.properties"/>
+            <include name="dynamo.xml"/>
+         </fileset>
      </install>
      <install mode='exec'>
        <command>chmod +x #{dst}</command>
@@ -51,7 +56,7 @@
        <include name="bin/*-server"/>
      </install>
      <install mode='exec' dir='web'>
-       <command>yui-compressor --type js --charset UTF-8 -o #{dst} #{src}</command>
+       <command>closure --charset UTF-8 #{src} --js_output_file #{dst}</command>
        <fileset dir="web">
          <include name="**/*.js"/>
        </fileset>
@@ -63,7 +68,7 @@
        </fileset>
      </install>
      <install mode='exec' dir='web'>
-       <command>pngcrush -q -fix -no_cc -rem alla -reduce -brute #{src} #{dst}</command>
+       <command>pngcrush -q #{src} #{dst}</command>
        <fileset dir="web">
          <include name="**/*.png"/>
        </fileset>
