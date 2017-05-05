@@ -10,7 +10,9 @@ include rules.mk
 DYNAMO_ARGS=db
 
 package:
+	rm -rf $(distdir)
 	$(DYNAMO) dist $(distdir) package.xml
+	tar czf $(DIST_FILE) $(distdir)
 
 post-build:
 	for i in  ; do \
