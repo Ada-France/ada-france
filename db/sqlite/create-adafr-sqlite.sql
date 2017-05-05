@@ -178,6 +178,8 @@ CREATE TABLE awa_access_key (
   `id` BIGINT NOT NULL,
   /*  */
   `version` INTEGER NOT NULL,
+  /* the access key type. */
+  `kind` TINYINT NOT NULL,
   /*  */
   `user_id` BIGINT NOT NULL,
   PRIMARY KEY (`id`)
@@ -284,6 +286,8 @@ CREATE TABLE awa_invitation (
   `invitee_id` BIGINT ,
   /*  */
   `inviter_id` BIGINT NOT NULL,
+  /*  */
+  `member_id` BIGINT NOT NULL,
   PRIMARY KEY (`id`)
 );
 /* The workspace controls the features available in the application
@@ -312,7 +316,8 @@ CREATE TABLE awa_workspace_feature (
   PRIMARY KEY (`id`)
 );
 /* The workspace member indicates the users who
-are part of the workspace. */
+are part of the workspace. The join_date is NULL when
+a user was invited but has not accepted the invitation. */
 CREATE TABLE awa_workspace_member (
   /*  */
   `id` BIGINT NOT NULL,
