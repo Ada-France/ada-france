@@ -13,6 +13,8 @@
 NAME=adafr
 ADAFR_DIR=/var/lib/$NAME
 ADAFR_USER=root
+ADAFR_LOG=/var/log
+ADAFR_RUN=/var/run
 
 # Read configuration variable file if it is present
 [ -r /etc/default/$NAME ] && . /etc/default/$NAME
@@ -21,12 +23,13 @@ DAEMON=daemon
 
 start_server() {
 
-  $DAEMON --name $NAME --respawn --delay=60 --inherit --user $ADAFR_USER \
-      --pidfile /var/run/$NAME.pid --output /var/log/$NAME.log $ADAFR_DIR/adafr-server.sh
+  $DAEMON --name $NAME --respawn --delay=60 --inherit \
+      --pidfile $ADAFR_RUN/$NAME.pid --output $ADAFR_LOG/$NAME.log \
+      --user $ADAFR_USER $ADAFR_DIR/adafr-server.sh
 }
 
 stop_server() {
-  $DAEMON --name $NAME --stop --pidfile /var/run/$NAME.pid
+  $DAEMON --name $NAME --stop --pidfile $ADAFR_LOG/$NAME.pid
 }
 
 case $1 in
