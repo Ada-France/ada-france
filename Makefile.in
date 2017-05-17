@@ -15,11 +15,15 @@ package:
 	tar czf $(DIST_FILE) $(distdir)
 
 post-build:
+ifneq (${PLUGINS},)
 	for i in  ; do \
 	   $(MAKE) -C plugins/$$i ; \
 	done
+endif
 
 post-generate:
+ifneq (${PLUGINS},)
 	for i in  ; do \
 	   $(MAKE) -C plugins/$$i generate ; \
 	done
+endif
