@@ -6,7 +6,7 @@ dnl AM_MAINTAINER_MODE
 
 # Current release settings
 ADAFR_MAJOR_VERSION=0
-ADAFR_MINOR_VERSION=1
+ADAFR_MINOR_VERSION=2
 ADAFR_MICRO_VERSION=0
 ADAFR_VERSION=$ADAFR_MAJOR_VERSION.$ADAFR_MINOR_VERSION.$ADAFR_MICRO_VERSION
 
@@ -47,7 +47,7 @@ AM_GNAT_FIND_PROJECT([ada-util],[Ada Utility Library],[util],
   [git@github.com:stcarrez/ada-util.git],
   [Building adafr requires the Ada Utility Library.],
   [
-    UTIL_DIR=
+    UTIL_DIR=${gnat_project_dir_util}
   ])
 AC_SUBST(UTIL_DIR)
 
@@ -58,7 +58,7 @@ AM_GNAT_FIND_PROJECT([ada-el],[Ada Expression Language Library],[el],
   [git@github.com:stcarrez/ada-el.git],
   [Building adafr requires the Ada EL Library.],
   [
-    EL_DIR=
+    EL_DIR=${gnat_project_dir_el}
   ])
 AC_SUBST(EL_DIR)
 
@@ -69,7 +69,7 @@ AM_GNAT_FIND_PROJECT([ada-asf],[Ada Server Faces],[asf],
   [git@github.com:stcarrez/ada-asf.git],
   [Building adafr requires the Ada Server Faces Library.],
   [
-    ASF_DIR=
+    ASF_DIR=${gnat_project_dir_asf}
   ])
 AC_SUBST(ASF_DIR)
 
@@ -80,7 +80,7 @@ AM_GNAT_FIND_PROJECT([ada-security],[Ada Security Library],[security],
   [git@github.com:stcarrez/ada-security.git],
   [Building adafr requires the Ada Security Library.],
   [
-    SECURITY_DIR=
+    SECURITY_DIR=${gnat_project_dir_security}
   ])
 AC_SUBST(SECURITY_DIR)
 
@@ -91,9 +91,20 @@ AM_GNAT_FIND_PROJECT([ada-ado],[Ada Database Objects],[ado],
   [git@github.com:stcarrez/ada-ado.git],
   [Building adafr requires the Ada Database Objects Library.],
   [
-    ADO_DIR=
+    ADO_DIR=${gnat_project_dir_ado}
   ])
 AC_SUBST(ADO_DIR)
+
+##########################################
+# Ada Wiki library
+##########################################
+AM_GNAT_FIND_PROJECT([ada-wiki],[Ada Wiki],[wiki],
+  [git@github.com:stcarrez/ada-wiki.git],
+  [Building hyperion requires the Ada Wiki Library.],
+  [
+    WIKI_DIR=${gnat_project_dir_wiki}
+  ])
+AC_SUBST(WIKI_DIR)
 
 ##########################################
 # Ada Web Application library
@@ -102,10 +113,11 @@ AM_GNAT_FIND_PROJECT([ada-awa],[Ada Web Application],[awa],
   [git@github.com:stcarrez/ada-awa.git],
   [Building adafr requires the Ada Web Application Library.],
   [
-    AWA_DIR=
+    AWA_DIR=${gnat_project_dir_awa}
   ])
 AC_SUBST(AWA_DIR)
 
+AM_UTIL_CHECK_INSTALL
 AC_OUTPUT(
 Makefile adafr.gpr rules.mk
 )
