@@ -41,6 +41,10 @@
 <script type="text/javascript" src="#{jquery.uiPath}widget.js"></script>
 <script type="text/javascript" src="#{jquery.uiPath}position.js"></script>
 <script type="text/javascript" src="#{jquery.uiPath}mouse.js"></script>
+<script type="text/javascript" src="#{contextPath}/js/asf.js"></script>
+<script type="text/javascript" src="#{contextPath}/js/asf-message.js"></script>
+<script type="text/javascript" src="#{contextPath}/js/asf-popup.js"></script>
+<c:if test="#{user.isLogged}">
 <script type="text/javascript" src="#{jquery.uiPath}draggable.js"></script>
 <script type="text/javascript" src="#{jquery.uiPath}resizable.js"></script>
 <script type="text/javascript" src="#{jquery.uiPath}sortable.js"></script>
@@ -57,16 +61,13 @@
 <script type="text/javascript" src="#{contextPath}/js/jquery.flot.js"></script>
 <script type="text/javascript" src="#{contextPath}/js/jquery.flot.stack.js"></script>
 <script type="text/javascript" src="#{contextPath}/js/jquery.flot.pie.js"></script>
-<script type="text/javascript" src="#{contextPath}/js/asf.js"></script>
 <script type="text/javascript" src="#{contextPath}/js/asf-widgets.js"></script>
 <script type="text/javascript" src="#{contextPath}/js/asf-list.js"></script>
 <script type="text/javascript" src="#{contextPath}/js/asf-editable.js"></script>
-<script type="text/javascript" src="#{contextPath}/js/asf-message.js"></script>
-<script type="text/javascript" src="#{contextPath}/js/asf-popup.js"></script>
 <script type="text/javascript" src="#{contextPath}/js/markedit/showdown.js"></script>
 <script type="text/javascript" src="#{contextPath}/js/markedit/jquery.markedit.js"></script>
 <script type="text/javascript" src="#{contextPath}/js/awa-storages.js"></script>
-<script type="text/javascript" src="#{contextPath}/js/awa-votes.js"></script>
+</c:if>
 <ui:insert name="pageScript"/>
 <util:flush/>
 <!--DEV_START-->
