@@ -1,4 +1,5 @@
 <nav xmlns:c="http://java.sun.com/jstl/core"
+     xmlns:auth="http://code.google.com/p/ada-awa/auth"
      class="navbar navbar-default">
   <div class="navbar-header">
       <a class="navbar-brand" href="#{contextPath}/index.html">Ada-France</a>
@@ -19,12 +20,14 @@
     <ul class="nav navbar-nav">
         <c:choose>
             <c:when test="#{user.isLogged}">
-                <li>
-                    <a href="#{contextPath}/workspaces/main.html"
-                       title="#{layoutMsg.layout_workspace_title}">
-                        Administration
-                    </a>
-                </li>
+                <c:if test="#{auth:hasPermission('blog-create-post',1)}">
+                    <li>
+                        <a href="#{contextPath}/workspaces/main.html"
+                           title="#{layoutMsg.layout_workspace_title}">
+                            Administration
+                        </a>
+                    </li>
+                </c:if>
                 <li id='awa-logout'>
                                         <a href="#{contextPath}/auth/logout.html"
                                            title="#{layoutMsg.layout_logout_title}">
