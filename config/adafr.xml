@@ -16,18 +16,31 @@
     <property name="template">/mail/welcome-message.xhtml</property>
   </on-event>
 
-  <!--  When a user is created, add a permission to the wiki.  -->
-  <on-event name="user-create">
+  <!--  When a user is created and has accepted the invitation, add a permission to the wiki.  -->
+  <on-event name="accept-invitation">
     <action>#{permission.create}</action>
     <property name="entity_type">awa_wiki_space</property>
     <property name="entity_id">1</property>
+    <property name="workspace_id">1</property>
+    <property name="permission">wiki-page-create,wiki-page-update,wiki-page-delete,wiki-page-view,wiki-space-delete,wiki-space-update</property>
   </on-event>
 
-  <!--  When a user is created, add a permission to the blog.  -->
-  <on-event name="user-create">
+  <!--  When a user is created and has accepted the invitation, add a permission to the blog.  -->
+  <on-event name="accept-invitation">
     <action>#{permission.create}</action>
     <property name="entity_type">awa_blog</property>
     <property name="entity_id">1</property>
+    <property name="workspace_id">1</property>
+    <property name="permission">blog-create-post,blog-delete-post,blog-add-comment,blog-publish-comment,blog-delete-comment,blog-update-post</property>
+  </on-event>
+
+  <!--  When a user is created and has accepted the invitation, add a permission for the storage space.  -->
+  <on-event name="accept-invitation">
+    <action>#{permission.create}</action>
+    <property name="entity_type">awa_workspace</property>
+    <property name="entity_id">1</property>
+    <property name="workspace_id">1</property>
+    <property name="permission">storage-create,storage-delete,folder-create</property>
   </on-event>
 
   <managed-bean>
@@ -119,12 +132,68 @@
     <url-pattern>/statistics.xml</url-pattern>
   </servlet-mapping>
 
-  <!-- Serve PDF, SVG and ICO files.  -->
+  <!-- Serve PDF and ICO files.  -->
   <servlet-mapping>
     <servlet-name>files</servlet-name>
     <url-pattern>*.pdf</url-pattern>
-    <url-pattern>*.svg</url-pattern>
     <url-pattern>*.ico</url-pattern>
   </servlet-mapping>
+
+  <!-- Security roles used by the Application -->
+  <security-role>
+    <role-name>Owner</role-name>
+  </security-role>
+
+  <security-role>
+    <role-name>Member</role-name>
+  </security-role>
+
+  <security-role>
+    <role-name>Invitee</role-name>
+  </security-role>
+
+  <!-- Wiki permissions granted to roles -->
+  <role-permission>
+    <name>wiki-page-create</name>
+    <role>Member</role>
+    <role>Owner</role>
+  </role-permission>
+
+  <role-permission>
+    <name>wiki-page-delete</name>
+    <role>Member</role>
+    <role>Owner</role>
+  </role-permission>
+
+  <role-permission>
+    <name>wiki-page-update</name>
+    <role>Member</role>
+    <role>Owner</role>
+  </role-permission>
+
+  <role-permission>
+    <name>wiki-page-view</name>
+    <role>Member</role>
+    <role>Owner</role>
+  </role-permission>
+
+  <!-- Blog permission granted to roles -->
+  <role-permission>
+    <name>blog-create-post</name>
+    <role>Member</role>
+    <role>Owner</role>
+  </role-permission>
+
+  <role-permission>
+    <name>blog-delete-post</name>
+    <role>Member</role>
+    <role>Owner</role>
+  </role-permission>
+
+  <role-permission>
+    <name>blog-update-post</name>
+    <role>Member</role>
+    <role>Owner</role>
+  </role-permission>
 
 </module>
