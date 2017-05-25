@@ -17,6 +17,7 @@
 <ui:composition template="/WEB-INF/layouts/layout.xhtml"
                 xmlns:ui="http://java.sun.com/jsf/facelets"
                 xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:auth="http://code.google.com/p/ada-awa/auth"
                 xmlns:c="http://java.sun.com/jstl/core"
                 xmlns:u="http://code.google.com/p/ada-asf/util"
                 xmlns:h="http://java.sun.com/jsf/html">
@@ -25,30 +26,37 @@
     <!-- Main page body -->
     <ui:define name="pageBody">
         <div id='awa-content' class="container_12 workspace-main">
-            <h2>Blogs</h2>
-            <ui:include src="/blogs/admin/lists/menu-list.xhtml"/>
-            <h2>Documents</h2>
-            <ui:include src="/storages/views/storage-nav.xhtml"/>
-            <h2>Wikis</h2>
-            <h:panelGroup rendered="#{adminWiki.wikis.count != 0}">
-                <ui:include src="/wikis/views/wiki-nav.xhtml">
-                    <ui:param name="wikiSpaceId" value="#{adminWiki.id}"/>
-                    <ui:param name="page_link" value="/grid"/>
-                </ui:include>
-            </h:panelGroup>
-            <h:panelGroup rendered="#{adminWiki.wikis.count == 0}">
-                <ul class='awa-nav'>
-                    <li class="awa-nav-left">
-                        <a href="#{contextPath}/wikis/setup.html"
-                           title="#{wikiMsg.wiki_admin_create_wiki_tooltip}">
-                            <img src="#{contextPath}/images/wikis/wiki-create.png" alt="#{wikiMsg.wiki_admin_create_wiki_label}"/>
-                            <span>#{wikiMsg.wiki_admin_create_wiki_label}</span>
-                        </a>
-                    </li>
-                </ul>
-            </h:panelGroup>
-            <h2>Members</h2>
-            <ui:include src="/workspaces/views/workspace-nav.xhtml"/>
+            <c:choose>
+                <c:when test="#{auth:hasPermission('blog-create-post',1)}">
+                    <h2>Billets</h2>
+                    <ui:include src="/blogs/admin/lists/menu-list.xhtml"/>
+                    <h2>Documents</h2>
+                    <ui:include src="/storages/views/storage-nav.xhtml"/>
+                    <h2>Wikis</h2>
+                    <h:panelGroup rendered="#{adminWiki.wikis.count != 0}">
+                        <ui:include src="/wikis/views/wiki-nav.xhtml">
+                            <ui:param name="wikiSpaceId" value="#{adminWiki.id}"/>
+                            <ui:param name="page_link" value="/grid"/>
+                        </ui:include>
+                    </h:panelGroup>
+                    <h:panelGroup rendered="#{adminWiki.wikis.count == 0}">
+                        <ul class='awa-nav'>
+                            <li class="awa-nav-left">
+                                <a href="#{contextPath}/wikis/setup.html"
+                                   title="#{wikiMsg.wiki_admin_create_wiki_tooltip}">
+                                    <img src="#{contextPath}/images/wikis/wiki-create.png" alt="#{wikiMsg.wiki_admin_create_wiki_label}"/>
+                                    <span>#{wikiMsg.wiki_admin_create_wiki_label}</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </h:panelGroup>
+                    <h2>Membress</h2>
+                    <ui:include src="/workspaces/views/workspace-nav.xhtml"/>
+                </c:when>
+                <c:otherwise>
+                    Vous n'avez pas accès à cette page.
+                </c:otherwise>
+            </c:choose>
         </div>
     </ui:define>
 </ui:composition>
