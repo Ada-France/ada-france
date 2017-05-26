@@ -43,6 +43,15 @@
     <property name="permission">storage-create,storage-delete,folder-create</property>
   </on-event>
 
+  <!--  When a user is created and has accepted the invitation, give him the right to manage other users.  -->
+  <on-event name="accept-invitation">
+    <action>#{permission.create}</action>
+    <property name="entity_type">awa_workspace</property>
+    <property name="entity_id">1</property>
+    <property name="workspace_id">1</property>
+    <property name="permission">workspace-invite-user,workspace-delete-user</property>
+  </on-event>
+
   <managed-bean>
     <description>Bean used to create a new permission for the current user.</description>
     <managed-bean-name>permission</managed-bean-name>
