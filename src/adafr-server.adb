@@ -18,6 +18,7 @@
 with Ada.Exceptions;
 
 with Util.Log.Loggers;
+with Util.Http.Clients.Curl;
 
 with AWS.Config.Set;
 with ASF.Server.Web;
@@ -48,6 +49,7 @@ procedure Adafr.Server is
    end Configure;
 
 begin
+   Util.Http.Clients.Curl.Register;
    WS.Configure (Configure'Access);
    WS.Start;
    Log.Info ("Connect you browser to: http://localhost:8080{0}/index.html",
