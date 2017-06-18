@@ -110,9 +110,27 @@
     <url-pattern>/index.html</url-pattern>
     <url-pattern>/actualites.html</url-pattern>
     <url-pattern>/contact.html</url-pattern>
-    <url-pattern>/ressources.html</url-pattern>
   </filter-mapping>
 
+  <filter-mapping>
+    <filter-name>auth-filter</filter-name>
+    <url-pattern>/index.html</url-pattern>
+    <url-pattern>/actualites.html</url-pattern>
+    <url-pattern>/contact.html</url-pattern>
+    <url-pattern>/blogs/post.html</url-pattern>
+  </filter-mapping>
+
+  <url-policy>
+    <description>
+       Security rule to allow anonymous users to display the main page.
+    </description>
+    <permission>anonymous</permission>
+    <url-pattern>/index.html</url-pattern>
+    <url-pattern>/actualites.html</url-pattern>
+    <url-pattern>/contact.html</url-pattern>
+    <url-pattern>/blogs/post.html</url-pattern>
+  </url-policy>
+                                                      
   <context-param>
     <param-name>no-cache.header.cache-control</param-name>
     <param-value>no-cache</param-value>
