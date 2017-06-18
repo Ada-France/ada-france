@@ -110,6 +110,7 @@
     <url-pattern>/index.html</url-pattern>
     <url-pattern>/actualites.html</url-pattern>
     <url-pattern>/contact.html</url-pattern>
+    <url-pattern>/statuts.html</url-pattern>
   </filter-mapping>
 
   <filter-mapping>
@@ -117,7 +118,7 @@
     <url-pattern>/index.html</url-pattern>
     <url-pattern>/actualites.html</url-pattern>
     <url-pattern>/contact.html</url-pattern>
-    <url-pattern>/blogs/post.html</url-pattern>
+    <url-pattern>/statuts.html</url-pattern>
   </filter-mapping>
 
   <url-policy>
