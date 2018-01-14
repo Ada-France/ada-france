@@ -4,11 +4,8 @@ body {
     line-height: 1.42857143;
     background-color: #fff;
 }
-#awa-page {
-    min-height: inherit;
-}
-#awa-content {
-    padding-top: 0;
+.jumbotron {
+    padding: 0;
 }
 .navbar {
     margin-bottom: 0px;
@@ -74,7 +71,38 @@ address span {
 .spip {
 }
 
+/* Page version.html */
+dl.adafr-version {
+    float: left;
+    width: 95%;
+    padding: 1%;
+    margin-bottom: 1em;
+    margin-top: 1em;
+}
+dl.adafr-version dt {
+    clear: both;
+    float: left;
+    width: 20%;
+    padding-bottom: 0.5em;
+}
+dl.adafr-version dd {
+    float: left;
+    width: 69%;
+}
+
 /* Adaptations from AWA */
+#awa-page {
+    min-height: inherit;
+}
+.adafr-index #awa-content {
+    padding-top: 0;
+}
+#awa-content {
+    padding-top: 2em;
+}
+dl.awa-error dt label, dl.asf-error dt label {
+    color: #555;
+}
 .awa-login-yahoo, .awa-login-orange {
     display: none;
 }
@@ -161,4 +189,22 @@ div.post-comments h3 {
         width: 100%;
         padding: 0;
     }
+}
+.invite-message {
+    float: left;
+    width: 100%;
+}
+div.awa-login .invite-message p {
+    width: 98%;
+    border: 1px solid #ccc;
+    margin: 1%;
+    padding: 1%;
+    font-size: 1.2em;
+}
+ul.openid-invite {
+    margin: 0;
+}
+ul.openid-invite li {
+    margin-top: 10px;
+    margin-bottom: 10px;
 }
