@@ -1,0 +1,115 @@
+<!-- Information about software version
+  -  Copyright (C) 2018 Stephane Carrez
+  -  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
+  -
+  -  Licensed under the Apache License, Version 2.0 (the "License");
+  -  you may not use this file except in compliance with the License.
+  -  You may obtain a copy of the License at
+  -
+  -      http://www.apache.org/licenses/LICENSE-2.0
+  -
+  -  Unless required by applicable law or agreed to in writing, software
+  -  distributed under the License is distributed on an "AS IS" BASIS,
+  -  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  -  See the License for the specific language governing permissions and
+  -  limitations under the License.
+  -->
+<ui:composition template="/WEB-INF/layouts/anonymous.xhtml"
+        xmlns:ui="http://java.sun.com/jsf/facelets"
+        xmlns:f="http://java.sun.com/jsf/core"
+        xmlns:w="http://code.google.com/p/ada-asf/widget"
+        xmlns:c="http://java.sun.com/jstl/core"
+	    xmlns:u="http://code.google.com/p/ada-asf/util"
+        xmlns:h="http://java.sun.com/jsf/html">
+    <ui:param name="title" value="Ada-France Version"/>
+
+    <!-- Main page body -->
+    <ui:define name="pageBody">
+      <div id='awa-content' class="adafr-version">
+          <div class='grid_9'>
+              <p>
+                  Ce site est réalisé par une application écrite en Ada qui
+                  utilise les composants Open Source Ada suivants:
+              </p>
+              <dl class='adafr-version'>
+                  <dt>
+                      <a href="https://www.ada-france.org/" title="Ada France">
+                          Ada France
+                      </a>
+                  </dt>
+                  <dd>
+                      Version 1.0
+                  </dd>
+                  <dt>
+                      <a href="https://github.com/stcarrez/ada-awa/wiki/Ada-Web-Application" title="Ada Web Application">
+                          Ada Web Application
+                      </a>
+                  </dt>
+                  <dd>
+                      Version 1.1
+                  </dd>
+                  <dt>
+                      <a href="https://github.com/stcarrez/ada-ado/" title="Ada Database Objects">
+                          Ada Database Objects
+                      </a>
+                  </dt>
+                  <dd>
+                      Version 1.2.0
+                  </dd>
+                  <dt>
+                      <a href="https://github.com/stcarrez/ada-asf/wiki" title="Ada Server Faces">
+                          Ada Server Faces
+                      </a>
+                  </dt>
+                  <dd>
+                      Version 1.2.0
+                  </dd>
+                  <dt>
+                      <a href="https://github.com/stcarrez/ada-security/" title="Ada Security">
+                          Ada Security
+                      </a>
+                  </dt>
+                  <dd>
+                      Version 1.2.0
+                  </dd>
+                  <dt>
+                      <a href="https://github.com/stcarrez/ada-el/" title="Ada Expression Language">
+                          Ada EL
+                      </a>
+                  </dt>
+                  <dd>
+                      Version 1.6.1
+                  </dd>
+                  <dt>
+                      <a href="https://github.com/stcarrez/ada-util/" title="Ada Utility Library">
+                          Ada Utility Library
+                      </a>
+                  </dt>
+                  <dd>
+                      Version 1.9.0
+                  </dd>
+                  <dt>
+                      <a href="http://libre.adacore.com/libre/tools/aws/" title="Ada Web Server">
+                          Ada Web Server
+                      </a>
+                  </dt>
+                  <dd>
+                      Version gpl-2017
+                  </dd>
+                  <dt>
+                      <a href="http://libre.adacore.com/libre/tools/xmlada/" title="XML/Ada">
+                          XML/Ada
+                      </a>
+                  </dt>
+                  <dd>
+                      Version gpl-2017
+                  </dd>
+              </dl>
+          </div>
+          <div class='grid_3 blog-post-info'>
+              <ui:include src="blogs/lists/post-info.xhtml"/>
+          </div>
+      </div>
+    </ui:define>
+</ui:composition>
+
