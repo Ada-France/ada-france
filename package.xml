@@ -47,6 +47,7 @@
      <install mode='libs' dir='lib'>
        <library>libmysqlclient*</library>
        <library>libmariadbclient*</library>
+       <library>libmysqlclient*</library>
        <library>libsqlite*</library>
        <library>libgnat*</library>
        <library>libgnarl*</library>
