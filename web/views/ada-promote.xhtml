@@ -2,7 +2,7 @@
                 xmlns:awa="http://code.google.com/p/ada-awa/jsf">
     <h2>Associations</h2>
     <nav class="grid_12">
-        <ul class='awa-nav'>
+        <ul class='awa-nav assoc-list'>
             <li>
                 <a href="http://www.sigada.org/" title="ACM SIGAda">
                     ACM SIGAda
@@ -35,15 +35,19 @@
               </li>
         </ul>
     </nav>
-<!--
-    <h2>Blogs Ada</h2>
-    <nav class="grid_12">
 
+    <h2>Abonnez-vous</h2>
+
+    <nav class='grid_12'>
+        <ul class='awa-nav feed-list'>
+            <li>
+                <a class='adhesion' href="#{contextPath}/documents/Adhesion.pdf">Bulletin d'adhésion</a>
+            </li>
+            <li>
+                <a class='feed' type='application/atom+xm;' href="#{contextPath}/blogs/feeds"
+                   title="Flux RSS du site Ada-France">Flux RSS</a>
+            </li>
+        </ul>
     </nav>
 
-    <h2>Liens</h2>
-    <nav class="grid_12">
-
-    </nav>
-    -->
 </ui:composition>
