@@ -4,13 +4,28 @@ body {
     line-height: 1.42857143;
     background-color: #fff;
 }
-.jumbotron {
-    padding: 0;
-}
 .navbar {
     margin-bottom: 0px;
+    padding-top: 5px;
+}
+#nav-member,
+.navbar .navbar-brand {
+    color: #888;
+    font-weight: bold;
+    font-size: 18px;
+}
+.navbar .navbar-header {
+    padding-left: 0px;
+}
+.adafr-index #nav-index,
+.page-wiki #nav-ressources,
+.page-news #nav-news,
+.page-members #nav-member,
+.page-contact #nav-contact {
+    color: #111;
 }
 .jumbotron {
+    padding: 0;
     background-color: #BBB;
 }
 .sourceCode .kw {
@@ -42,7 +57,6 @@ body {
     color: #268BD2;
 }
 .sourceCode .re {
-;
 }
 .sourceCode .er {
     color: #D30102;
@@ -90,6 +104,27 @@ dl.adafr-version dd {
     width: 69%;
 }
 
+/* Association list and feeds. */
+.assoc-list, .feed-list {
+    margin-top: 0.5em;
+    margin-bottom: 1em;
+}
+.feed-list .feed, .feed-list .adhesion {
+    display: inline-block;
+    background: url(../images/rss-feed-32x32.png) no-repeat;
+    padding-right: 5px;
+    padding-left: 32px;
+    height: 32px;
+    line-height: 32px;
+    margin-bottom: 5px;
+}
+.feed-list .adhesion {
+    background: url(../images/pdf-32x32.png) no-repeat;
+}
+#nav-contact-footer {
+    display: none;
+}
+
 /* Adaptations from AWA */
 #awa-page {
     min-height: inherit;
@@ -100,7 +135,7 @@ dl.adafr-version dd {
 #awa-content {
     padding-top: 2em;
 }
-dl.awa-error dt label, dl.asf-error dt label {
+.awa-error dt label, .asf-error dt label {
     color: #555;
 }
 .awa-login-yahoo, .awa-login-orange {
@@ -110,7 +145,14 @@ div.awa-error {
    margin-top: 1em;
 }
 .awa-nav {
-    margin-top: 2em;
+    margin-top: 1em;
+    margin-bottom: 1em;
+}
+.awa-tag-input {
+    background: #fff;
+}
+.blog-post-tag-info {
+    border: none;
 }
 div.blog-post-tag-info h2 {
     background: inherit;
@@ -121,6 +163,7 @@ div.blog-post-tag-info h2 {
 div.blog-post div.post-title {
     background: inherit;
     padding-left: 0;
+    width: 100%;
 }
 div.blog-post div.post-title h2 a {
     color: #333;
@@ -141,7 +184,7 @@ div.blog-post {
 .tagedit-list li.tagedit-listelement a {
     color: #222;
 }
-div.blog-post-info h2 {
+div.blog-post-tag-info, div.blog-post-info h2 {
     width: 100%;
     float: left;
     background-color: #0043a1;
@@ -163,6 +206,24 @@ div.post-comments h3 {
 .wiki-title h2 {
     margin-top: 0;
 }
+.invite-message {
+    float: left;
+    width: 100%;
+}
+div.awa-login .invite-message p {
+    width: 98%;
+    border: 1px solid #ccc;
+    margin: 1%;
+    padding: 1%;
+    font-size: 1.2em;
+}
+ul.openid-invite {
+    margin: 0;
+}
+ul.openid-invite li {
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
 @media screen and (max-width: 768px) {
     @-ms-viewport { width: 320px; }
     .wiki-page-container .grid_2, .wiki-page-container .grid_10,
@@ -170,6 +231,10 @@ div.post-comments h3 {
         width: 100%;
         margin-left: 0;
         margin-right: 0;
+    }
+    .col-md-3,
+    .container_12 .grid_3 {
+        margin-top: 1em;
     }
     .tagedit-list li.tagedit-listelement {
         float: right;
@@ -189,22 +254,17 @@ div.post-comments h3 {
         width: 100%;
         padding: 0;
     }
-}
-.invite-message {
-    float: left;
-    width: 100%;
-}
-div.awa-login .invite-message p {
-    width: 98%;
-    border: 1px solid #ccc;
-    margin: 1%;
-    padding: 1%;
-    font-size: 1.2em;
-}
-ul.openid-invite {
-    margin: 0;
-}
-ul.openid-invite li {
-    margin-top: 10px;
-    margin-bottom: 10px;
+    .navbar .navbar-brand {
+        padding: 8px 8px;
+    }
+    .wiki-page-actions {
+        display: none;
+    }
+    #nav-contact-footer {
+        display: block;
+    }
+    ul.awa-pagination li {
+        margin-left: 5%;
+        margin-right: 5%;
+    }
 }
