@@ -22,13 +22,14 @@
     <link media="screen" type="text/css" rel="stylesheet" href="#{contextPath}/css/storages.css"/>
     <link media="screen" type="text/css" rel="stylesheet" href="#{contextPath}/css/wikis.css"/>
     <link media="screen" type="text/css" rel="stylesheet" href="#{contextPath}/css/jquery.tagedit.css"/>
+    <link media="screen" type="text/css" rel="stylesheet" href="#{contextPath}/css/jquery.datetimepicker.css"/>
     <link media="screen" type="text/css" rel="stylesheet" href="#{contextPath}/css/adafrance.css"/>
     <link rel="icon" type="image/png" sizes="32x32" href="#{contextPath}/images/favicon-32x32.png"/>
     <link rel="icon" type="image/png" sizes="16x16" href="#{contextPath}/images/favicon-16x16.png"/>
     <ui:insert name="pageHeader"/>
     <title><h:outputText value="#{title}"/></title>
 </head>
-<body class="#{not empty pageStyle ? pageStyle : ''}">
+<body class="#{not empty pageStyle ? pageStyle : 'page-news'}">
 
 <!-- Top header with user account -->
 <ui:include src="top-bar.xhtml"/>
@@ -67,6 +68,7 @@
 <script type="text/javascript" src="#{contextPath}/js/asf-widgets.js"></script>
 <script type="text/javascript" src="#{contextPath}/js/asf-list.js"></script>
 <script type="text/javascript" src="#{contextPath}/js/asf-editable.js"></script>
+<script type="text/javascript" src="#{contextPath}/js/awa.js"></script>
 <script type="text/javascript" src="#{contextPath}/js/markedit/showdown.js"></script>
 <script type="text/javascript" src="#{contextPath}/js/markedit/jquery.markedit.js"></script>
 <script type="text/javascript" src="#{contextPath}/js/awa-storages.js"></script>
