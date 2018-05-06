@@ -3,10 +3,20 @@ body {
     font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
     line-height: 1.42857143;
     background-color: #fff;
+    display: flex;
+    flex-direction: column;
+}
+footer {
+    background: #e7e7e7;
+    margin-top: 0;
+    padding-top: 1em;
+    border-top: 1px solid #979797;
 }
 .navbar {
     margin-bottom: 0px;
     padding-top: 5px;
+    border-bottom: 1px solid #979797;
+    min-height: auto;
 }
 #nav-member,
 .navbar .navbar-brand {
@@ -69,6 +79,7 @@ address {
 address strong {
     display: inline-block;
     float: left;
+    padding-right: 1em;
 }
 address span {
     display: inline-block;
@@ -109,17 +120,20 @@ dl.adafr-version dd {
     margin-top: 0.5em;
     margin-bottom: 1em;
 }
-.feed-list .feed, .feed-list .adhesion {
+.feed-list .feed, .feed-list .adhesion, .feed-list .mailing-list {
     display: inline-block;
     background: url(../images/rss-feed-32x32.png) no-repeat;
     padding-right: 5px;
-    padding-left: 32px;
+    padding-left: 38px;
     height: 32px;
     line-height: 32px;
     margin-bottom: 5px;
 }
 .feed-list .adhesion {
     background: url(../images/pdf-32x32.png) no-repeat;
+}
+.feed-list .mailing-list {
+    background: url(../images/mail-icon-32x32.png) no-repeat;
 }
 #nav-contact-footer {
     display: none;
@@ -128,6 +142,8 @@ dl.adafr-version dd {
 /* Adaptations from AWA */
 #awa-page {
     min-height: inherit;
+    flex-grow: 1;
+    margin-bottom: 0;
 }
 .adafr-index #awa-content {
     padding-top: 0;
@@ -177,6 +193,7 @@ div.blog-post div.post-title {
 }
 div.blog-post {
     padding-left: 0;
+    width: 98%;
 }
 .tagedit-list li.tagedit-listelement-old {
     background-color: #eee;
