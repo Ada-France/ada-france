@@ -38,6 +38,16 @@ footer {
     padding: 0;
     background-color: #BBB;
 }
+.jumbotron img {
+    margin-left:auto;
+    margin-right:auto;
+}
+.adafr-summary .col-md-4 {
+    margin-top: 2em;
+}
+.adafr-summary .col-md-6 {
+    margin-top: 2em;
+}
 .sourceCode .kw {
     color: #268BD2;
 }
@@ -191,10 +201,10 @@ div.blog-post div.post-title h2 a:hover {
 div.blog-post div.post-title {
     border-color: #333;
 }
-div.blog-post {
+/* div.blog-post {
     padding-left: 0;
     width: 98%;
-}
+}*/
 .tagedit-list li.tagedit-listelement-old {
     background-color: #eee;
 }
@@ -241,13 +251,53 @@ ul.openid-invite li {
     margin-top: 10px;
     margin-bottom: 10px;
 }
+.adafr-block {
+    float: left;
+    width: 45%;
+    border: 1px solid #ccc;
+    margin: 0.5em;
+    padding: 0.5em;
+    box-sizing: border-box;
+    height: 200px;
+    -webkit-border-radius: 6px;
+    -moz-border-radius: 6px;
+    border-radius: 6px 6px 6px 6px;
+}
+.adafr-block h3 {
+    text-align: center;
+}
+@media screen and (max-width: 600px) {
+    @-ms-viewport { width: 320px; }
+}
+@media (min-width: 600px) {
+    .navbar-collapse.collapse {
+        visibility: visible;
+        display: block;
+    }
+    .navbar-right {
+        margin-right: 0;
+        float: right;
+    }
+    .navbar-header {
+        float: left;
+    }
+}
 @media screen and (max-width: 768px) {
     @-ms-viewport { width: 320px; }
+
     .wiki-page-container .grid_2, .wiki-page-container .grid_10,
     .tagedit-list, .container_12 .grid_9, .container_12 .grid_3 {
         width: 100%;
-        margin-left: 0;
+        margin-left: 1%;
+        margin-right: 1%;
+    }
+    .navbar-right {
         margin-right: 0;
+        float: right;
+        width: 150px;
+    }
+    #nav-contact-li {
+        display: none;
     }
     .col-md-3,
     .container_12 .grid_3 {
@@ -259,6 +309,9 @@ ul.openid-invite li {
     h3 {
         overflow: hidden;
         width: 100%;
+    }
+    .adafr-block {
+        width: 90%;
     }
     div.post-text div {
         max-width: 95%;
