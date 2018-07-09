@@ -15,117 +15,127 @@
         </f:metadata>
         <div id='awa-content'>
             <div id="wrap">
-              <div class="main">
-                <div class="jumbotron">
-                  <div class="container">
-                      <img class="img-responsive" src="#{contextPath}/images/AdaFrance-small.png" alt="logo"/>
-                  </div>
-                </div>
-                <div class="container">
-                  <div class="row">
-                    <div class="col-md-4">
-                      <h2>L'association</h2>
-                      <p class="text-justify"> L'association Ada France est une association sans but lucratif (loi de 1901) dont
-                        le but est la promotion des bonnes pratiques d'ingénierie logicielle en général et
-                        du langage Ada en particulier. </p>
-                      <p class="text-justify">Elle permet à tous ceux intéressés par Ada de se rencontrer
-                        et d'échanger de l'expérience; en 2014, elle a organisé la conférence
-                        Ada-Europe à Paris. </p>
+                <div class="main">
+                    <div class="jumbotron">
+                        <div class="container">
+                            <img class="img-responsive" width="738" height="250" src="#{contextPath}/images/AdaFrance-small.png" alt="Ada France"/>
+                        </div>
                     </div>
-                    <div class="col-md-4">
-                        <img class="img-responsive" src="#{contextPath}/images/adamascot.png" alt="Mascotte Ada"
-                             style="margin-left: 10px; float:right" width="150"/>
-                      <h2>Le langage Ada</h2>
-                      <p class="text-justify"> Le langage Ada est un langage de programmation impératif, fortement
-                        typé, développé depuis les années 1980. Il a depuis connu plusieurs
-                        évolutions et re-normalisations en 1995, 2005 et 2012. </p>
-                    </div>
-                    <div class="col-md-4">
-                      <h2>Les actions</h2>
-                      <p class="text-justify"> L'association Ada-France organise un réseau offrant un lieu
-                        d'échange aux différents utilisateurs du langage Ada. L'association est également
-                        présente dans différents rassemblements majeurs de communautés du logiciel libre
-                        français et européens tels que « Solutions Linux » ou les
-                          « FOSDEM ». </p>
-                    </div>
-                  </div>
-                </div>
-                <div class="container">
-                  <div class="row">
-                    <div class="col-md-6">
-                      <h2>Ada Europe</h2>
-                      <p class="text-justify"> Ada france est membre de <a href="http://www.ada-europe.org/">Ada europe</a>.
-                        Cette organisation est éditrice du « <i>Ada User Journal</i> », et organise
-                        de manière annuelle la conférence « <i>International Conference on Reliable
-                          Software Technologie</i> ». </p>
-                    </div>
-                    <div class="col-md-6">
-                      <h2>Rejoindre Ada-france</h2>
-                      <p class="text-justify"> Rien de plus simple ! Il suffit de remplir le <a href="documents/Adhesion.pdf">bulletin
-                          d'adhésion</a> et de le renvoyer avec votre règlement par chèque à
-                        l'adresse indiquée. </p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            <div class="container">
-  <h:list var="post" value="#{recentPostList.posts}">
-    <div class='blog-post' id="p_#{post.id}">
-        <div class='post-title'>
-            <h2><a href="#{contextPath}/blogs/post.html?post=#{post.uri}">#{post.title}</a></h2>
-            <p>
-                <h:outputFormat value="#{blogMsg.blog_post_author}">
-                    <f:param value="#{post.username}"/>
-                </h:outputFormat>
-                <h:outputText styleClass='post-date' value="#{post.date}" converter="dateConverter"/>
-                <h:panelGroup rendered="#{post.comment_count ne 0}">
-                   <a href="#{contextPath}/blogs/post.html?post=#{post.uri}#comments" class="post-comment-count">
-                      <h:outputFormat value="#{blogMsg.blog_post_count}">
-                         <f:param value="#{post.comment_count}"/>
-                      </h:outputFormat>
-                   </a>
-                </h:panelGroup>
-            </p>
-        </div>
-        <awa:tagList value='#{postList.tags}' styleClass="tagedit-list"
-                     tagLink="#{contextPath}/blogs/tagged.html?tag=#{util:urlEncode(tagName)}"
-                     var="tagName"
-                     tagClass="tagedit-listelement tagedit-listelement-old"/>
+                    <div class="container">
+                        <h:list var="post" value="#{recentPostList.posts}">
+                            <div class='blog-post' id="p_#{post.id}">
+                                <div class='post-title'>
+                                    <h2><a href="#{contextPath}/blogs/post.html?post=#{post.uri}">#{post.title}</a></h2>
+                                    <p>
+                                        <h:outputFormat value="#{blogMsg.blog_post_author}">
+                                            <f:param value="#{post.username}"/>
+                                        </h:outputFormat>
+                                        <h:outputText styleClass='post-date' value="#{post.date}"
+                                                      converter="dateConverter"/>
+                                        <h:panelGroup rendered="#{post.comment_count ne 0}">
+                                            <a href="#{contextPath}/blogs/post.html?post=#{post.uri}#comments"
+                                               class="post-comment-count">
+                                                <h:outputFormat value="#{blogMsg.blog_post_count}">
+                                                    <f:param value="#{post.comment_count}"/>
+                                                </h:outputFormat>
+                                            </a>
+                                        </h:panelGroup>
+                                    </p>
+                                </div>
+                                <awa:tagList value='#{postList.tags}' styleClass="tagedit-list"
+                                             tagLink="#{contextPath}/blogs/tagged.html?tag=#{util:urlEncode(tagName)}"
+                                             var="tagName"
+                                             tagClass="tagedit-listelement tagedit-listelement-old"/>
 
-        <awa:wiki styleClass='post-text'
-                  value="#{post.text}"
-                  links="#{recentPostList.links}"
-                  format="dotclear"/>
-        <!-- Increment the post read counter but do not display anything -->
-        <awa:counter value="#{recentPostList.counter}" hidden="true"/>
-        <h:panelGroup layout="div" styleClass="blog-post-comment"
-                      rendered="#{post.allow_comments or post.comment_count ne 0}">
-            <h:panelGroup rendered="#{post.comment_count ne 0}" layout="div" styleClass="blog-post-comment-count">
-                <a href="#{contextPath}/blogs/post.html?post=#{post.uri}#comments">
-                    <h:outputFormat value="#{blogMsg.blog_post_count}">
-                        <f:param value="#{post.comment_count}"/>
-                    </h:outputFormat>
-                </a>
-            </h:panelGroup>
-            <h:panelGroup rendered="#{post.allow_comments}" layout="div" styleClass="blog-post-add-comment">
-                <c:choose>
-                    <c:when test="#{user.isLogged}">
-                        <a href="#{contextPath}/blogs/post.html?post=#{post.uri}#comments">#{blogMsg.blog_add_comment}</a>
-                    </c:when>
-                    <c:otherwise>
-                        #{blogMsg.blog_sign_in_add_comment}
-                        <a rel="nofollow" href="#{contextPath}/auth/login.html?redirect=#{contextPath}/blogs/post.html%3Fpost%3D#{util:urlEncode(post.uri)}%23comment-add">#{blogMsg.blog_sign_in_add_comment_label}</a>
-                    </c:otherwise>
-                </c:choose>
-            </h:panelGroup>
-        </h:panelGroup>
-    </div>
-  </h:list>
+                                <awa:wiki styleClass='post-text'
+                                          value="#{post.text}"
+                                          links="#{recentPostList.links}"
+                                          format="dotclear"/>
+                                <!-- Increment the post read counter but do not display anything -->
+                                <awa:counter value="#{recentPostList.counter}" hidden="true"/>
+                                <h:panelGroup layout="div" styleClass="blog-post-comment"
+                                              rendered="#{post.allow_comments or post.comment_count ne 0}">
+                                    <h:panelGroup rendered="#{post.comment_count ne 0}" layout="div"
+                                                  styleClass="blog-post-comment-count">
+                                        <a href="#{contextPath}/blogs/post.html?post=#{post.uri}#comments">
+                                            <h:outputFormat value="#{blogMsg.blog_post_count}">
+                                                <f:param value="#{post.comment_count}"/>
+                                            </h:outputFormat>
+                                        </a>
+                                    </h:panelGroup>
+                                    <h:panelGroup rendered="#{post.allow_comments}" layout="div"
+                                                  styleClass="blog-post-add-comment">
+                                        <c:choose>
+                                            <c:when test="#{user.isLogged}">
+                                                <a href="#{contextPath}/blogs/post.html?post=#{post.uri}#comments">#{blogMsg.blog_add_comment}</a>
+                                            </c:when>
+                                            <c:otherwise>
+                                                #{blogMsg.blog_sign_in_add_comment}
+                                                <a rel="nofollow"
+                                                   href="#{contextPath}/auth/login.html?redirect=#{contextPath}/blogs/post.html%3Fpost%3D#{util:urlEncode(post.uri)}%23comment-add">#{blogMsg.blog_sign_in_add_comment_label}</a>
+                                            </c:otherwise>
+                                        </c:choose>
+                                    </h:panelGroup>
+                                </h:panelGroup>
+                            </div>
+                        </h:list>
+                    </div>
+                    <div class="container">
+                        <a href="#{contextPath}/blogs/view.html">Voir toutes les nouvelles</a>
+                    </div>
+                    <div class="container adafr-summary">
+                        <div class="row">
+                            <div class="col-md-4">
+                                <h2>L'association</h2>
+                                <p class="text-justify"> L'association Ada France est une association sans but lucratif
+                                    (loi de 1901) dont
+                                    le but est la promotion des bonnes pratiques d'ingénierie logicielle en général et
+                                    du langage Ada en particulier. </p>
+                                <p class="text-justify">Elle permet à tous ceux intéressés par Ada de se rencontrer
+                                    et d'échanger de l'expérience; en 2014, elle a organisé la conférence
+                                    Ada-Europe à Paris. </p>
+                            </div>
+                            <div class="col-md-4">
+                                <img class="img-responsive" src="#{contextPath}/images/adamascot.png" alt="Mascotte Ada"
+                                     style="margin-left: 10px; float:right" width="150"/>
+                                <h2>Le langage Ada</h2>
+                                <p class="text-justify"> Le langage Ada est un langage de programmation impératif,
+                                    fortement
+                                    typé, développé depuis les années 1980. Il a depuis connu plusieurs
+                                    évolutions et re-normalisations en 1995, 2005 et 2012. </p>
+                            </div>
+                            <div class="col-md-4">
+                                <h2>Les actions</h2>
+                                <p class="text-justify"> L'association Ada-France organise un réseau offrant un lieu
+                                    d'échange aux différents utilisateurs du langage Ada. L'association est également
+                                    présente dans différents rassemblements majeurs de communautés du logiciel libre
+                                    français et européens tels que « Solutions Linux » ou les
+                                    « FOSDEM ». </p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="container adafr-summary">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <h2>Ada Europe</h2>
+                                <p class="text-justify"> Ada france est membre de <a href="http://www.ada-europe.org/">Ada
+                                    europe</a>.
+                                    Cette organisation est éditrice du « <i>Ada User Journal</i> », et organise
+                                    de manière annuelle la conférence « <i>International Conference on Reliable
+                                        Software Technologie</i> ». </p>
+                            </div>
+                            <div class="col-md-6">
+                                <h2>Rejoindre Ada-france</h2>
+                                <p class="text-justify"> Rien de plus simple ! Il suffit de remplir le <a
+                                        href="documents/Adhesion.pdf">bulletin
+                                    d'adhésion</a> et de le renvoyer avec votre règlement par chèque à
+                                    l'adresse indiquée. </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
             </div>
-              <div class="container">
-                  <a href="#{contextPath}/blogs/view.html">Voir toutes les nouvelles</a>
-              </div>
-              </div>
         </div>
     </ui:define>
 </ui:composition>
