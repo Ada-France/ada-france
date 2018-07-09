@@ -105,12 +105,77 @@
     </managed-property>
   </managed-bean>
 
+  <managed-bean>
+    <description>A wiki block displayed on all public pages.</description>
+    <managed-bean-name>wikiFormations</managed-bean-name>
+    <managed-bean-class>AWA.Wikis.Beans.Wiki_View_Bean</managed-bean-class>
+    <managed-bean-scope>request</managed-bean-scope>
+    <managed-property>
+      <property-name>wiki_id</property-name>
+      <property-class>Integer</property-class>
+      <value>1</value>
+    </managed-property>
+    <managed-property>
+      <property-name>name</property-name>
+      <property-class>String</property-class>
+      <value>Formations</value>
+    </managed-property>
+    <managed-property>
+      <property-name>image_prefix</property-name>
+      <property-class>String</property-class>
+      <value>#{contextPath}/images/</value>
+    </managed-property>
+    <managed-property>
+      <property-name>page_prefix</property-name>
+      <property-class>String</property-class>
+      <value>#{contextPath}/wikis/view/</value>
+    </managed-property>
+    <managed-property>
+      <property-name>page_prefix</property-name>
+      <property-class>String</property-class>
+      <value>#{contextPath}/wikis/view/</value>
+    </managed-property>
+  </managed-bean>
+
+  <managed-bean>
+    <description>A wiki block displayed on all public pages.</description>
+    <managed-bean-name>wikiRessources</managed-bean-name>
+    <managed-bean-class>AWA.Wikis.Beans.Wiki_View_Bean</managed-bean-class>
+    <managed-bean-scope>request</managed-bean-scope>
+    <managed-property>
+      <property-name>wiki_id</property-name>
+      <property-class>Integer</property-class>
+      <value>1</value>
+    </managed-property>
+    <managed-property>
+      <property-name>name</property-name>
+      <property-class>String</property-class>
+      <value>Ressources</value>
+    </managed-property>
+    <managed-property>
+      <property-name>image_prefix</property-name>
+      <property-class>String</property-class>
+      <value>#{contextPath}/images/</value>
+    </managed-property>
+    <managed-property>
+      <property-name>page_prefix</property-name>
+      <property-class>String</property-class>
+      <value>#{contextPath}/wikis/view/</value>
+    </managed-property>
+    <managed-property>
+      <property-name>page_prefix</property-name>
+      <property-class>String</property-class>
+      <value>#{contextPath}/wikis/view/</value>
+    </managed-property>
+  </managed-bean>
+
   <filter-mapping>
     <filter-name>service</filter-name>
     <url-pattern>/index.html</url-pattern>
     <url-pattern>/actualites.html</url-pattern>
     <url-pattern>/contact.html</url-pattern>
     <url-pattern>/statuts.html</url-pattern>
+    <url-pattern>*.html</url-pattern>
   </filter-mapping>
 
   <filter-mapping>
@@ -119,6 +184,7 @@
     <url-pattern>/actualites.html</url-pattern>
     <url-pattern>/contact.html</url-pattern>
     <url-pattern>/statuts.html</url-pattern>
+    <url-pattern>*.html</url-pattern>
   </filter-mapping>
 
   <url-policy>
@@ -130,6 +196,8 @@
     <url-pattern>/actualites.html</url-pattern>
     <url-pattern>/contact.html</url-pattern>
     <url-pattern>/statuts.html</url-pattern>
+    <url-pattern>/formations.html</url-pattern>
+    <url-pattern>/ressources.html</url-pattern>
     <url-pattern>/blogs/post.html</url-pattern>
   </url-policy>
                                                       
@@ -153,6 +221,8 @@
     <url-pattern>/storages/*</url-pattern>
     <url-pattern>/index.html</url-pattern>
     <url-pattern>/actualites.html</url-pattern>
+    <url-pattern>/ressources.html</url-pattern>
+    <url-pattern>/formations.html</url-pattern>
     <url-pattern>/contact.html</url-pattern>
   </filter-mapping>
 
