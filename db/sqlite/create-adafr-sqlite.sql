@@ -386,101 +386,6 @@ Date: 2013-02-23the database entity to which the tag is associated */
 );
 INSERT INTO entity_type (name) VALUES ("awa_tag");
 INSERT INTO entity_type (name) VALUES ("awa_tagged_entity");
-/* Copied from awa_counters-sqlite.sql*/
-/* File generated automatically by dynamo */
-/*  */
-CREATE TABLE awa_counter (
-  /* the object associated with the counter. */
-  `object_id` BIGINT NOT NULL,
-  /* the day associated with the counter. */
-  `date` DATE NOT NULL,
-  /* the counter value. */
-  `counter` INTEGER NOT NULL,
-  /* the counter definition identifier. */
-  `definition_id` BIGINT NOT NULL,
-  PRIMARY KEY (`object_id`, `date`, `definition_id`)
-);
-/* A counter definition defines what the counter represents. It uniquely identifies
-the counter for the Counter table. A counter may be associated with a database
-table. In that case, the counter definition has a relation to the corresponding Entity_Type. */
-CREATE TABLE awa_counter_definition (
-  /* the counter name. */
-  `name` VARCHAR(255) NOT NULL,
-  /* the counter unique id. */
-  `id` INTEGER NOT NULL,
-  /* the optional entity type that identifies the database table. */
-  `entity_type` INTEGER ,
-  PRIMARY KEY (`id`)
-);
-/*  */
-CREATE TABLE awa_visit (
-  /* the entity identifier. */
-  `object_id` BIGINT NOT NULL,
-  /* the number of times the entity was visited by the user. */
-  `counter` INTEGER NOT NULL,
-  /* the date and time when the entity was last visited. */
-  `date` DATETIME NOT NULL,
-  /* the user who visited the entity. */
-  `user` BIGINT NOT NULL,
-  /* the counter definition identifier. */
-  `definition_id` BIGINT NOT NULL,
-  PRIMARY KEY (`object_id`, `user`, `definition_id`)
-);
-INSERT INTO entity_type (name) VALUES ("awa_counter");
-INSERT INTO entity_type (name) VALUES ("awa_counter_definition");
-INSERT INTO entity_type (name) VALUES ("awa_visit");
-/* Copied from awa-blogs-sqlite.sql*/
-/* File generated automatically by dynamo */
-/*  */
-CREATE TABLE awa_blog (
-  /* the blog identifier */
-  `id` BIGINT NOT NULL,
-  /* the blog name */
-  `name` VARCHAR(255) NOT NULL,
-  /* the version */
-  `version` INTEGER NOT NULL,
-  /* the blog uuid */
-  `uid` VARCHAR(255) NOT NULL,
-  /* the blog creation date */
-  `create_date` DATETIME NOT NULL,
-  /* the date when the blog was updated */
-  `update_date` DATETIME NOT NULL,
-  /* The blog base URL. */
-  `url` VARCHAR(255) NOT NULL,
-  /* the workspace that this blog belongs to */
-  `workspace_id` BIGINT NOT NULL,
-  PRIMARY KEY (`id`)
-);
-/*  */
-CREATE TABLE awa_post (
-  /* the post identifier */
-  `id` BIGINT NOT NULL,
-  /* the post title */
-  `title` VARCHAR(255) NOT NULL,
-  /* the post text content */
-  `text` TEXT NOT NULL,
-  /* the post creation date */
-  `create_date` DATETIME NOT NULL,
-  /* the post URI */
-  `uri` VARCHAR(255) NOT NULL,
-  /*  */
-  `version` INTEGER NOT NULL,
-  /* the post publication date */
-  `publish_date` DATETIME ,
-  /* the post status */
-  `status` TINYINT NOT NULL,
-  /*  */
-  `allow_comments` TINYINT NOT NULL,
-  /* the number of times the post was read. */
-  `read_count` INTEGER NOT NULL,
-  /*  */
-  `author_id` BIGINT NOT NULL,
-  /*  */
-  `blog_id` BIGINT NOT NULL,
-  PRIMARY KEY (`id`)
-);
-INSERT INTO entity_type (name) VALUES ("awa_blog");
-INSERT INTO entity_type (name) VALUES ("awa_post");
 /* Copied from awa-storages-sqlite.sql*/
 /* File generated automatically by dynamo */
 /* The uri member holds the URI if the storage type is URL.
@@ -642,6 +547,101 @@ CREATE TABLE awa_image (
   PRIMARY KEY (`id`)
 );
 INSERT INTO entity_type (name) VALUES ("awa_image");
+/* Copied from awa_counters-sqlite.sql*/
+/* File generated automatically by dynamo */
+/*  */
+CREATE TABLE awa_counter (
+  /* the object associated with the counter. */
+  `object_id` BIGINT NOT NULL,
+  /* the day associated with the counter. */
+  `date` DATE NOT NULL,
+  /* the counter value. */
+  `counter` INTEGER NOT NULL,
+  /* the counter definition identifier. */
+  `definition_id` BIGINT NOT NULL,
+  PRIMARY KEY (`object_id`, `date`, `definition_id`)
+);
+/* A counter definition defines what the counter represents. It uniquely identifies
+the counter for the Counter table. A counter may be associated with a database
+table. In that case, the counter definition has a relation to the corresponding Entity_Type. */
+CREATE TABLE awa_counter_definition (
+  /* the counter name. */
+  `name` VARCHAR(255) NOT NULL,
+  /* the counter unique id. */
+  `id` INTEGER NOT NULL,
+  /* the optional entity type that identifies the database table. */
+  `entity_type` INTEGER ,
+  PRIMARY KEY (`id`)
+);
+/*  */
+CREATE TABLE awa_visit (
+  /* the entity identifier. */
+  `object_id` BIGINT NOT NULL,
+  /* the number of times the entity was visited by the user. */
+  `counter` INTEGER NOT NULL,
+  /* the date and time when the entity was last visited. */
+  `date` DATETIME NOT NULL,
+  /* the user who visited the entity. */
+  `user` BIGINT NOT NULL,
+  /* the counter definition identifier. */
+  `definition_id` BIGINT NOT NULL,
+  PRIMARY KEY (`object_id`, `user`, `definition_id`)
+);
+INSERT INTO entity_type (name) VALUES ("awa_counter");
+INSERT INTO entity_type (name) VALUES ("awa_counter_definition");
+INSERT INTO entity_type (name) VALUES ("awa_visit");
+/* Copied from awa-blogs-sqlite.sql*/
+/* File generated automatically by dynamo */
+/*  */
+CREATE TABLE awa_blog (
+  /* the blog identifier */
+  `id` BIGINT NOT NULL,
+  /* the blog name */
+  `name` VARCHAR(255) NOT NULL,
+  /* the version */
+  `version` INTEGER NOT NULL,
+  /* the blog uuid */
+  `uid` VARCHAR(255) NOT NULL,
+  /* the blog creation date */
+  `create_date` DATETIME NOT NULL,
+  /* the date when the blog was updated */
+  `update_date` DATETIME NOT NULL,
+  /* The blog base URL. */
+  `url` VARCHAR(255) NOT NULL,
+  /* the workspace that this blog belongs to */
+  `workspace_id` BIGINT NOT NULL,
+  PRIMARY KEY (`id`)
+);
+/*  */
+CREATE TABLE awa_post (
+  /* the post identifier */
+  `id` BIGINT NOT NULL,
+  /* the post title */
+  `title` VARCHAR(255) NOT NULL,
+  /* the post text content */
+  `text` TEXT NOT NULL,
+  /* the post creation date */
+  `create_date` DATETIME NOT NULL,
+  /* the post URI */
+  `uri` VARCHAR(255) NOT NULL,
+  /*  */
+  `version` INTEGER NOT NULL,
+  /* the post publication date */
+  `publish_date` DATETIME ,
+  /* the post status */
+  `status` TINYINT NOT NULL,
+  /*  */
+  `allow_comments` TINYINT NOT NULL,
+  /* the number of times the post was read. */
+  `read_count` INTEGER NOT NULL,
+  /*  */
+  `author_id` BIGINT NOT NULL,
+  /*  */
+  `blog_id` BIGINT NOT NULL,
+  PRIMARY KEY (`id`)
+);
+INSERT INTO entity_type (name) VALUES ("awa_blog");
+INSERT INTO entity_type (name) VALUES ("awa_post");
 /* Copied from awa-wikis-sqlite.sql*/
 /* File generated automatically by dynamo */
 /*  */
