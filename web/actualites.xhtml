@@ -20,7 +20,7 @@
         xmlns:c="http://java.sun.com/jstl/core"
 	    xmlns:u="http://code.google.com/p/ada-asf/util"
         xmlns:h="http://java.sun.com/jsf/html">
-    <ui:param name="title" value="#{blogMsg.blog_page_title}"/>
+    <ui:param name="title" value="#{newsList.tag}"/>
     <ui:param name="pageStyle" value="page-news"/>
 
     <!-- Main page body -->
@@ -32,7 +32,6 @@
         <div id='awa-content'>
 
             <div class='grid_9'>
-                <h1>#{newsList.tag}</h1>
                 <ui:include src="blogs/lists/post-list.xhtml">
                     <ui:param name="postList" value="#{newsList}"/>
                     <ui:param name="pageUrl" value="blogs/view.html"/>
