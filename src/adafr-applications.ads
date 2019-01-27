@@ -1,7 +1,7 @@
 -----------------------------------------------------------------------
 --  adafr -- adafr applications
 -----------------------------------------------------------------------
---  Copyright (C) 2017 Ada France
+--  Copyright (C) 2017, 2019 Ada France
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -17,11 +17,11 @@
 --  limitations under the License.
 -----------------------------------------------------------------------
 with ASF.Servlets.Faces;
-with ASF.Servlets.Files;
+with Servlet.Core.Files;
 with ASF.Servlets.Ajax;
 with ASF.Filters.Dump;
 with ASF.Filters.Cache_Control;
-with ASF.Servlets.Measures;
+with Servlet.Core.Measures;
 with ASF.Applications;
 with ASF.Security.Servlets;
 with ASF.Converters.Sizes;
@@ -80,10 +80,10 @@ private
       --  Application servlets and filters (add new servlet and filter instances here).
       Faces             : aliased ASF.Servlets.Faces.Faces_Servlet;
       Ajax              : aliased ASF.Servlets.Ajax.Ajax_Servlet;
-      Files             : aliased ASF.Servlets.Files.File_Servlet;
+      Files             : aliased Servlet.Core.Files.File_Servlet;
       Dump              : aliased ASF.Filters.Dump.Dump_Filter;
       Service_Filter    : aliased AWA.Services.Filters.Service_Filter;
-      Measures          : aliased ASF.Servlets.Measures.Measure_Servlet;
+      Measures          : aliased Servlet.Core.Measures.Measure_Servlet;
       No_Cache          : aliased ASF.Filters.Cache_Control.Cache_Control_Filter;
 
       --  Authentication servlet and filter.

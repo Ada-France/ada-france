@@ -1,7 +1,7 @@
 -----------------------------------------------------------------------
 --  adafr -- adafr applications
 -----------------------------------------------------------------------
---  Copyright (C) 2017 Ada France
+--  Copyright (C) 2017, 2019 Ada France
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
