@@ -23,6 +23,38 @@ INSERT INTO entity_type (name) VALUES ("entity_type");
 INSERT INTO entity_type (name) VALUES ("sequence");
 /* Copied from awa-sqlite.sql*/
 /* File generated automatically by dynamo */
+/* The Audit table records the changes made on database on behalf of a user.
+The record indicates the database table and row, the field being updated,
+the old and new value. The old and new values are converted to a string
+and they truncated if necessary to 256 characters. */
+CREATE TABLE awa_audit (
+  /* the audit identifier */
+  `id` BIGINT NOT NULL,
+  /* the date when the field was modified. */
+  `date` DATETIME NOT NULL,
+  /* the old field value. */
+  `old_value` VARCHAR(255) ,
+  /* the new field value. */
+  `new_value` VARCHAR(255) ,
+  /* the database entity identifier to which the audit is associated. */
+  `entity_id` BIGINT NOT NULL,
+  /*  */
+  `field` INTEGER NOT NULL,
+  /* the user session under which the field was modified. */
+  `session_id` BIGINT ,
+  /* the entity type. */
+  `entity_type` INTEGER NOT NULL,
+  PRIMARY KEY (`id`)
+);
+/* The Audit_Field table describes
+the database field being updated. */
+CREATE TABLE awa_audit_field (
+  /* the audit field identifier. */
+  `id` INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+  /* the audit field name. */
+  `name` VARCHAR(255) NOT NULL,
+  /* the entity type */
+  `entity_type` INTEGER NOT NULL);
 /*  */
 CREATE TABLE awa_message (
   /* the message identifier */
@@ -80,8 +112,7 @@ CREATE TABLE awa_queue (
   `name` VARCHAR(255) NOT NULL,
   PRIMARY KEY (`id`)
 );
-/* The application that is granted access to the database.
- */
+/* The application that is granted access to the database. */
 CREATE TABLE awa_application (
   /* the application identifier. */
   `id` BIGINT NOT NULL,
@@ -225,8 +256,7 @@ CREATE TABLE awa_session (
   `user_id` BIGINT NOT NULL,
   PRIMARY KEY (`id`)
 );
-/* The User entity represents a user that can access and use the application.
- */
+/* The User entity represents a user that can access and use the application. */
 CREATE TABLE awa_user (
   /* the user first name. */
   `first_name` VARCHAR(255) NOT NULL,
@@ -250,6 +280,8 @@ CREATE TABLE awa_user (
   `email_id` BIGINT NOT NULL,
   PRIMARY KEY (`id`)
 );
+INSERT INTO entity_type (name) VALUES ("awa_audit");
+INSERT INTO entity_type (name) VALUES ("awa_audit_field");
 INSERT INTO entity_type (name) VALUES ("awa_message");
 INSERT INTO entity_type (name) VALUES ("awa_message_type");
 INSERT INTO entity_type (name) VALUES ("awa_queue");
@@ -262,6 +294,14 @@ INSERT INTO entity_type (name) VALUES ("awa_access_key");
 INSERT INTO entity_type (name) VALUES ("awa_email");
 INSERT INTO entity_type (name) VALUES ("awa_session");
 INSERT INTO entity_type (name) VALUES ("awa_user");
+INSERT INTO awa_audit_field (entity_type, name)
+  VALUES ((SELECT id FROM entity_type WHERE name = "awa_user"), "first_name");
+INSERT INTO awa_audit_field (entity_type, name)
+  VALUES ((SELECT id FROM entity_type WHERE name = "awa_user"), "last_name");
+INSERT INTO awa_audit_field (entity_type, name)
+  VALUES ((SELECT id FROM entity_type WHERE name = "awa_user"), "country");
+INSERT INTO awa_audit_field (entity_type, name)
+  VALUES ((SELECT id FROM entity_type WHERE name = "awa_user"), "name");
 /* Copied from awa-workspaces-sqlite.sql*/
 /* File generated automatically by dynamo */
 /*  */
@@ -353,14 +393,20 @@ CREATE TABLE awa_comment (
   /* the entity type that identifies the table to which the comment is associated. */
   `entity_type` INTEGER NOT NULL,
   /* the comment status to decide whether the comment is visible (published) or not. */
-  `status` integer NOT NULL,
+  `status` INTEGER NOT NULL,
   /* the comment format type. */
-  `format` integer NOT NULL,
+  `format` INTEGER NOT NULL,
   /*  */
   `author_id` BIGINT NOT NULL,
   PRIMARY KEY (`id`)
 );
 INSERT INTO entity_type (name) VALUES ("awa_comment");
+INSERT INTO awa_audit_field (entity_type, name)
+  VALUES ((SELECT id FROM entity_type WHERE name = "awa_comment"), "message");
+INSERT INTO awa_audit_field (entity_type, name)
+  VALUES ((SELECT id FROM entity_type WHERE name = "awa_comment"), "status");
+INSERT INTO awa_audit_field (entity_type, name)
+  VALUES ((SELECT id FROM entity_type WHERE name = "awa_comment"), "format");
 /* Copied from awa-tags-sqlite.sql*/
 /* File generated automatically by dynamo */
 /* The tag definition. */
@@ -517,8 +563,7 @@ INSERT INTO entity_type (name) VALUES ("awa_job");
 /* - The workspace contains one or several folders.
 - Each image folder contains a set of images that have been uploaded by the user.
 - An image can be visible if a user has an ACL permission to read the associated folder.
-- An image marked as 'public=True' can be visible by anybody
- */
+- An image marked as 'public=True' can be visible by anybody */
 CREATE TABLE awa_image (
   /* the image identifier */
   `id` BIGINT NOT NULL,
@@ -642,6 +687,22 @@ CREATE TABLE awa_post (
 );
 INSERT INTO entity_type (name) VALUES ("awa_blog");
 INSERT INTO entity_type (name) VALUES ("awa_post");
+INSERT INTO awa_audit_field (entity_type, name)
+  VALUES ((SELECT id FROM entity_type WHERE name = "awa_blog"), "name");
+INSERT INTO awa_audit_field (entity_type, name)
+  VALUES ((SELECT id FROM entity_type WHERE name = "awa_blog"), "uid");
+INSERT INTO awa_audit_field (entity_type, name)
+  VALUES ((SELECT id FROM entity_type WHERE name = "awa_blog"), "url");
+INSERT INTO awa_audit_field (entity_type, name)
+  VALUES ((SELECT id FROM entity_type WHERE name = "awa_post"), "title");
+INSERT INTO awa_audit_field (entity_type, name)
+  VALUES ((SELECT id FROM entity_type WHERE name = "awa_post"), "uri");
+INSERT INTO awa_audit_field (entity_type, name)
+  VALUES ((SELECT id FROM entity_type WHERE name = "awa_post"), "publish_date");
+INSERT INTO awa_audit_field (entity_type, name)
+  VALUES ((SELECT id FROM entity_type WHERE name = "awa_post"), "status");
+INSERT INTO awa_audit_field (entity_type, name)
+  VALUES ((SELECT id FROM entity_type WHERE name = "awa_post"), "allow_comments");
 /* Copied from awa-wikis-sqlite.sql*/
 /* File generated automatically by dynamo */
 /*  */
@@ -708,8 +769,7 @@ CREATE TABLE awa_wiki_space (
   `create_date` DATETIME NOT NULL,
   /* the left panel side wiki text for every page. */
   `left_side` TEXT NOT NULL,
-  /* the right panel wiki text for every page.
- */
+  /* the right panel wiki text for every page. */
   `right_side` TEXT NOT NULL,
   /* the default wiki page format. */
   `format` TINYINT NOT NULL,
@@ -720,3 +780,17 @@ CREATE TABLE awa_wiki_space (
 INSERT INTO entity_type (name) VALUES ("awa_wiki_content");
 INSERT INTO entity_type (name) VALUES ("awa_wiki_page");
 INSERT INTO entity_type (name) VALUES ("awa_wiki_space");
+INSERT INTO awa_audit_field (entity_type, name)
+  VALUES ((SELECT id FROM entity_type WHERE name = "awa_wiki_page"), "name");
+INSERT INTO awa_audit_field (entity_type, name)
+  VALUES ((SELECT id FROM entity_type WHERE name = "awa_wiki_page"), "last_version");
+INSERT INTO awa_audit_field (entity_type, name)
+  VALUES ((SELECT id FROM entity_type WHERE name = "awa_wiki_page"), "is_public");
+INSERT INTO awa_audit_field (entity_type, name)
+  VALUES ((SELECT id FROM entity_type WHERE name = "awa_wiki_page"), "title");
+INSERT INTO awa_audit_field (entity_type, name)
+  VALUES ((SELECT id FROM entity_type WHERE name = "awa_wiki_space"), "name");
+INSERT INTO awa_audit_field (entity_type, name)
+  VALUES ((SELECT id FROM entity_type WHERE name = "awa_wiki_space"), "is_public");
+INSERT INTO awa_audit_field (entity_type, name)
+  VALUES ((SELECT id FROM entity_type WHERE name = "awa_wiki_space"), "format");
