@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  import_archives -- Import old Ada France Archives
---  Copyright (C) 2017 Ada France
+--  Copyright (C) 2017, 2019 Ada France
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -24,7 +24,8 @@ with Ada.Calendar.Formatting;
 
 with ADO;
 with ADO.SQL;
-with ADO.Drivers;
+with ADO.Mysql;
+with ADO.Configs;
 with ADO.Queries;
 with ADO.Statements;
 with ADO.Sessions;
@@ -319,11 +320,11 @@ begin
       Util.Log.Loggers.Initialize (Config);
 
       --  Initialize the database drivers.
-      ADO.Drivers.Initialize (Config);
+      ADO.Mysql.Initialize (Config);
 
       --  Initialize the session factory to connect to the
       --  database defined by 'database' property.
-      Factory.Create (ADO.Drivers.Get_Config ("database"));
+      Factory.Create (ADO.Configs.Get_Config ("database"));
 
       --  Find the author in the database.
       DB := Factory.Get_Master_Session;
