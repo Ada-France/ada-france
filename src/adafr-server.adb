@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  Adafr-server -- Application server
---  Copyright (C) 2017 Ada France
+--  Copyright (C) 2017, 2019 Ada France
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -18,8 +18,8 @@
 with Ada.Exceptions;
 
 with Util.Log.Loggers;
-with Util.Http.Clients.Curl;
 
+with ADO.Mysql;
 with AWS.Config.Set;
 with ASF.Server.Web;
 with AWA.Setup.Applications;
@@ -49,7 +49,7 @@ procedure Adafr.Server is
    end Configure;
 
 begin
-   Util.Http.Clients.Curl.Register;
+   ADO.Mysql.Initialize;
    WS.Configure (Configure'Access);
    WS.Start;
    Log.Info ("Connect you browser to: http://localhost:8080{0}/index.html",
