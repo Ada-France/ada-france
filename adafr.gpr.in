@@ -1,10 +1,11 @@
 with "config";
-with "@UTIL_DIR@util";
-with "@UTIL_DIR@util_http_curl";
-with "@EL_DIR@el";
+with "@UTIL_DIR@utilada_sys";
+with "@UTIL_DIR@utilada_aws";
+with "@EL_DIR@elada";
 with "@ASF_DIR@asf";
-with "@SERVLET_DIR@servlet_aws";
+with "@SERVLET_DIR@servletada_aws";
 with "@ADO_DIR@ado";
+with "@ADO_DIR@ado_mysql";
 with "@AWA_DIR@awa";
 with "@AWA_DIR@awa_workspaces";
 with "@AWA_DIR@awa_mail";
