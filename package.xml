@@ -51,6 +51,7 @@
        <library>libsqlite*</library>
        <library>libgnat*</library>
        <library>libgnarl*</library>
+       <library>libada_lzma*</library>
        <library>libbfd*</library>
        <library>libssl*</library>
        <library>libcrypto*</library>
