@@ -3,6 +3,7 @@ with "@UTIL_DIR@utilada_sys";
 with "@UTIL_DIR@utilada_aws";
 with "@EL_DIR@elada";
 with "@ASF_DIR@asf";
+with "@SERVLET_DIR@servletada";
 with "@SERVLET_DIR@servletada_aws";
 with "@ADO_DIR@ado";
 with "@ADO_DIR@ado_mysql";
@@ -15,6 +16,7 @@ with "@AWA_DIR@awa_storages";
 with "@AWA_DIR@awa_tags";
 with "@AWA_DIR@awa_jobs";
 with "@AWA_DIR@awa_counters";
+with "@AWA_DIR@awa_images";
 with "@AWA_DIR@awa_wikis";
 with "@AWA_DIR@awa_setup";
 
