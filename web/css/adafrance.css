@@ -28,8 +28,9 @@ footer {
     padding-left: 0px;
 }
 .adafr-index #nav-index,
-.page-wiki #nav-ressources,
+.page-wiki #nav-resources,
 .page-news #nav-news,
+.page-jobs #nav-jobs,
 .page-members #nav-member,
 .page-contact #nav-contact {
     color: #111;
@@ -258,7 +259,7 @@ ul.openid-invite li {
     margin: 0.5em;
     padding: 0.5em;
     box-sizing: border-box;
-    height: 200px;
+    height: 300px;
     -webkit-border-radius: 6px;
     -moz-border-radius: 6px;
     border-radius: 6px 6px 6px 6px;
@@ -268,6 +269,9 @@ ul.openid-invite li {
 }
 @media screen and (max-width: 600px) {
     @-ms-viewport { width: 320px; }
+    #nav-member, .navbar .navbar-brand {
+        font-size: 16px;
+    }
 }
 @media (min-width: 600px) {
     .navbar-collapse.collapse {
