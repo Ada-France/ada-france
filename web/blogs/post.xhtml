@@ -1,5 +1,5 @@
 <!-- View a single post
-  -  Copyright (C) 2014, 2015, 2016, 2017, 2018 Stephane Carrez
+  -  Copyright (C) 2014, 2015, 2016, 2018, 2019 Stephane Carrez
   -  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
   -
   -  Licensed under the Apache License, Version 2.0 (the "License");
@@ -20,9 +20,21 @@
         xmlns:awa="http://code.google.com/p/ada-awa/jsf"
         xmlns:ajax="http://code.google.com/p/ada-asf/ajax"
         xmlns:c="http://java.sun.com/jstl/core"
-        xmlns:util="http://code.google.com/p/ada-asf/util"
+	xmlns:util="http://code.google.com/p/ada-asf/util"
+        xmlns:fn="http://java.sun.com/jsp/jstl/functions"
         xmlns:h="http://java.sun.com/jsf/html">
     <ui:param name="title" value="#{post.title}"/>
+
+    <ui:define name="pageHeader">
+        <meta name="author" content="#{post.username}"/>
+        <meta property="og:title" content="#{util:escapeJavaScript(post.title)}"/>
+        <meta property="og:url" content="#{initParam['app_url_base']}/blogs/post.html?post=#{post.uri}"/>
+        <meta property="og:type" content="article"/>
+        <h:panelGroup rendered="#{not empty post.image}">
+        <meta property="og:image" content="#{initParam['app_url_domain']}#{post.image}"/>
+        </h:panelGroup>
+        <meta property="og:description" content="#{util:escapeJavaScript(fn:substring(fn:trim(post.description),1,128))}"/>
+    </ui:define>
 
     <!-- Main page body -->
     <ui:define name="pageBody">
@@ -50,10 +62,17 @@
                                  tagLink="#{contextPath}/blogs/tagged.html?tag=#{util:urlEncode(tagName)}"
                                  var="tagName"
                                  tagClass="tagedit-listelement tagedit-listelement-old"/>
+
+                    <awa:wiki rendered="#{not empty post.summary}"
+                              styleClass='post-text'
+                              value="#{post.summary}"
+                              links="#{postList.links}"
+                              format="#{post.format}"/>
+
                     <awa:wiki styleClass='post-text'
                               value="#{post.text}"
                               links="#{post.links}"
-                              format="dotclear"/>
+                              format="#{post.format}"/>
                     <!-- Increment the post read counter but do not display anything -->
                     <awa:counter value="#{post.counter}" hidden="true"/>
                     <div id="disqus_thread"></div>
@@ -106,7 +125,10 @@
 
     <ui:define name="pageScript">
         <script type="text/javascript" src="#{jquery.path}"></script>
+        <script type="text/javascript" src="#{jquery.uiPath}core.js"></script>
+        <script type="text/javascript" src="#{jquery.uiPath}widget.js"></script>
         <script type="text/javascript" src="#{contextPath}/js/asf.js"></script>
+        <script type="text/javascript" src="#{contextPath}/js/asf-message.js"></script>
         <script type="text/javascript" src="#{contextPath}/js/awa.js"></script>
     </ui:define>
 
