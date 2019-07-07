@@ -5,6 +5,6 @@
 config.status
 adafr.properties
 adafr.gpr
-Makefile
+Makefile.conf
 autom4te.cache
-rules.mk
+
