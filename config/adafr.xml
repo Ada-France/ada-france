@@ -10,6 +10,18 @@
     <message-bundle var='adafrMsg'>adafr</message-bundle>
   </application>
 
+  <managed-bean>
+    <description>This bean describes a blog post for the creation or the update</description>
+    <managed-bean-name>jobList</managed-bean-name>
+    <managed-bean-class>AWA.Blogs.Beans.Post_List_Bean</managed-bean-class>
+    <managed-bean-scope>request</managed-bean-scope>
+    <managed-property>
+      <property-name>tag</property-name>
+      <property-class>String</property-class>
+      <value>Emploi</value>
+    </managed-property>
+  </managed-bean>
+
   <!--  When a user is created, send him a welcome message.  -->
   <on-event name="user-create">
     <action>#{userMail.send}</action>
@@ -172,6 +184,7 @@
   <filter-mapping>
     <filter-name>service</filter-name>
     <url-pattern>/index.html</url-pattern>
+    <url-pattern>/emploi.html</url-pattern>
     <url-pattern>/actualites.html</url-pattern>
     <url-pattern>/contact.html</url-pattern>
     <url-pattern>/statuts.html</url-pattern>
@@ -182,6 +195,7 @@
     <filter-name>auth-filter</filter-name>
     <url-pattern>/index.html</url-pattern>
     <url-pattern>/actualites.html</url-pattern>
+    <url-pattern>/emploi.html</url-pattern>
     <url-pattern>/contact.html</url-pattern>
     <url-pattern>/statuts.html</url-pattern>
     <url-pattern>*.html</url-pattern>
@@ -194,6 +208,7 @@
     <permission>anonymous</permission>
     <url-pattern>/index.html</url-pattern>
     <url-pattern>/actualites.html</url-pattern>
+    <url-pattern>/emploi.html</url-pattern>
     <url-pattern>/contact.html</url-pattern>
     <url-pattern>/statuts.html</url-pattern>
     <url-pattern>/formations.html</url-pattern>
