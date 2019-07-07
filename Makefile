@@ -25,6 +25,6 @@ generate::
 	$(DYNAMO) generate $(DYNAMO_ARGS)
 
 package:
-	rm -rf $(distdir)
-	$(DYNAMO) dist $(distdir) package.xml
-	tar czf $(DIST_FILE) $(distdir)
+	rm -rf $(DIST_DIR)
+	$(DYNAMO) dist $(DIST_DIR) package.xml
+	tar czf $(DIST_FILE) $(DIST_DIR)
