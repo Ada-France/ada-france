@@ -674,6 +674,10 @@ CREATE TABLE awa_blog (
   `update_date` DATETIME NOT NULL,
   /* The blog base URL. */
   `url` VARCHAR(255) BINARY NOT NULL,
+  /* the default post format. */
+  `format` TINYINT NOT NULL,
+  /* the default image URL to be used */
+  `default_image_url` VARCHAR(255) BINARY NOT NULL,
   /* the workspace that this blog belongs to */
   `workspace_id` BIGINT NOT NULL,
   PRIMARY KEY (`id`)
@@ -700,10 +704,16 @@ CREATE TABLE awa_post (
   `allow_comments` TINYINT NOT NULL,
   /* the number of times the post was read. */
   `read_count` INTEGER NOT NULL,
+  /* the post summary. */
+  `summary` VARCHAR(255) BINARY NOT NULL,
+  /* the blog post format. */
+  `format` TINYINT NOT NULL,
   /*  */
   `author_id` BIGINT NOT NULL,
   /*  */
   `blog_id` BIGINT NOT NULL,
+  /*  */
+  `image_id` BIGINT ,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 INSERT INTO entity_type (name) VALUES
@@ -717,6 +727,10 @@ INSERT INTO awa_audit_field (entity_type, name)
 INSERT INTO awa_audit_field (entity_type, name)
   VALUES ((SELECT id FROM entity_type WHERE name = "awa_blog"), "url");
 INSERT INTO awa_audit_field (entity_type, name)
+  VALUES ((SELECT id FROM entity_type WHERE name = "awa_blog"), "format");
+INSERT INTO awa_audit_field (entity_type, name)
+  VALUES ((SELECT id FROM entity_type WHERE name = "awa_blog"), "default_image_url");
+INSERT INTO awa_audit_field (entity_type, name)
   VALUES ((SELECT id FROM entity_type WHERE name = "awa_post"), "title");
 INSERT INTO awa_audit_field (entity_type, name)
   VALUES ((SELECT id FROM entity_type WHERE name = "awa_post"), "uri");
@@ -726,6 +740,10 @@ INSERT INTO awa_audit_field (entity_type, name)
   VALUES ((SELECT id FROM entity_type WHERE name = "awa_post"), "status");
 INSERT INTO awa_audit_field (entity_type, name)
   VALUES ((SELECT id FROM entity_type WHERE name = "awa_post"), "allow_comments");
+INSERT INTO awa_audit_field (entity_type, name)
+  VALUES ((SELECT id FROM entity_type WHERE name = "awa_post"), "summary");
+INSERT INTO awa_audit_field (entity_type, name)
+  VALUES ((SELECT id FROM entity_type WHERE name = "awa_post"), "format");
 /* Copied from awa-wikis-mysql.sql*/
 /* File generated automatically by dynamo */
 /*  */
