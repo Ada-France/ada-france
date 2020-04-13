@@ -11,7 +11,7 @@ LIBNAME=lib${NAME}
 
 # Model generation arguments with Dynamo
 # --package XXX.XXX.Models db uml/xxx.zargo
-DYNAMO_ARGS=db
+DYNAMO_ARGS=--package Adafr.Members.Models db uml/ada-france.zargo
 
 ROOTDIR=.
 
