@@ -1,7 +1,6 @@
 -----------------------------------------------------------------------
---  adafr -- adafr applications
------------------------------------------------------------------------
---  Copyright (C) 2017, 2019 Ada France
+--  adafr-applications -- Ada France application
+--  Copyright (C) 2017, 2019, 2020 Ada France
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -42,6 +41,7 @@ with AWA.Images.Modules;
 with AWA.Counters.Modules;
 with AWA.Services.Filters;
 with AWA.Converters.Dates;
+with Adafr.Members.Modules;
 package Adafr.Applications is
 
    CONFIG_PATH  : constant String := "/adafr";
@@ -109,6 +109,7 @@ private
       Counter_Module    : aliased AWA.Counters.Modules.Counter_Module;
 
       --  Add your modules here.
+      Member_Module  : aliased Adafr.Members.Modules.Member_Module;
    end record;
 
 end Adafr.Applications;

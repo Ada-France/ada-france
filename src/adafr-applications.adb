@@ -1,7 +1,6 @@
 -----------------------------------------------------------------------
---  adafr -- adafr applications
------------------------------------------------------------------------
---  Copyright (C) 2017, 2019 Ada France
+--  adafr-applications -- Ada France application
+--  Copyright (C) 2017, 2019, 2020 Ada France
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -149,6 +148,10 @@ package body Adafr.Applications is
                 URI    => "wikis-preview",
                 Module => App.Preview_Module'Access);
 
+      Register (App    => App.Self.all'Access,
+                Name   => Adafr.Members.Modules.NAME,
+                URI    => "members",
+                Module => App.Member_Module'Access);
    end Initialize_Modules;
 
 end Adafr.Applications;
