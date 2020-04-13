@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  Adafr-server -- Application server
---  Copyright (C) 2017, 2019 Ada France
+--  Copyright (C) 2020 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,51 +15,49 @@
 --  See the License for the specific language governing permissions and
 --  limitations under the License.
 -----------------------------------------------------------------------
-with Ada.Exceptions;
-
 with Util.Log.Loggers;
+with Util.Commands;
+
+with Servlet.Server.Web;
+
+with AWA.Setup.Applications;
+with AWA.Commands.Drivers;
+with AWA.Commands.Start;
+with AWA.Commands.Setup;
+with AWA.Commands.Stop;
+with AWA.Commands.List;
+with AWA.Commands.Info;
 
 with ADO.Mysql;
-with AWS.Config.Set;
-with ASF.Server.Web;
-with AWA.Setup.Applications;
 
 with Adafr.Applications;
 procedure Adafr.Server is
 
-   procedure Configure (Config : in out AWS.Config.Object);
+   package Server_Commands is
+     new AWA.Commands.Drivers (Driver_Name => "adafr",
+                               Container_Type => Servlet.Server.Web.AWS_Container);
 
+   package List_Command is new AWA.Commands.List (Server_Commands);
+   package Start_Command is new AWA.Commands.Start (Server_Commands);
+   package Stop_Command is new AWA.Commands.Stop (Server_Commands);
+   package Info_Command is new AWA.Commands.Info (Server_Commands);
+   package Setup_Command is new AWA.Commands.Setup (Start_Command);
 
-   Log     : constant Util.Log.Loggers.Logger := Util.Log.Loggers.Create ("Adafr.Server");
-   App     : constant Adafr.Applications.Application_Access := new Adafr.Applications.Application;
-   WS      : ASF.Server.Web.AWS_Container;
-
-   procedure Setup is
-     new AWA.Setup.Applications.Configure (Adafr.Applications.Application'Class,
-                                           Adafr.Applications.Application_Access,
-                                           Adafr.Applications.Initialize);
-
-   procedure Configure (Config : in out AWS.Config.Object) is
-   begin
-      AWS.Config.Set.Input_Line_Size_Limit (1_000_000);
-      AWS.Config.Set.Max_Connection (Config, 2);
-      AWS.Config.Set.Accept_Queue_Size (Config, 100);
-      AWS.Config.Set.Send_Buffer_Size (Config, 128 * 1024);
-      AWS.Config.Set.Upload_Size_Limit (Config, 100_000_000);
-   end Configure;
-
+   Log       : constant Util.Log.Loggers.Logger := Util.Log.Loggers.Create ("Adafr.Server");
+   App       : constant Adafr.Applications.Application_Access := new Adafr.Applications.Application;
+   WS        : Servlet.Server.Web.AWS_Container renames Server_Commands.WS;
+   Context   : AWA.Commands.Context_Type;
+   Arguments : Util.Commands.Dynamic_Argument_List;
 begin
+   --  Initialize the database drivers (all of them or specific ones).
    ADO.Mysql.Initialize;
-   WS.Configure (Configure'Access);
-   WS.Start;
    Log.Info ("Connect you browser to: http://localhost:8080{0}/index.html",
              Adafr.Applications.CONTEXT_PATH);
-   Setup (WS, App, "adafr", Adafr.Applications.CONTEXT_PATH);
-   delay 365.0 * 24.0 * 3600.0;
-   App.Close;
+   WS.Register_Application (Adafr.Applications.CONTEXT_PATH, App.all'Access);
+
+   Server_Commands.Run (Context, Arguments);
+
 exception
    when E : others =>
-      Log.Error ("Exception in server: " &
-                 Ada.Exceptions.Exception_Name (E) & ": " &
-                 Ada.Exceptions.Exception_Message (E));
+      Context.Print (E);
 end Adafr.Server;
