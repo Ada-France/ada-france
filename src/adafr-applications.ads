@@ -21,7 +21,6 @@ with ASF.Servlets.Ajax;
 with ASF.Filters.Dump;
 with ASF.Filters.Cache_Control;
 with Servlet.Core.Measures;
-with ASF.Applications;
 with ASF.Security.Servlets;
 with ASF.Converters.Sizes;
 
@@ -49,11 +48,6 @@ package Adafr.Applications is
 
    type Application is new AWA.Applications.Application with private;
    type Application_Access is access all Application'Class;
-
-   --  Initialize the application.
-   procedure Initialize (App    : in Application_Access;
-                         Config : in ASF.Applications.Config);
-
 
    --  Initialize the servlets provided by the application.
    --  This procedure is called by <b>Initialize</b>.
