@@ -18,16 +18,18 @@
 
 with Ada.Strings.Unbounded;
 
-with Util.Beans.Basic;
 with Util.Beans.Objects;
-with Util.Beans.Methods;
+with Util.Beans.Basic;
+with ADO;
 with Adafr.Members.Modules;
+with Adafr.Members.Models;
 package Adafr.Members.Beans is
 
-   type Member_Bean is new Util.Beans.Basic.Bean
-     and Util.Beans.Methods.Method_Bean with record
-      Module : Adafr.Members.Modules.Member_Module_Access := null;
-      Count  : Natural := 0;
+   type Member_Bean is new Adafr.Members.Models.Member_Bean with record
+      Module       : Adafr.Members.Modules.Member_Module_Access := null;
+      Id           : ADO.Identifier := ADO.NO_IDENTIFIER;
+      History      : aliased Adafr.Members.Models.Audit_Info_List_Bean;
+      History_Bean : Adafr.Members.Models.Audit_Info_List_Bean_Access;
    end record;
    type Member_Bean_Access is access all Member_Bean'Class;
 
@@ -36,23 +38,64 @@ package Adafr.Members.Beans is
    function Get_Value (From : in Member_Bean;
                        Name : in String) return Util.Beans.Objects.Object;
 
-   --  Set the value identified by the name.
+   --  Set the bean attribute identified by the name.
    overriding
-   procedure Set_Value (From  : in out Member_Bean;
+   procedure Set_Value (Item  : in out Member_Bean;
                         Name  : in String;
                         Value : in Util.Beans.Objects.Object);
 
-   --  This bean provides some methods that can be used in a Method_Expression
+   --  Send the member email validation request.
    overriding
-   function Get_Method_Bindings (From : in Member_Bean)
-                                 return Util.Beans.Methods.Method_Binding_Array_Access;
+   procedure Send (Bean    : in out Member_Bean;
+                   Outcome : in out Ada.Strings.Unbounded.Unbounded_String);
 
-   --  Example of action method.
-   procedure Action (Bean    : in out Member_Bean;
-                     Outcome : in out Ada.Strings.Unbounded.Unbounded_String);
+   --  Save the member information.
+   overriding
+   procedure Save (Bean    : in out Member_Bean;
+                   Outcome : in out Ada.Strings.Unbounded.Unbounded_String);
+
+   --  Validate the member information.
+   overriding
+   procedure Load (Bean    : in out Member_Bean;
+                   Outcome : in out Ada.Strings.Unbounded.Unbounded_String);
+
+   --  Validate the member information.
+   overriding
+   procedure Validate (Bean    : in out Member_Bean;
+                       Outcome : in out Ada.Strings.Unbounded.Unbounded_String);
+
+   --  Register the member information.
+   overriding
+   procedure Register (Bean    : in out Member_Bean;
+                       Outcome : in out Ada.Strings.Unbounded.Unbounded_String);
+
+   --  Update the member after receiving the contribution.
+   overriding
+   procedure Save_Payment (Bean    : in out Member_Bean;
+                           Outcome : in out Ada.Strings.Unbounded.Unbounded_String);
 
    --  Create the Members_Bean bean instance.
    function Create_Member_Bean (Module : in Adafr.Members.Modules.Member_Module_Access)
+      return Util.Beans.Basic.Readonly_Bean_Access;
+
+   type Member_List_Bean is new Adafr.Members.Models.Member_List_Bean with record
+      Module       : Adafr.Members.Modules.Member_Module_Access := null;
+      Members      : aliased Adafr.Members.Models.Member_Info_List_Bean;
+      Members_Bean : Adafr.Members.Models.Member_Info_List_Bean_Access;
+   end record;
+   type Member_List_Bean_Access is access all Member_List_Bean'Class;
+
+   overriding
+   function Get_Value (From : in Member_List_Bean;
+                       Name : in String) return Util.Beans.Objects.Object;
+
+   --  Load the list of members.
+   overriding
+   procedure Load (List    : in out Member_List_Bean;
+                   Outcome : in out Ada.Strings.Unbounded.Unbounded_String);
+
+   --  Create the Members_List_Bean bean instance.
+   function Create_Member_List_Bean (Module : in Adafr.Members.Modules.Member_Module_Access)
       return Util.Beans.Basic.Readonly_Bean_Access;
 
 end Adafr.Members.Beans;
