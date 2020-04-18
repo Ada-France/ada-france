@@ -1,0 +1,65 @@
+<f:view contentType="text/html; charset=UTF-8"
+        xmlns:f="http://java.sun.com/jsf/core"
+        xmlns:util="http://code.google.com/p/ada-asf/util"
+        xmlns:h="http://java.sun.com/jsf/html">
+  <f:metadata>
+      <f:viewParam id='id' value='#{adafrMember.id}' required="true"/>
+      <f:viewAction action='#{adafrMember.load}'/>
+  </f:metadata>
+  <div>
+    <h2>Cotisation reçue de la part de #{adafrMember.first_name} #{adafrMember.last_name}</h2>
+    <h:form id='contribution-received-form'>
+        <h:inputHidden id='member-id' value="#{adafrMember.id}"/>
+        <div class='ui-widget container_12'>
+            <div class='awa-messages'>
+                <h:message styleClass='awa-error'/>
+            </div>
+            <h:selectOneRadio styleClass="awa-radio" id="mode" value="#{adafrMember.ada_europe}">
+                <f:selectItem id="ada-europe-no" name="mode"
+                              itemValue="FALSE"
+                              itemLabel="Ada-France (30 euros)" />
+                <f:selectItem id="ada-europe-yes" name="mode"
+                              itemValue="TRUE"
+                              itemLabel="Ada-France + Ada-Europe (65 euros)" />
+            </h:selectOneRadio>
+            <dl class="awa-required#{util:hasMessage('payment-date') ? ' awa-error' : ''}">
+                <dt>
+                    <label for='email'>Cotisation aquitté le</label>
+                    <h:message for='payment-date'/>
+                </dt>
+                <dd>
+                    <h:inputText id="payment-date"
+                                 required="false"
+                                 styleClass="ui-corner-all"
+                                 value="#{adafrMember.payment_date}">
+                        <f:convertDateTime pattern="%Y-%m-%d"/>
+                    </h:inputText>
+                </dd>
+            </dl>
+            <div class="adafr-member-contribution-note">
+                Un e-mail sera envoyé à #{adafrMember.email} ainsi qu'à #{initParam['bureau_email']}
+                pour reception de cette cotisation.
+            </div>
+            <ul class='awa-buttons'>
+                <li>
+                    <h:commandButton id='save' value='Save' action="#{adafrMember.save_payment}"
+                            styleClass="ui-button ui-state-default ui-corner-all"/>
+                </li>
+            </ul>
+        </div>
+    </h:form>
+      <util:script>
+          $(function(){
+              $("#payment-date").datetimepicker({
+                  format: 'Y-m-d',
+                  dayOfWeekStart: 1,
+                  timepicker: false,
+                  datepicker: true,
+                  onSelect: function(date, picker) {
+                      /* alert(date); */
+                  }
+              });
+          });
+      </util:script>
+  </div>
+</f:view>

@@ -1,0 +1,12 @@
+<ul xmlns:h="http://java.sun.com/jsf/html"
+    class="adafr-member-actions">
+    <li>
+        <a class='awa-button' href="#{contextPath}/members/edit.html?id=#{adafrMember.id}">Modifier</a>
+    </li>
+    <li>
+        <a class='awa-button' href="#" title="Mettre à jour pour cotisation reçue"
+           onclick="return ASF.OpenDialog(this, 'approveDialog', '#{contextPath}/members/forms/contribution-received-form.html?id=#{adafrMember.id}');">
+            Souscription
+        </a>
+    </li>
+</ul>

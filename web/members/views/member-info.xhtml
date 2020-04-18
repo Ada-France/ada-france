@@ -1,0 +1,32 @@
+<div xmlns:h="http://java.sun.com/jsf/html"
+     xmlns:f="http://java.sun.com/jsf/core"
+     class="adafr-member-info">
+    <dl>
+        <dt>Nom</dt>
+        <dd>#{adafrMember.first_name} #{adafrMember.last_name}</dd>
+        <dt>Email</dt>
+        <dd>#{adafrMember.email}</dd>
+        <h:panelGroup rendered="#{not empty adafrMember.company}">
+            <dt>Société</dt>
+            <dd>#{adafrMember.company}</dd>
+        </h:panelGroup>
+        <dt>Adresse</dt>
+        <dd>
+            <div>#{adafrMember.address1}</div>
+            <div>#{adafrMember.address2}</div>
+            <div>#{adafrMember.address3}</div>
+            <div>#{adafrMember.postal_code} #{adafrMember.city}</div>
+            <div>#{adafrMember.country}</div>
+        </dd>
+        <dt>Crée le</dt>
+        <dd>#{adafrMember.create_date}</dd>
+        <dt>Email vérifié le</dt>
+        <dd>#{adafrMember.mail_verify_date}</dd>
+        <dt>Mis à jour le</dt>
+        <dd>#{adafrMember.update_date}</dd>
+        <dt>Date de paiement</dt>
+        <dd><h:outputText value="#{adafrMember.payment_date}">
+            <f:convertDateTime pattern="%Y-%m-%d"/>
+        </h:outputText></dd>
+    </dl>
+</div>
