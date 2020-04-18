@@ -1,3 +1,6 @@
+/* Copied from adafr-drop-mysql.sql*/
+/* File generated automatically by dynamo */
+DROP TABLE IF EXISTS `adafr_member`;
 /* Copied from awa-wikis-drop-mysql.sql*/
 /* File generated automatically by dynamo */
 DROP TABLE IF EXISTS `awa_wiki_space`;

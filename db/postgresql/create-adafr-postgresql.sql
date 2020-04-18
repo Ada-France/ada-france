@@ -302,13 +302,13 @@ INSERT INTO entity_type (name) VALUES
 ,('awa_user')
 ;
 INSERT INTO awa_audit_field (entity_type, name)
-  VALUES ((SELECT id FROM entity_type WHERE name = "awa_user"), "first_name");
+  VALUES ((SELECT id FROM entity_type WHERE name = 'awa_user'), 'first_name');
 INSERT INTO awa_audit_field (entity_type, name)
-  VALUES ((SELECT id FROM entity_type WHERE name = "awa_user"), "last_name");
+  VALUES ((SELECT id FROM entity_type WHERE name = 'awa_user'), 'last_name');
 INSERT INTO awa_audit_field (entity_type, name)
-  VALUES ((SELECT id FROM entity_type WHERE name = "awa_user"), "country");
+  VALUES ((SELECT id FROM entity_type WHERE name = 'awa_user'), 'country');
 INSERT INTO awa_audit_field (entity_type, name)
-  VALUES ((SELECT id FROM entity_type WHERE name = "awa_user"), "name");
+  VALUES ((SELECT id FROM entity_type WHERE name = 'awa_user'), 'name');
 /* Copied from awa-workspaces-postgresql.sql*/
 /* File generated automatically by dynamo */
 /*  */
@@ -413,11 +413,11 @@ INSERT INTO entity_type (name) VALUES
 ('awa_comment')
 ;
 INSERT INTO awa_audit_field (entity_type, name)
-  VALUES ((SELECT id FROM entity_type WHERE name = "awa_comment"), "message");
+  VALUES ((SELECT id FROM entity_type WHERE name = 'awa_comment'), 'message');
 INSERT INTO awa_audit_field (entity_type, name)
-  VALUES ((SELECT id FROM entity_type WHERE name = "awa_comment"), "status");
+  VALUES ((SELECT id FROM entity_type WHERE name = 'awa_comment'), 'status');
 INSERT INTO awa_audit_field (entity_type, name)
-  VALUES ((SELECT id FROM entity_type WHERE name = "awa_comment"), "format");
+  VALUES ((SELECT id FROM entity_type WHERE name = 'awa_comment'), 'format');
 /* Copied from awa-tags-postgresql.sql*/
 /* File generated automatically by dynamo */
 /* The tag definition. */
@@ -721,29 +721,29 @@ INSERT INTO entity_type (name) VALUES
 ,('awa_post')
 ;
 INSERT INTO awa_audit_field (entity_type, name)
-  VALUES ((SELECT id FROM entity_type WHERE name = "awa_blog"), "name");
+  VALUES ((SELECT id FROM entity_type WHERE name = 'awa_blog'), 'name');
 INSERT INTO awa_audit_field (entity_type, name)
-  VALUES ((SELECT id FROM entity_type WHERE name = "awa_blog"), "uid");
+  VALUES ((SELECT id FROM entity_type WHERE name = 'awa_blog'), 'uid');
 INSERT INTO awa_audit_field (entity_type, name)
-  VALUES ((SELECT id FROM entity_type WHERE name = "awa_blog"), "url");
+  VALUES ((SELECT id FROM entity_type WHERE name = 'awa_blog'), 'url');
 INSERT INTO awa_audit_field (entity_type, name)
-  VALUES ((SELECT id FROM entity_type WHERE name = "awa_blog"), "format");
+  VALUES ((SELECT id FROM entity_type WHERE name = 'awa_blog'), 'format');
 INSERT INTO awa_audit_field (entity_type, name)
-  VALUES ((SELECT id FROM entity_type WHERE name = "awa_blog"), "default_image_url");
+  VALUES ((SELECT id FROM entity_type WHERE name = 'awa_blog'), 'default_image_url');
 INSERT INTO awa_audit_field (entity_type, name)
-  VALUES ((SELECT id FROM entity_type WHERE name = "awa_post"), "title");
+  VALUES ((SELECT id FROM entity_type WHERE name = 'awa_post'), 'title');
 INSERT INTO awa_audit_field (entity_type, name)
-  VALUES ((SELECT id FROM entity_type WHERE name = "awa_post"), "uri");
+  VALUES ((SELECT id FROM entity_type WHERE name = 'awa_post'), 'uri');
 INSERT INTO awa_audit_field (entity_type, name)
-  VALUES ((SELECT id FROM entity_type WHERE name = "awa_post"), "publish_date");
+  VALUES ((SELECT id FROM entity_type WHERE name = 'awa_post'), 'publish_date');
 INSERT INTO awa_audit_field (entity_type, name)
-  VALUES ((SELECT id FROM entity_type WHERE name = "awa_post"), "status");
+  VALUES ((SELECT id FROM entity_type WHERE name = 'awa_post'), 'status');
 INSERT INTO awa_audit_field (entity_type, name)
-  VALUES ((SELECT id FROM entity_type WHERE name = "awa_post"), "allow_comments");
+  VALUES ((SELECT id FROM entity_type WHERE name = 'awa_post'), 'allow_comments');
 INSERT INTO awa_audit_field (entity_type, name)
-  VALUES ((SELECT id FROM entity_type WHERE name = "awa_post"), "summary");
+  VALUES ((SELECT id FROM entity_type WHERE name = 'awa_post'), 'summary');
 INSERT INTO awa_audit_field (entity_type, name)
-  VALUES ((SELECT id FROM entity_type WHERE name = "awa_post"), "format");
+  VALUES ((SELECT id FROM entity_type WHERE name = 'awa_post'), 'format');
 /* Copied from awa-wikis-postgresql.sql*/
 /* File generated automatically by dynamo */
 /*  */
@@ -824,16 +824,95 @@ INSERT INTO entity_type (name) VALUES
 ,('awa_wiki_space')
 ;
 INSERT INTO awa_audit_field (entity_type, name)
-  VALUES ((SELECT id FROM entity_type WHERE name = "awa_wiki_page"), "name");
+  VALUES ((SELECT id FROM entity_type WHERE name = 'awa_wiki_page'), 'name');
 INSERT INTO awa_audit_field (entity_type, name)
-  VALUES ((SELECT id FROM entity_type WHERE name = "awa_wiki_page"), "last_version");
+  VALUES ((SELECT id FROM entity_type WHERE name = 'awa_wiki_page'), 'last_version');
 INSERT INTO awa_audit_field (entity_type, name)
-  VALUES ((SELECT id FROM entity_type WHERE name = "awa_wiki_page"), "is_public");
+  VALUES ((SELECT id FROM entity_type WHERE name = 'awa_wiki_page'), 'is_public');
 INSERT INTO awa_audit_field (entity_type, name)
-  VALUES ((SELECT id FROM entity_type WHERE name = "awa_wiki_page"), "title");
+  VALUES ((SELECT id FROM entity_type WHERE name = 'awa_wiki_page'), 'title');
 INSERT INTO awa_audit_field (entity_type, name)
-  VALUES ((SELECT id FROM entity_type WHERE name = "awa_wiki_space"), "name");
+  VALUES ((SELECT id FROM entity_type WHERE name = 'awa_wiki_space'), 'name');
 INSERT INTO awa_audit_field (entity_type, name)
-  VALUES ((SELECT id FROM entity_type WHERE name = "awa_wiki_space"), "is_public");
+  VALUES ((SELECT id FROM entity_type WHERE name = 'awa_wiki_space'), 'is_public');
 INSERT INTO awa_audit_field (entity_type, name)
-  VALUES ((SELECT id FROM entity_type WHERE name = "awa_wiki_space"), "format");
+  VALUES ((SELECT id FROM entity_type WHERE name = 'awa_wiki_space'), 'format');
+/* Copied from adafr-postgresql.sql*/
+/* File generated automatically by dynamo */
+/* The Member table holds the list of Ada France members with the necessary
+information so that we can send them the Ada User Journal if they are
+member of Ada Europe. The member is first in the PENDING state
+until we receive the validation of the email address. Then, it enters
+int the WAITNG_PAYMENT state until the payment is acknowledged.
+The payment process is manual (wire transfer or by check) and
+switch to MEMBER once it is received.the member identifier */
+CREATE TABLE adafr_member (
+  /*  */
+  "id" BIGINT NOT NULL,
+  /* optimistic locking version */
+  "version" INTEGER NOT NULL,
+  /* the member's first name. */
+  "first_name" VARCHAR(255) NOT NULL,
+  /* the member's last name. */
+  "last_name" VARCHAR(255) NOT NULL,
+  /* the optional member's company name. */
+  "company" VARCHAR(255) NOT NULL,
+  /* first adress field. */
+  "address1" VARCHAR(255) NOT NULL,
+  /* second address field. */
+  "address2" VARCHAR(255) NOT NULL,
+  /* third address field. */
+  "address3" VARCHAR(255) NOT NULL,
+  /* address postal code. */
+  "postal_code" VARCHAR(255) NOT NULL,
+  /* address tiown. */
+  "city" VARCHAR(255) NOT NULL,
+  /* the country. */
+  "country" VARCHAR(255) NOT NULL,
+  /* the date when the member record was created. */
+  "create_date" TIMESTAMP NOT NULL,
+  /* the date when the member's email was validated. */
+  "mail_verify_date" TIMESTAMP ,
+  /* the date when the payment was received. */
+  "payment_date" TIMESTAMP ,
+  /*  */
+  "status" SMALLINT NOT NULL,
+  /* whether the member is also member of Ada Europe. */
+  "ada_europe" BOOLEAN NOT NULL,
+  /* secure key salt. */
+  "salt" VARCHAR(255) NOT NULL,
+  /* date when the information was updated. */
+  "update_date" TIMESTAMP NOT NULL,
+  /* the member's email address. */
+  "email_id" BIGINT NOT NULL,
+  PRIMARY KEY ("id")
+);
+INSERT INTO entity_type (name) VALUES
+('adafr_member')
+;
+INSERT INTO awa_audit_field (entity_type, name)
+  VALUES ((SELECT id FROM entity_type WHERE name = 'adafr_member'), 'first_name');
+INSERT INTO awa_audit_field (entity_type, name)
+  VALUES ((SELECT id FROM entity_type WHERE name = 'adafr_member'), 'last_name');
+INSERT INTO awa_audit_field (entity_type, name)
+  VALUES ((SELECT id FROM entity_type WHERE name = 'adafr_member'), 'company');
+INSERT INTO awa_audit_field (entity_type, name)
+  VALUES ((SELECT id FROM entity_type WHERE name = 'adafr_member'), 'address1');
+INSERT INTO awa_audit_field (entity_type, name)
+  VALUES ((SELECT id FROM entity_type WHERE name = 'adafr_member'), 'address2');
+INSERT INTO awa_audit_field (entity_type, name)
+  VALUES ((SELECT id FROM entity_type WHERE name = 'adafr_member'), 'address3');
+INSERT INTO awa_audit_field (entity_type, name)
+  VALUES ((SELECT id FROM entity_type WHERE name = 'adafr_member'), 'postal_code');
+INSERT INTO awa_audit_field (entity_type, name)
+  VALUES ((SELECT id FROM entity_type WHERE name = 'adafr_member'), 'city');
+INSERT INTO awa_audit_field (entity_type, name)
+  VALUES ((SELECT id FROM entity_type WHERE name = 'adafr_member'), 'country');
+INSERT INTO awa_audit_field (entity_type, name)
+  VALUES ((SELECT id FROM entity_type WHERE name = 'adafr_member'), 'mail_verify_date');
+INSERT INTO awa_audit_field (entity_type, name)
+  VALUES ((SELECT id FROM entity_type WHERE name = 'adafr_member'), 'payment_date');
+INSERT INTO awa_audit_field (entity_type, name)
+  VALUES ((SELECT id FROM entity_type WHERE name = 'adafr_member'), 'status');
+INSERT INTO awa_audit_field (entity_type, name)
+  VALUES ((SELECT id FROM entity_type WHERE name = 'adafr_member'), 'ada_europe');
