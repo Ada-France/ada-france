@@ -18,30 +18,11 @@
 
 with Util.Log.Loggers;
 
-with AWA.Applications.Factory;
-
 package body Adafr.Applications is
 
    use AWA.Applications;
 
    Log     : constant Util.Log.Loggers.Logger := Util.Log.Loggers.Create ("Adafr");
-
-   --  ------------------------------
-   --  Initialize the application:
-   --  <ul>
-   --     <li>Register the servlets and filters.
-   --     <li>Register the application modules.
-   --     <li>Define the servlet and filter mappings.
-   --  </ul>
-   --  ------------------------------
-   procedure Initialize (App    : in Application_Access;
-                         Config : in ASF.Applications.Config) is
-      Fact  : AWA.Applications.Factory.Application_Factory;
-   begin
-      App.Self := App;
-      App.Initialize (Config, Fact);
-      App.Set_Global ("contextPath", CONTEXT_PATH);
-   end Initialize;
 
    --  ------------------------------
    --  Initialize the servlets provided by the application.
@@ -53,6 +34,8 @@ package body Adafr.Applications is
    begin
       Log.Info ("Initializing application servlets...");
 
+      App.Self := App'Unchecked_Access;
+      App.Set_Global ("contextPath", CONTEXT_PATH);
       AWA.Applications.Application (App).Initialize_Servlets;
       App.Add_Servlet (Name => "faces", Server => App.Self.Faces'Access);
       App.Add_Servlet (Name => "files", Server => App.Self.Files'Access);
