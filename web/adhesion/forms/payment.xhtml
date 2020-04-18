@@ -1,0 +1,49 @@
+<f:view contentType="text/html; charset=UTF-8"
+        xmlns:ui="http://java.sun.com/jsf/facelets"
+        xmlns:f="http://java.sun.com/jsf/core"
+        xmlns:h="http://java.sun.com/jsf/html">
+    <f:metadata>
+        <f:viewParam name="key" value="#{adafrMember.key}"/>
+        <f:viewAction action="#{adafrMember.load}"/>
+    </f:metadata>
+    <div class='ui-widget awa-form'>
+        <h:panelGroup rendered="#{adafrMember.status eq 'MEMBER_ADA_FRANCE'}">
+            <p>
+                Merci pour votre support à notre association.
+            </p>
+            <p>
+                Vous êtes actuellement membre de Ada-France.
+            </p>
+        </h:panelGroup>
+        <h:panelGroup rendered="#{adafrMember.status eq 'MEMBER_ADA_EUROPE'}">
+            <p>
+                Merci pour votre support à notre association.
+            </p>
+            <p>
+                Vous êtes actuellement membre de Ada-France et Ada-Europe.
+            </p>
+        </h:panelGroup>
+        <h:panelGroup rendered="#{adafrMember.status eq 'WAITING_PAYMENT'}">
+            <p>
+                Vous êtes actuellement enregistré et nous attendons votre
+                paiement de #{adafrMember.ada_europe ? '65' : '30'} euros
+                pour finaliser l'enregistrement.
+            </p>
+            <ui:include src="/adhesion/views/payment-info.xhtml"/>
+        </h:panelGroup>
+        <h:panelGroup rendered="#{adafrMember.ada_europe or adafrMember.status eq 'MEMBER_ADA_EUROPE'}">
+            <p>
+                En tant que membre de Ada-Europe, nous vous enverrons
+                les <b>Ada User Journals</b> à l'adresse suivante:
+            </p>
+            <address class="adafr-member-address">
+                <span>#{adafrMember.first_name} #{adafrMember.last_name}</span>
+                <span>#{adafrMember.address1}</span>
+                <span>#{adafrMember.address2}</span>
+                <span>#{adafrMember.address3}</span>
+                <span>#{adafrMember.postal_code} #{adafrMember.city}</span>
+                <span>#{adafrMember.country}</span>
+            </address>
+        </h:panelGroup>
+    </div>
+</f:view>

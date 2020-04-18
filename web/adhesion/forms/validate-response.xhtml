@@ -1,0 +1,10 @@
+<f:view contentType="application/json"
+        xmlns:util="http://code.google.com/p/ada-asf/util"
+        xmlns:f="http://java.sun.com/jsf/core">
+[
+    { "action": "get", "url": "#{contextPath}/adhesion/forms/register.html?key=#{util:escapeJavaScript(adafrMember.key)}" },
+    { "action": "removeClass", "id": "#subscribe-steps", "data": "subscribe-validate" },
+    { "action": "addClass", "id": "#subscribe-steps", "data": "subscribe-register" },
+    { "action": "update", "id": "error", "data": ""}
+]
+</f:view>

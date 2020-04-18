@@ -1,0 +1,29 @@
+<f:view contentType="text/html; charset=UTF-8"
+        xmlns:f="http://java.sun.com/jsf/core"
+        xmlns:w="http://code.google.com/p/ada-asf/widget"
+        xmlns:h="http://java.sun.com/jsf/html">
+    <div class='ui-widget awa-form'>
+        <h:form id='subscribe-send'>
+            <div class='col-md-8'>
+                <h:messages styleClass='awa-error'/>
+                <p>
+                    Une clef de sécurité vous a été envoyée par e-mail.
+                    Entrez cette clef ci-dessous ou cliquez sur le lien
+                    reçu dans le mail.
+                </p>
+                <w:inputText styleClass="awa-required ui-corner-all"
+                             id='key' size='50' required='true' value='#{adafrMember.key}'
+                             title='Clef de sécurité'/>
+                <ul class='awa-buttons'>
+                    <li>
+                        <h:commandButton id='send-mail'
+                                         title="Valider la clef de sécurité"
+                                         value='Valider'
+                                         styleClass="ui-button ui-state-default ui-corner-all"
+                                         action="#{adafrMember.validate}"/>
+                    </li>
+                </ul>
+            </div>
+        </h:form>
+    </div>
+</f:view>

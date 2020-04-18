@@ -1,0 +1,31 @@
+<f:view contentType="text/html; charset=UTF-8"
+        xmlns:f="http://java.sun.com/jsf/core"
+        xmlns:w="http://code.google.com/p/ada-asf/widget"
+        xmlns:h="http://java.sun.com/jsf/html">
+    <div class='ui-widget awa-form'>
+        <h:form id='subscribe-send'>
+            <div class='col-md-8'>
+                <h:messages styleClass='awa-error' globalOnly="true"/>
+                <p>
+                    Entrez votre adresse email pour commencer le process d'adhésion.
+                    Un premier e-mail vous sera envoyé pour la valider.
+                </p>
+                <w:inputText styleClass="awa-required ui-corner-all"
+                             id='email' size='50' required='true' value='#{adafrMember.email}'
+                             validatorMessage="Addresse e-mail non valide"
+                             title='Adresse e-mail'>
+                    <f:validateRegex pattern="^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$"/>
+                </w:inputText>
+                <ul class='awa-buttons'>
+                    <li>
+                        <h:commandButton id='send-mail'
+                                         title="Envoyer l'e-mail de validation"
+                                         value='Envoyer'
+                                         styleClass="ui-button ui-state-default ui-corner-all"
+                                         action="#{adafrMember.send}"/>
+                    </li>
+                </ul>
+            </div>
+        </h:form>
+    </div>
+</f:view>
