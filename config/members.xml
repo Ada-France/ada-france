@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module version="1.0">
+
+  <application>
+    <message-bundle var='memberMsg'>members</message-bundle>
+  </application>
+
+  <!--  When a user wants to become a member, send her/him a mail validation message.  -->
+  <on-event name="member-send-validate">
+    <action>#{userMail.send}</action>
+    <property name="template">/mail/member-send-validate-email.html</property>
+  </on-event>
+
+  <on-event name="member-subscribed">
+    <action>#{userMail.send}</action>
+    <property name="template">/mail/member-subscribed-email.html</property>
+  </on-event>
+
+  <on-event name="member-pending">
+    <action>#{userMail.send}</action>
+    <property name="template">/mail/member-pending-email.html</property>
+  </on-event>
+
+  <on-event name="member-registered">
+    <action>#{userMail.send}</action>
+    <property name="template">/mail/member-registered-email.html</property>
+  </on-event>
+
+  <managed-bean>
+    <description>Subscription member</description>
+    <managed-bean-name>adafrMember</managed-bean-name>
+    <managed-bean-class>Adafr.Members.Beans.Member_Bean</managed-bean-class>
+    <managed-bean-scope>request</managed-bean-scope>
+  </managed-bean>
+
+  <managed-bean>
+    <description>List of members</description>
+    <managed-bean-name>adafrMemberList</managed-bean-name>
+    <managed-bean-class>Adafr.Members.Beans.Member_List_Bean</managed-bean-class>
+    <managed-bean-scope>request</managed-bean-scope>
+  </managed-bean>
+
+  <!-- Registration forms -->
+  <navigation-rule>
+    <from-view-id>/adhesion/forms/mail.xhtml</from-view-id>
+    <navigation-case>
+      <from-outcome>success</from-outcome>
+      <to-view-id>/adhesion/forms/mail-response.xhtml</to-view-id>
+    </navigation-case>
+  </navigation-rule>
+
+  <navigation-rule>
+    <from-view-id>/adhesion/forms/validate.xhtml</from-view-id>
+    <navigation-case>
+      <from-outcome>success</from-outcome>
+      <to-view-id>/adhesion/forms/validate-response.xhtml</to-view-id>
+    </navigation-case>
+    <navigation-case>
+      <from-outcome>failure</from-outcome>
+      <to-view-id>/adhesion/forms/validate-response.xhtml</to-view-id>
+    </navigation-case>
+  </navigation-rule>
+
+  <navigation-rule>
+    <from-view-id>/adhesion/forms/register.xhtml</from-view-id>
+    <navigation-case>
+      <from-outcome>saved</from-outcome>
+      <to-view-id>/adhesion/forms/register-response.xhtml</to-view-id>
+    </navigation-case>
+  </navigation-rule>
+
+  <navigation-rule>
+    <from-view-id>/adhesion/forms/adhesion.xhtml</from-view-id>
+    <navigation-case>
+      <from-outcome>success</from-outcome>
+      <to-view-id>/adhesion/forms/adhesion-response.xhtml</to-view-id>
+    </navigation-case>
+  </navigation-rule>
+
+  <navigation-rule>
+    <from-view-id>/adhesion/forms/payment.xhtml</from-view-id>
+  </navigation-rule>
+
+  <navigation-rule>
+    <from-view-id>/adhesion/validate.xhtml</from-view-id>
+    <navigation-case>
+      <from-outcome>failure</from-outcome>
+      <to-view-id>/adhesion/index.html</to-view-id>
+      <redirect/>
+    </navigation-case>
+  </navigation-rule>
+
+  <!-- Admin approval forms -->
+  <navigation-rule>
+    <from-view-id>/members/forms/contribution-received-form.xhtml</from-view-id>
+    <navigation-case>
+      <from-outcome>saved</from-outcome>
+      <to-view-id>/members/forms/contribution-received-response.xhtml</to-view-id>
+    </navigation-case>
+  </navigation-rule>
+
+  <navigation-rule>
+    <from-view-id>/members/edit.xhtml</from-view-id>
+    <navigation-case>
+      <from-outcome>saved</from-outcome>
+      <to-view-id>/members/index.xhtml</to-view-id>
+      <redirect/>
+    </navigation-case>
+  </navigation-rule>
+
+  <filter-mapping>
+    <filter-name>service</filter-name>
+    <url-pattern>/members/*.html</url-pattern>
+    <url-pattern>/adhesion/*.html</url-pattern>
+  </filter-mapping>
+
+  <filter-mapping>
+    <filter-name>auth-filter</filter-name>
+    <url-pattern>/members/*.html</url-pattern>
+    <url-pattern>/adhesion/*.html</url-pattern>
+  </filter-mapping>
+
+  <entity-permission>
+    <name>member-view</name>
+    <entity-type>awa_workspace</entity-type>
+    <description>Grant the member view </description>
+    <sql>
+       SELECT acl.id FROM awa_acl AS acl
+            WHERE acl.entity_type = :entity_type
+            AND acl.user_id = :user_id
+            AND acl.entity_id = 1
+            AND acl.permission = $permission[member-view]
+    </sql>
+  </entity-permission>
+
+  <entity-permission>
+    <name>member-update</name>
+    <entity-type>awa_workspace</entity-type>
+    <description>Grant the member view </description>
+    <sql>
+       SELECT acl.id FROM awa_acl AS acl
+            WHERE acl.entity_type = :entity_type
+            AND acl.user_id = :user_id
+            AND acl.entity_id = 1
+            AND acl.permission = $permission[member-update]
+    </sql>
+  </entity-permission>
+
+  <url-policy>
+    <permission>anonymous</permission>
+    <url-pattern>/adhesion/.*\.html</url-pattern>
+    <url-pattern>/mail/member-send-validate-email.html</url-pattern>
+    <url-pattern>/mail/member-pending-email.html</url-pattern>
+    <url-pattern>/mail/member-subscribed-email.html</url-pattern>
+  </url-policy>
+
+  <url-policy>
+    <permission>logged-user</permission>
+    <url-pattern>/members/admin/.*</url-pattern>
+    <url-pattern>/members/.*</url-pattern>
+  </url-policy>
+
+</module>
