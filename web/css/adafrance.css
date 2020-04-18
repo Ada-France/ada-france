@@ -141,13 +141,170 @@ dl.adafr-version dd {
     margin-bottom: 5px;
 }
 .feed-list .adhesion {
-    background: url(../images/pdf-32x32.png) no-repeat;
+    background: url(../images/ada-france-icon.png) no-repeat;
+    padding-left: 100px;
+    height: 24px;
+    line-height: 24px;
 }
 .feed-list .mailing-list {
     background: url(../images/mail-icon-32x32.png) no-repeat;
 }
 #nav-contact-footer {
     display: none;
+}
+.adafr-bureau dt {
+    float: left;
+    clear: both;
+    width: 140px;
+}
+.adafr-bureau dd {
+    float: left;
+}
+
+.adafr-subscribe {
+    margin-top: 1em;
+    float: left;
+}
+.adafr-subscribe a {
+    background: #dfeffc;
+    color: #333;
+}
+#adafr-rib-table, #adafr-address {
+    margin-top: 1em;
+    margin-bottom: 1em;
+}
+.adafr-member-address {
+    margin-top: 1em;
+}
+
+/* /adhesion */
+#subscribe-steps {
+    width: 100%;
+    margin-bottom: 1em;
+    float: left;
+}
+#subscribe-steps ul {
+    list-style-type: none;
+    float: left;
+    clear: both;
+    width: 100%;
+    height: 40px;
+}
+#subscribe-steps li {
+    float: left;
+    padding: 0.5em;
+    padding-right: 1em;
+    padding-top: 0;
+    width: 20%;
+    height: 1.5em;
+    text-align: center;
+}
+#subscribe-steps .step-graph {
+    margin-top: 1em;
+}
+#subscribe-steps .step-graph li {
+    border-bottom: 3px solid #f0f0f0;
+    text-align: center;
+    height: 15px; /* = 1/2 span height - border-bottm/2*/
+    line-height: 32px; /* = span height */
+}
+.step-graph li span {
+    display: inline-block;
+    background: #f0f0f0;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+}
+.subscribe-email #subscribe-email,
+.subscribe-validate #subscribe-validate,
+.subscribe-register #subscribe-register,
+.subscribe-mode #subscribe-mode,
+.subscribe-payment #subscribe-payment {
+    font-weight: bold;
+}
+.subscribe-email #subscribe-graph-email span,
+.subscribe-validate #subscribe-graph-validate span,
+.subscribe-register #subscribe-graph-register span,
+.subscribe-mode #subscribe-graph-mode span,
+.subscribe-payment #subscribe-graph-payment span {
+    font-weight: bold;
+    background: #337ab7;
+    color: #fff;
+}
+#address1, #address2 {
+    margin-bottom: 0.5em;
+}
+#member-list-action {
+    width: 300px;
+}
+.adafr-members .member-email {
+    width: 20%;
+}
+.adafr-members .member-title {
+    width: 15%;
+}
+.adafr-members .member-subscription {
+    width: 15%;
+    float: left;
+    height: 1em;
+}
+.adafr-members .member-date {
+    width: 10%;
+}
+.adafr-MEMBER_NONE {
+}
+.adafr-MEMBER_WAIT_PAYMENT {
+}
+.adafr-MEMBER_ADA_FRANCE .member-status {
+    background: url(../images/ada-france-icon.png) no-repeat;
+    height: 32px;
+}
+.adafr-MEMBER_ADA_EUROPE .member-status {
+    background: url(../images/ada-europe-icon.png) no-repeat;
+    height: 32px;
+}
+.adafr-member-info dl {
+    padding: 1em;
+}
+.adafr-member-info dl dt {
+    clear: both;
+    float: left;
+    width: 150px;
+}
+.adafr-member-info dl dd {
+    float: left;
+    width: 70%;
+}
+.adafr-member-title {
+    float: left;
+    padding-left: 1%;
+}
+.adafr-member-actions {
+    float: right;
+    list-style-type: none;
+}
+.adafr-member-actions li {
+    float: left;
+    padding-right: 2em;
+}
+.adafr-member-contribution-note {
+    padding-top: 1em;
+    float: left;
+}
+.adafr-members .history-date,
+ .adafr-members .history-field,
+ .adafr-members .history-old-value,
+ .adafr-members .history-new-value,
+ .adafr-members .history-author {
+ width: 20%;
+}
+#adafr-member-history, #adafr-member-history-header {
+    margin-left: 1%;
+    margin-right: 1%;
+    width: 98%;
+}
+#adafr-member-history-header {
+    margin-top: 2em;
 }
 
 /* Adaptations from AWA */
