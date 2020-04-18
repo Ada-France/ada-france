@@ -1,0 +1,69 @@
+<query-mapping package='Adafr.Members.Models'>
+    <description>
+      List of Ada France members.
+    </description>
+
+    <class name="Adafr.Members.Models.Member_Info" bean="yes">
+        <comment>Describes the information about an Ada-France member.</comment>
+        <property type='Identifier' name="id">
+            <comment>the member identifier.</comment>
+        </property>
+        <property type='String' name="first_name" not-null="no">
+            <comment>the member first name.</comment>
+        </property>
+        <property type='String' name="last_name" not-null="no">
+            <comment>the member last name.</comment>
+        </property>
+        <property type='Adafr.Members.Models.Status_Type' name="status">
+            <comment>the member status.</comment>
+        </property>
+        <property type='Boolean' name="ada_europe" not-null="no">
+            <comment>whether the member is member of Ada-Europe.</comment>
+        </property>
+        <property type='Date' name="create_date" not-null="no">
+            <comment>the date when the member was created.</comment>
+        </property>
+        <property type='Nullable_Date' name="payment_date" not-null="no">
+            <comment>the date when the invitation was sent to the user.</comment>
+        </property>
+        <property type='String' name="email">
+            <comment>the member email address.</comment>
+        </property>
+        <property type='String' name="login_name" not-null="no">
+            <comment>the user login name.</comment>
+        </property>
+        <property type='String' name="role" not-null="no">
+            <comment>the user role.</comment>
+        </property>
+    </class>
+
+    <query name='adafr-member-list'>
+       <comment>List of Ada France members</comment>
+       <sql>
+    SELECT
+      m.id AS id,
+      m.first_name AS first_name,
+      m.last_name AS last_name,
+      COALESCE(m.status, 0) AS status,
+      COALESCE(m.ada_europe, 0) AS ada_europe,
+      m.create_date AS create_date,
+      m.payment_date AS payment_date,
+      email.email AS email,
+      user.name AS user_name,
+      wm.role AS user_role
+    FROM awa_email AS email
+    LEFT JOIN adafr_member AS m ON m.email_id = email.id
+    LEFT JOIN awa_user AS user ON user.email_id = email.id
+    LEFT JOIN awa_workspace_member AS wm ON wm.member_id = user.id AND wm.workspace_id = 1
+    WHERE (m.status = :status OR m.status = 1) OR wm.id IS NOT NULL
+    ORDER BY last_name, first_name, email, user_name
+       </sql>
+       <sql-count>
+    SELECT
+       count(m.id)
+    FROM adafr_member AS m
+    WHERE m.status = :status   
+       </sql-count>
+    </query>
+
+</query-mapping>

@@ -1,0 +1,50 @@
+<query-mapping package='Adafr.Members.Models'>
+    <description>
+      History of changes made for an Ada France member
+    </description>
+
+    <class name="Adafr.Members.Models.Audit_Info" bean="yes">
+        <comment>Describes the change made on the adafr_member database record.</comment>
+        <property type='Date' name="date">
+            <comment>the date of change.</comment>
+        </property>
+        <property type='String' name="name">
+            <comment>the audit field name.</comment>
+        </property>
+        <property type='String' name="old_value" not-null="no">
+            <comment>the old field value.</comment>
+        </property>
+        <property type='String' name="new_value" not-null="no">
+            <comment>the new field value.</comment>
+        </property>
+        <property type='String' name="author" not-null="no">
+            <comment>the user who made the change.</comment>
+        </property>
+    </class>
+
+    <query name='adafr-member-history'>
+       <comment>History of changes made on the Ada France member database record</comment>
+       <sql>
+    SELECT
+      audit.date,
+      field.name,
+      audit.old_value,
+      audit.new_value,
+      IF(user.id IS NULL, CONCAT(member.first_name, ' ', member.last_name), user.name) AS author
+    FROM awa_audit AS audit
+    INNER JOIN awa_audit_field AS field ON audit.field = field.id AND audit.entity_type = $entity_type[adafr_member]
+    INNER JOIN adafr_member AS member ON member.id = :member_id
+    LEFT JOIN awa_session AS session ON audit.session_id = session.id
+    LEFT JOIN awa_user AS user ON session.user_id = user.id
+    WHERE audit.entity_id = :member_id
+    ORDER BY audit.date DESC
+       </sql>
+       <sql-count>
+    SELECT
+      COUNT(*)
+    FROM awa_audit AS audit
+    WHERE audit.entity_id = :member_id
+       </sql-count>
+    </query>
+
+</query-mapping>
