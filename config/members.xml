@@ -152,6 +152,7 @@
     <url-pattern>/mail/member-send-validate-email.html</url-pattern>
     <url-pattern>/mail/member-pending-email.html</url-pattern>
     <url-pattern>/mail/member-subscribed-email.html</url-pattern>
+    <url-pattern>/mail/member-registered-email.html</url-pattern>
   </url-policy>
 
   <url-policy>
