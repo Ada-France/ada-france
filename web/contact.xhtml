@@ -2,20 +2,22 @@
                 xmlns:ui="http://java.sun.com/jsf/facelets"
                 xmlns:f="http://java.sun.com/jsf/core"
                 xmlns:c="http://java.sun.com/jstl/core"
+                xmlns:awa="http://code.google.com/p/ada-awa/jsf"
                 template="/WEB-INF/layouts/layout.xhtml">
     <ui:param name="title" value="Ada France"/>
     <ui:param name="pageStyle" value="page-contact"/>
     <!-- Main page body -->
     <ui:define name="pageBody">
+        <f:metadata>
+            <f:viewAction action="#{wikiSubscribe.load}"/>
+        </f:metadata>
         <div id='awa-content'>
             <div id="wrap">
                 <div class="main">
                     <div class="container">
-                        <h1>Contact</h1>
-                    </div>
-                    <div class="container">
                         <div class="row">
-                            <div class="col-md-12">
+                            <div class="col-md-6">
+                                <h1>Contact</h1>
                                 <address>
                                     <strong>Ada france</strong>
                                     <span>c/o J-P. Rosen</span>
@@ -27,6 +29,35 @@
                                     <strong>Email</strong>
                                     contact at ada-france.org
                                 </address>
+                            </div>
+                            <div class="col-md-6">
+                                <h1>Adhérer à Ada-France</h1>
+                                <div class="wiki-text">
+                                    <awa:wiki styleClass='wiki-text'
+                                              value="#{wikiSubscribe.content}"
+                                              toc="true"
+                                              links="#{wikiSubscribe.links}"
+                                              plugins="#{wikiSubscribe.plugins}"
+                                              format="#{wikiSubscribe.format}"/>
+                                </div>
+                                <div class="adafr-subscribe">
+                                    <a class='awa-button' href="#{contextPath}/adhesion/index.html">
+                                        Je m'inscris
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <h1>Bureau</h1>
+                                <dl class="adafr-bureau">
+                                    <dt>Président</dt>
+                                    <dd>Jean-Pierre Rosen</dd>
+                                    <dt>Trésorière</dt>
+                                    <dd>Natacha Porté</dd>
+                                    <dt>Secrétaire</dt>
+                                    <dd>Stéphane Carrez</dd>
+                                </dl>
                             </div>
                         </div>
                     </div>
