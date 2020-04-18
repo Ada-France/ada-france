@@ -258,6 +258,7 @@ package body Adafr.Members.Modules is
       end if;
       Current_Entity.Set_First_Name (Unbounded_String '(Member.Get_First_Name));
       Current_Entity.Set_Last_Name (Unbounded_String '(Member.Get_Last_Name));
+      Current_Entity.Set_Company (Unbounded_String '(Member.Get_Company));
       Current_Entity.Set_Address1 (Unbounded_String '(Member.Get_Address1));
       Current_Entity.Set_Address2 (Unbounded_String '(Member.Get_Address2));
       Current_Entity.Set_Address3 (Unbounded_String '(Member.Get_Address3));
@@ -288,7 +289,7 @@ package body Adafr.Members.Modules is
       Key   : constant String := To_String (Member.Key);
       Ctx   : constant ASC.Service_Context_Access := ASC.Current;
       DB    : ADO.Sessions.Master_Session := ASC.Get_Master_Session (Ctx);
-      Current_Entity : Adafr.Members.Models.Member_Ref;
+      Current_Entity : aliased Adafr.Members.Models.Member_Ref;
    begin
       Log.Info ("Register member with key {0}", Key);
 
@@ -297,6 +298,7 @@ package body Adafr.Members.Modules is
       if Current_Entity.Get_Status = Models.PENDING then
          Current_Entity.Set_Status (Models.WAITING_PAYMENT);
       end if;
+      --  Member.Load (DB, Current_Entity.Get_Id);
 
       --  Avoid sending the email again if there is no change.
       if not Current_Entity.Is_Modified then
@@ -311,14 +313,12 @@ package body Adafr.Members.Modules is
 
       declare
          Ptr   : constant Util.Beans.Basic.Readonly_Bean_Access
-           := Member'Unchecked_Access;
+           := Current_Entity'Unchecked_Access;
          Bean  : constant Util.Beans.Objects.Object
            := Util.Beans.Objects.To_Object (Ptr, Util.Beans.Objects.STATIC);
          Email : constant AWA.Users.Models.Email_Ref'Class := Current_Entity.Get_Email;
          Event : AWA.Events.Module_Event;
       begin
-         Current_Entity.Copy (Into => Models.Member_Ref (Member));
-
          if Current_Entity.Get_Status = Models.WAITING_PAYMENT then
             --  First event to send the subscription email to the user.
             Event.Set_Event_Kind (Send_Subscribed_Event.Kind);
@@ -349,7 +349,7 @@ package body Adafr.Members.Modules is
                            Member : in out Adafr.Members.Models.Member_Bean'Class) is
       Ctx   : constant ASC.Service_Context_Access := ASC.Current;
       DB    : ADO.Sessions.Master_Session := ASC.Get_Master_Session (Ctx);
-      Current_Entity : Adafr.Members.Models.Member_Ref;
+      Current_Entity : aliased Adafr.Members.Models.Member_Ref;
    begin
       Log.Info ("Update member's status and contribution with id {0}",
                 ADO.Identifier'Image (Id));
@@ -366,6 +366,9 @@ package body Adafr.Members.Modules is
       end if;
       Current_Entity.Set_Payment_Date (Member.Get_Payment_Date);
 
+      --  Id is now validated, update member.
+      Member.Set_Id (Id);
+
       --  Avoid sending the email again if there is no change.
       if not Current_Entity.Is_Modified then
          return;
@@ -379,13 +382,12 @@ package body Adafr.Members.Modules is
 
       declare
          Ptr   : constant Util.Beans.Basic.Readonly_Bean_Access
-           := Member'Unchecked_Access;
+           := Current_Entity'Unchecked_Access;
          Bean  : constant Util.Beans.Objects.Object
            := Util.Beans.Objects.To_Object (Ptr, Util.Beans.Objects.STATIC);
          Email : constant AWA.Users.Models.Email_Ref'Class := Current_Entity.Get_Email;
          Event : AWA.Events.Module_Event;
       begin
-         Current_Entity.Copy (Into => Models.Member_Ref (Member));
          Event.Set_Event_Kind (Send_Registered_Member_Event.Kind);
          Event.Set_Parameter ("email", Email.Get_Email);
          Event.Set_Parameter ("name", Email.Get_Email);
