@@ -1,0 +1,52 @@
+<mail:message xmlns:ui="http://java.sun.com/jsf/facelets"
+              xmlns:f="http://java.sun.com/jsf/core"
+              xmlns:mail="http://code.google.com/p/ada-awa/mail">
+    <mail:from address="#{initParam['app_mail_name']}">#{initParam['app_mail_from']}</mail:from>
+    <mail:to address="#{event.name}">#{event.email}</mail:to>
+    <mail:subject>Validation de votre adresse e-mail</mail:subject>
+
+    <mail:body type="text/html; charset=UTF-8">
+        <f:facet name="alternative">
+Vous avez souhaité devenir membre d'Ada-France et nous vous en remercions.
+
+Pour continuer le process d'enregistrement, nous avons besoin de valider
+votre adresse e-mail.
+
+Veuillez entrer la clef de sécurité suivante:
+#{event.secure_key}
+
+Vous pouvez aussi cliquer que le lien suivant:
+
+#{initParam['app_url_base']}/adhesion/validate.html?key=#{event.secure_key}
+
+L'équipe Ada-France
+        </f:facet>
+        <ui:decorate template="/WEB-INF/layouts/mail.xhtml">
+            <ui:define name="mailBody">
+                <p>
+                    Vous avez souhaité devenir membre d'Ada-France et nous vous en remercions.
+                </p>
+                <p>
+                    Pour continuer le process d'enregistrement, nous avons besoin de valider
+                    votre adresse e-mail.
+                </p>
+                <p>
+                    Veuillez entrer la clef de sécurité suivante:
+                </p>
+                <p>
+                    #{event.secure_key}
+                </p>
+                <p>
+                    Vous pouvez aussi cliquer que le lien suivant:
+                </p>
+                <a href="#{initParam['app_url_base']}/adhesion/validate.html?key=#{event.secure_key}">
+                    #{initParam['app_url_base']}/adhesion/validate.html
+                </a>
+                <p>
+                    L'équipe Ada-France
+                </p>
+            </ui:define>
+        </ui:decorate>
+    </mail:body>
+</mail:message>
+

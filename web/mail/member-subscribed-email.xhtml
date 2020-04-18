@@ -1,0 +1,41 @@
+<mail:message xmlns:ui="http://java.sun.com/jsf/facelets"
+              xmlns:f="http://java.sun.com/jsf/core"
+              xmlns:mail="http://code.google.com/p/ada-awa/mail">
+    <mail:from address="#{initParam['bureau_email']}">#{initParam['bureau_email']}</mail:from>
+    <mail:to address="#{event.name}">#{event.email}</mail:to>
+    <mail:subject>Enregistrement Ada-France en attente du paiement</mail:subject>
+
+    <mail:body type="text/html; charset=UTF-8">
+        <f:facet name="alternative">
+Vous avez souhaité devenir membre d'#{event.member.ada_europe ? 'Ada-France+Ada-Europe' : 'Ada-France'} et nous vous en remercions.
+
+Votre enregistrement est actuellement en attente du paiement de #{event.member.ada_europe ? '65' : '30'} euros.
+
+<ui:include src="/adhesion/views/payment-info-text.xhtml"/>
+
+Nous vous remercions de confirmer votre paiement par e-mail en répondant
+à cet e-mail.
+
+L'équipe Ada-France
+        </f:facet>
+        <ui:decorate template="/WEB-INF/layouts/mail.xhtml">
+            <ui:define name="mailBody">
+                <p>
+                    Vous avez souhaité devenir membre d'#{event.member.ada_europe ? 'Ada-France+Ada-Europe' : 'Ada-France'} et nous vous en remercions.
+                </p>
+                <p>
+                    Votre enregistrement est actuellement en attente du paiement de #{event.member.ada_europe ? '65' : '30'} euros.
+                    Vous pouvez payer par chèque ou par virement bancaire.
+                </p>
+                <ui:include src="/adhesion/views/payment-info.xhtml"/>
+                <p>
+                    Nous vous remercions de confirmer votre paiement par e-mail en répondant
+                    à cet e-mail.
+                </p>
+                <p>
+                    L'équipe Ada-France
+                </p>
+            </ui:define>
+        </ui:decorate>
+    </mail:body>
+</mail:message>
