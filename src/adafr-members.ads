@@ -15,5 +15,9 @@
 --  See the License for the specific language governing permissions and
 --  limitations under the License.
 -----------------------------------------------------------------------
+
+--  == Ada France Registration ==
+--  This module allows Ada France members to register to the organization.
+--  The registration is made in several steps.
 package Adafr.Members is
 end Adafr.Members;
