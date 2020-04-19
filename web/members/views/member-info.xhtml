@@ -25,7 +25,8 @@
         <dt>Mis à jour le</dt>
         <dd>#{adafrMember.update_date}</dd>
         <dt>Date de paiement</dt>
-        <dd><h:outputText value="#{adafrMember.payment_date}">
+        <dd><h:outputText rendered="#{not empty adafrMember.payment_date}"
+                          value="#{adafrMember.payment_date}">
             <f:convertDateTime pattern="%Y-%m-%d"/>
         </h:outputText></dd>
     </dl>
