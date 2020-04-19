@@ -5,7 +5,7 @@
     <mail:to address="#{event.name}">#{event.email}</mail:to>
     <mail:subject>Enregistrement Ada-France en attente du paiement</mail:subject>
 
-    <mail:body type="text/html; charset=UTF-8">
+    <mail:body type="text/html; charset='UTF-8'">
         <f:facet name="alternative">
 Vous avez souhaité devenir membre d'#{event.member.ada_europe ? 'Ada-France+Ada-Europe' : 'Ada-France'} et nous vous en remercions.
 

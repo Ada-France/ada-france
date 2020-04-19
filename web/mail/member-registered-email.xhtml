@@ -7,7 +7,7 @@
     <mail:cc address="#{initParam['bureau_email']}">#{initParam['bureau_email']}</mail:cc>
     <mail:subject>Réception de cotisation #{event.member.ada_europe ? 'Ada-France et Ada-Europe' : 'Ada-France'}</mail:subject>
 
-    <mail:body type="text/html; charset=UTF-8">
+    <mail:body type="text/html; charset='UTF-8'">
         <f:facet name="alternative">
 Nous accusons réception de votre cotisation reçue le <h:outputText value="#{event.member.payment_date}">
             <f:convertDateTime pattern="%Y-%m-%d"/>
