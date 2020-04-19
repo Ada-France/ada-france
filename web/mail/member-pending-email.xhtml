@@ -1,13 +1,14 @@
-<mail:message xmlns:ui="http://java.sun.com/jsf/facelets"
-              xmlns:f="http://java.sun.com/jsf/core"
-              xmlns:h="http://java.sun.com/jsf/html"
-              xmlns:mail="http://code.google.com/p/ada-awa/mail">
-    <mail:from address="#{initParam['app_mail_name']}">#{initParam['app_mail_from']}</mail:from>
-    <mail:to address="#{initParam['bureau_email']}">#{initParam['bureau_email']}</mail:to>
-    <mail:subject>Nouveau membre Ada-France en attente de paiement</mail:subject>
-
-    <mail:body type="text/html; charset='UTF-8'">
-        <f:facet name="alternative">
+<ui:decorate template="/WEB-INF/layouts/mail.xhtml"
+             xmlns:mail="http://code.google.com/p/ada-awa/mail"
+             xmlns:h="http://java.sun.com/jsf/html"
+             xmlns:f="http://java.sun.com/jsf/core"
+             xmlns:ui="http://java.sun.com/jsf/facelets">
+    <ui:define name="subject">Nouveau membre Ada-France en attente de paiement</ui:define>
+    <ui:define name="mailTo">
+        <mail:from address="#{initParam['app_mail_name']}">#{initParam['app_mail_from']}</mail:from>
+        <mail:to address="#{initParam['bureau_email']}">#{initParam['bureau_email']}</mail:to>
+    </ui:define>
+    <ui:define name="mailTextBody">
 Un nouveau membre s'est enregistré sur le site Ada-France pour adhérer.
 
 Un e-mail lui a été envoyé pour le paiement de sa cotisation.
@@ -26,42 +27,37 @@ Une fois la paiement recu, il faut changer le statut de ce membre sur la page:
 #{initParam['app_url_base']}/members/index.html
 
 L'équipe Ada-France
-        </f:facet>
-        <ui:decorate template="/WEB-INF/layouts/mail.xhtml">
-            <ui:param name="title" value="Nouveau membre Ada-France en attente de paiement"/>
-            <ui:define name="mailBody">
-                <p>
-                    Un nouveau membre s'est enregistré sur le site Ada-France pour adhérer.
-                </p>
-                <p>
-                    Un e-mail lui a été envoyé pour le paiement de sa cotisation.
-                </p>
-                <table cellpadding="0" cellspacing="0" border="0" width="100%"
-                       style="max-width: 600px;">
-                    <tr><td width="30%">Nom</td><td width="70%">#{event.member.last_name}</td></tr>
-                    <tr><td>Prénom</td><td>#{event.member.first_name}</td></tr>
-                    <tr><td>Email</td><td>#{event.email}</td></tr>
-                    <h:panelGroup rendered="#{not empty event.member.company}">
-                    <tr><td>Société</td><td>#{event.member.company}</td></tr>
-                    </h:panelGroup>
-                    <tr><td>Adresse</td><td>#{event.member.address1}</td></tr>
-                    <tr><td></td><td>#{event.member.address2}</td></tr>
-                    <tr><td></td><td>#{event.member.address3}</td></tr>
-                    <tr><td></td><td>#{event.member.postal_code} #{event.member.city}</td></tr>
-                    <tr><td></td><td>#{event.member.country}</td></tr>
-                    <tr><td>Adhésion</td><td>#{event.member.ada_europe ? 'Ada-France et Ada-Europe' : 'Ada-France'}</td></tr>
-                </table>
-                <p>
-                    Une fois la paiement recu, il faut changer le statut de
-                    ce membre sur la page:
-                </p>
-                <a href="#{initParam['app_url_base']}/members/index.html">
-                   #{initParam['app_url_base']}/members/index.html
-                </a>
-                <p>
-                    L'équipe Ada-France
-                </p>
-            </ui:define>
-        </ui:decorate>
-    </mail:body>
-</mail:message>
+</ui:define>
+<ui:define name="mailBody">
+<p>
+  Un nouveau membre s'est enregistré sur le site Ada-France pour adhérer.
+</p>
+<p>
+  Un e-mail lui a été envoyé pour le paiement de sa cotisation.
+</p>
+<table cellpadding="0" cellspacing="0" border="0" width="100%" style="max-width: 600px;">
+  <tr><td width="30%">Nom</td><td width="70%">#{event.member.last_name}</td></tr>
+  <tr><td>Prénom</td><td>#{event.member.first_name}</td></tr>
+  <tr><td>Email</td><td>#{event.email}</td></tr>
+  <h:panelGroup rendered="#{not empty event.member.company}">
+  <tr><td>Société</td><td>#{event.member.company}</td></tr>
+  </h:panelGroup>
+  <tr><td>Adresse</td><td>#{event.member.address1}</td></tr>
+  <tr><td></td><td>#{event.member.address2}</td></tr>
+  <tr><td></td><td>#{event.member.address3}</td></tr>
+  <tr><td></td><td>#{event.member.postal_code} #{event.member.city}</td></tr>
+  <tr><td></td><td>#{event.member.country}</td></tr>
+  <tr><td>Adhésion</td><td>#{event.member.ada_europe ? 'Ada-France et Ada-Europe' : 'Ada-France'}</td></tr>
+</table>
+<p>
+  Une fois la paiement recu, il faut changer le statut de
+  ce membre sur la page:
+</p>
+<a href="#{initParam['app_url_base']}/members/index.html">
+#{initParam['app_url_base']}/members/index.html
+</a>
+<p>
+  L'équipe Ada-France
+</p>
+</ui:define>
+</ui:decorate>

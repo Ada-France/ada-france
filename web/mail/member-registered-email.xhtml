@@ -1,14 +1,15 @@
-<mail:message xmlns:ui="http://java.sun.com/jsf/facelets"
-              xmlns:f="http://java.sun.com/jsf/core"
-              xmlns:h="http://java.sun.com/jsf/html"
-              xmlns:mail="http://code.google.com/p/ada-awa/mail">
+<ui:decorate template="/WEB-INF/layouts/mail.xhtml"
+             xmlns:mail="http://code.google.com/p/ada-awa/mail"
+             xmlns:h="http://java.sun.com/jsf/html"
+             xmlns:f="http://java.sun.com/jsf/core"
+             xmlns:ui="http://java.sun.com/jsf/facelets">
+    <ui:define name="subject">Réception de cotisation #{event.member.ada_europe ? 'Ada-France et Ada-Europe' : 'Ada-France'}</ui:define>
+    <ui:define name="mailTo">
     <mail:from address="#{initParam['bureau_email']}">#{initParam['bureau_email']}</mail:from>
     <mail:to address="#{event.name}">#{event.email}</mail:to>
     <mail:cc address="#{initParam['bureau_email']}">#{initParam['bureau_email']}</mail:cc>
-    <mail:subject>Réception de cotisation #{event.member.ada_europe ? 'Ada-France et Ada-Europe' : 'Ada-France'}</mail:subject>
-
-    <mail:body type="text/html; charset='UTF-8'">
-        <f:facet name="alternative">
+    </ui:define>
+    <ui:define name="mailTextBody">
 Nous accusons réception de votre cotisation reçue le <h:outputText value="#{event.member.payment_date}">
             <f:convertDateTime pattern="%Y-%m-%d"/>
 </h:outputText> et nous vous en remercions.
@@ -19,30 +20,26 @@ Vous pouvez modifier vos coordonnées en allant sur la page
 #{initParam['app_url_base']}/adhesion/index.html
 
 L'équipe Ada-France
-        </f:facet>
-        <ui:decorate template="/WEB-INF/layouts/mail.xhtml">
-            <ui:param name="title" value="Réception de cotisation"/>
-            <ui:define name="mailBody">
-                <p>
-                    Nous accusons réception de votre cotisation reçue le
-                    <h:outputText value="#{event.member.payment_date}">
-                        <f:convertDateTime pattern="%x"/>
-                    </h:outputText>
-                    et nous vous en remercions.
-                </p>
-                <p>
-                    Vous êtes membre de #{event.member.ada_europe ? 'Ada-France et Ada-Europe' : 'Ada-France'}.
-                </p>
-                <p>
-                    Vous pouvez modifier vos coordonnées en allant sur la page
-                    <a href="#{initParam['app_url_base']}/adhesion/index.html">
-                        Adhésion Ada-France
-                    </a>.
-                </p>
-                <p>
-                    L'équipe Ada-France
-                </p>
-            </ui:define>
-        </ui:decorate>
-    </mail:body>
-</mail:message>
+</ui:define>
+<ui:define name="mailBody">
+<p>
+  Nous accusons réception de votre cotisation reçue le
+  <h:outputText value="#{event.member.payment_date}">
+     <f:convertDateTime pattern="%x"/>
+  </h:outputText>
+  et nous vous en remercions.
+</p>
+<p>
+  Vous êtes membre de #{event.member.ada_europe ? 'Ada-France et Ada-Europe' : 'Ada-France'}.
+</p>
+<p>
+  Vous pouvez modifier vos coordonnées en allant sur la page
+  <a href="#{initParam['app_url_base']}/adhesion/index.html">
+   Adhésion Ada-France
+  </a>.
+</p>
+<p>
+  L'équipe Ada-France
+</p>
+</ui:define>
+</ui:decorate>
