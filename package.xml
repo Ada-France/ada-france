@@ -42,6 +42,7 @@
           <include name="**/*.pdf"/>
           <include name="**/*.svg"/>
           <include name="WEB-INF/**"/>
+          <exclude name="preview/**"/>
        </fileset>
      </install>
      <install mode='libs' dir='lib'>
@@ -61,6 +62,9 @@
        <command>closure --charset UTF-8 #{src} --js_output_file #{dst}</command>
        <fileset dir="web">
          <include name="**/*.js"/>
+         <exclude name="js/jquery-chosen-1.4.2/**"/>
+         <exclude name="js/jquery-ui-1.11.4/**"/>
+         <exclude name="js/jquery-1.11.3.js"/>
        </fileset>
      </install>
      <install mode='exec' dir='web'>
