@@ -1,0 +1,48 @@
+<ui:decorate template="/WEB-INF/layouts/mail.xhtml"
+             xmlns:mail="http://code.google.com/p/ada-awa/mail"
+             xmlns:h="http://java.sun.com/jsf/html"
+             xmlns:f="http://java.sun.com/jsf/core"
+             xmlns:ui="http://java.sun.com/jsf/facelets">
+    <ui:define name="subject">
+        <h:outputFormat value="Invitation à rejoindre {0}">
+            <f:param value="#{initParam['app_name']}"/>
+        </h:outputFormat>
+    </ui:define>
+    <ui:define name="mailTo">
+        <mail:from address="#{initParam['app_mail_name']}">#{initParam['app_mail_from']}</mail:from>
+        <mail:to address="#{event.name}">#{event.email}</mail:to>
+    </ui:define>
+    <ui:define name="mailTextBody">
+#{event.name},
+
+#{event.inviter} vous a invité à rejoindre #{initParam['app_name']}.
+
+#{event.message}
+
+Pour accepter cette invitation, veuillez vous rendre à l'URL suivante:
+
+#{initParam['app_url_base']}/auth/invitation.html?key=#{event.key}
+
+Merci d'utiliser #{initParam['app_name']}.
+
+Cordialement,
+
+L'équipe #{initParam['app_name']}
+</ui:define>
+    <ui:define name="mailBody">
+#{event.name},
+<p>
+#{event.inviter} vous a invité à rejoindre #{initParam['app_name']}.
+</p>
+#{event.message}
+<p>
+Pour accepter cette invitation, veuillez vous rendre à l'URL suivante:
+</p>
+<a href="#{initParam['app_url_base']}/auth/invitation.html?key=#{event.key}">
+#{initParam['app_url_base']}/auth/invitation.html?key=#{event.key}</a>
+<p>Merci d'utiliser #{initParam['app_name']}.</p>
+<p>Cordialement,</p>
+<p>L'équipe #{initParam['app_name']}</p>
+</ui:define>
+
+</ui:decorate>
