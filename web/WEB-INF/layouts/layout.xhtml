@@ -9,6 +9,7 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
+    <!-- DYNAMO-MERGE-START link=#{contextPath}/css/adafr-1.css -->
     <link media="screen" type="text/css" rel="stylesheet" href="#{contextPath}/css/bootstrap.min.css"/>
     <link media="screen" type="text/css" rel="stylesheet" href="#{contextPath}/css/grids/fluid_grid.css"/>
     <link media="screen" type="text/css" rel="stylesheet" href="#{contextPath}/css/asf.css"/>
@@ -23,7 +24,8 @@
     <link media="screen" type="text/css" rel="stylesheet" href="#{contextPath}/css/wikis.css"/>
     <link media="screen" type="text/css" rel="stylesheet" href="#{contextPath}/css/jquery.tagedit.css"/>
     <link media="screen" type="text/css" rel="stylesheet" href="#{contextPath}/css/jquery.datetimepicker.css"/>
-    <link media="screen" type="text/css" rel="stylesheet" href="#{contextPath}/css/adafrance.css?build=1.6.2"/>
+    <link media="screen" type="text/css" rel="stylesheet" href="#{contextPath}/css/adafrance.css"/>
+    <!-- DYNAMO-MERGE-END -->
     <link rel="icon" type="image/png" sizes="32x32" href="#{contextPath}/images/favicon-32x32.png"/>
     <link rel="icon" type="image/png" sizes="16x16" href="#{contextPath}/images/favicon-16x16.png"/>
     <ui:insert name="pageHeader"/>
@@ -40,6 +42,7 @@
 </div>
 <ui:include src="footer.xhtml"/>
 
+<!-- DYNAMO-MERGE-START script=#{contextPath}/js/adafr-1.js -->
 <script type="text/javascript" src="#{jquery.path}"></script>
 <script type="text/javascript" src="#{jquery.uiPath}core.js"></script>
 <script type="text/javascript" src="#{jquery.uiPath}widget.js"></script>
@@ -48,7 +51,9 @@
 <script type="text/javascript" src="#{contextPath}/js/asf.js"></script>
 <script type="text/javascript" src="#{contextPath}/js/asf-message.js"></script>
 <script type="text/javascript" src="#{contextPath}/js/asf-popup.js"></script>
+<!-- DYNAMO-MERGE-END -->
 <c:if test="#{user.isLogged}">
+<!-- DYNAMO-MERGE-START script=#{contextPath}/js/adafr-2.js -->
 <script type="text/javascript" src="#{jquery.uiPath}draggable.js"></script>
 <script type="text/javascript" src="#{jquery.uiPath}resizable.js"></script>
 <script type="text/javascript" src="#{jquery.uiPath}sortable.js"></script>
@@ -62,9 +67,6 @@
 <script type="text/javascript" src="#{jquery.uiPath}slider.js"></script>
 <script type="text/javascript" src="#{contextPath}/js/jquery.autoGrowInput.js"></script>
 <script type="text/javascript" src="#{contextPath}/js/jquery.tagedit.js"></script>
-<script type="text/javascript" src="#{contextPath}/js/jquery.flot.js"></script>
-<script type="text/javascript" src="#{contextPath}/js/jquery.flot.stack.js"></script>
-<script type="text/javascript" src="#{contextPath}/js/jquery.flot.pie.js"></script>
 <script type="text/javascript" src="#{contextPath}/js/asf-widgets.js"></script>
 <script type="text/javascript" src="#{contextPath}/js/asf-list.js"></script>
 <script type="text/javascript" src="#{contextPath}/js/asf-editable.js"></script>
@@ -73,6 +75,7 @@
 <script type="text/javascript" src="#{contextPath}/js/markedit/jquery.markedit.js"></script>
 <script type="text/javascript" src="#{contextPath}/js/awa-storages.js"></script>
 <script type="text/javascript" src="#{contextPath}/js/awa-images.js"></script>
+<!-- DYNAMO-MERGE-END -->
 </c:if>
 <ui:insert name="pageScript"/>
 <util:flush/>
