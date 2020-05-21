@@ -127,6 +127,7 @@ package body Adafr.Members.Modules is
       Found : Boolean;
       Mail  : AWA.Users.Models.Email_Ref;
       Event : AWA.Events.Module_Event;
+      Ada_Europe : constant Boolean := Entity.Get_Ada_Europe;
    begin
       Log.Info ("Send mail validation to {0}", Email);
 
@@ -155,6 +156,7 @@ package body Adafr.Members.Modules is
          Entity.Set_Status (Adafr.Members.Models.PENDING);
          Entity.Set_Create_Date (Ada.Calendar.Clock);
          Entity.Set_Country ("France");
+         Entity.Set_Ada_Europe (Ada_Europe);
       end if;
       Entity.Set_Salt (Salt);
       Entity.Save (DB);
