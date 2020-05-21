@@ -14,7 +14,9 @@ Nous accusons réception de votre cotisation reçue le <h:outputText value="#{ev
             <f:convertDateTime pattern="%Y-%m-%d"/>
 </h:outputText> et nous vous en remercions.
 
-Vous êtes membre de #{event.member.ada_europe ? 'Ada-France et Ada-Europe' : 'Ada-France'}.
+Vous êtes membre de #{event.member.ada_europe ? 'Ada-France et Ada-Europe' : 'Ada-France'} en <h:outputText value="#{event.member.payment_date}">
+   <f:convertDateTime pattern="%Y"/>
+</h:outputText>.
 
 Vous pouvez modifier vos coordonnées en allant sur la page
 #{initParam['app_url_base']}/adhesion/index.html
@@ -30,7 +32,9 @@ L'équipe Ada-France
   et nous vous en remercions.
 </p>
 <p>
-  Vous êtes membre de #{event.member.ada_europe ? 'Ada-France et Ada-Europe' : 'Ada-France'}.
+  Vous êtes membre de #{event.member.ada_europe ? 'Ada-France et Ada-Europe' : 'Ada-France'} en <h:outputText value="#{event.member.payment_date}">
+   <f:convertDateTime pattern="%Y"/>
+</h:outputText>.
 </p>
 <p>
   Vous pouvez modifier vos coordonnées en allant sur la page
