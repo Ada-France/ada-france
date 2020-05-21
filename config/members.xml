@@ -31,6 +31,11 @@
     <managed-bean-name>adafrMember</managed-bean-name>
     <managed-bean-class>Adafr.Members.Beans.Member_Bean</managed-bean-class>
     <managed-bean-scope>request</managed-bean-scope>
+    <managed-property>
+      <property-name>ada_europe</property-name>
+      <property-class>Boolean</property-class>
+      <value>TRUE</value>
+    </managed-property>
   </managed-bean>
 
   <managed-bean>
@@ -149,10 +154,6 @@
   <url-policy>
     <permission>anonymous</permission>
     <url-pattern>/adhesion/.*\.html</url-pattern>
-    <url-pattern>/mail/member-send-validate-email.html</url-pattern>
-    <url-pattern>/mail/member-pending-email.html</url-pattern>
-    <url-pattern>/mail/member-subscribed-email.html</url-pattern>
-    <url-pattern>/mail/member-registered-email.html</url-pattern>
   </url-policy>
 
   <url-policy>
