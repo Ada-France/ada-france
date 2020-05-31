@@ -74,6 +74,11 @@ package Adafr.Members.Beans is
    procedure Save_Payment (Bean    : in out Member_Bean;
                            Outcome : in out Ada.Strings.Unbounded.Unbounded_String);
 
+   --  Create a new member.
+   overriding
+   procedure Create (Bean    : in out Member_Bean;
+                     Outcome : in out Ada.Strings.Unbounded.Unbounded_String);
+
    --  Create the Members_Bean bean instance.
    function Create_Member_Bean (Module : in Adafr.Members.Modules.Member_Module_Access)
       return Util.Beans.Basic.Readonly_Bean_Access;
