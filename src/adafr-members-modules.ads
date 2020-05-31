@@ -41,11 +41,18 @@ package Adafr.Members.Modules is
      new Security.Permissions.Definition ("member-view");
    package ACL_Update_Member is
      new Security.Permissions.Definition ("member-update");
+   package ACL_Create_Member is
+     new Security.Permissions.Definition ("member-create");
 
    --  The name under which the module is registered.
    NAME : constant String := "members";
 
-   PARAM_SIGN_KEY : constant String := "secret_key";
+   PARAM_SIGN_KEY          : constant String := "secret_key";
+   PARAM_RECEIPT_TEMPLATE  : constant String := "receipt_template";
+   PARAM_RECEIPT_DIRECTORY : constant String := "receipt_directory";
+   PARAM_RECEIPT_KEY       : constant String := "receipt_key";
+
+   Member_Exist : exception;
 
    --  ------------------------------
    --  Module members
@@ -101,11 +108,19 @@ package Adafr.Members.Modules is
                            Id     : in ADO.Identifier;
                            Member : in out Adafr.Members.Models.Member_Bean'Class);
 
+   --  Create a new member with the given email address.
+   procedure Create (Model  : in out Member_Module;
+                     Email  : in String;
+                     Member : in out Adafr.Members.Models.Member_Bean'Class);
+
 private
 
    type Member_Module is new AWA.Modules.Module with record
-      Random      : Security.Random.Generator;
-      Sign_Key    : Ada.Strings.Unbounded.Unbounded_String;
+      Random            : Security.Random.Generator;
+      Sign_Key          : Ada.Strings.Unbounded.Unbounded_String;
+      Receipt_Sign_Key  : Ada.Strings.Unbounded.Unbounded_String;
+      Receipt_Template  : Ada.Strings.Unbounded.Unbounded_String;
+      Receipt_Directory : Ada.Strings.Unbounded.Unbounded_String;
    end record;
 
    function Get_Secure_Key (Model : in Member_Module;
@@ -116,5 +131,12 @@ private
                                  Value  : in String;
                                  Member : in Adafr.Members.Models.Member_Ref'Class)
                                  return Boolean;
+
+   function Get_Receipt_Path (Model   : in Member_Module;
+                              Receipt : in Adafr.Members.Models.Receipt_Ref) return String;
+
+   function Create_Receipt (Model   : in Member_Module;
+                            Member  : in Adafr.Members.Models.Member_Ref;
+                            Receipt : in Adafr.Members.Models.Receipt_Ref) return String;
 
 end Adafr.Members.Modules;
