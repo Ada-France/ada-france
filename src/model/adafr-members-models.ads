@@ -52,7 +52,89 @@ package Adafr.Members.Models is
       Value   : Status_Type;
    end record;
 
+   type Receipt_Ref is new ADO.Objects.Object_Ref with null record;
+
    type Member_Ref is new ADO.Objects.Object_Ref with null record;
+
+   --  Create an object key for Receipt.
+   function Receipt_Key (Id : in ADO.Identifier) return ADO.Objects.Object_Key;
+   --  Create an object key for Receipt from a string.
+   --  Raises Constraint_Error if the string cannot be converted into the object key.
+   function Receipt_Key (Id : in String) return ADO.Objects.Object_Key;
+
+   Null_Receipt : constant Receipt_Ref;
+   function "=" (Left, Right : Receipt_Ref'Class) return Boolean;
+
+   --  Set the receipt id
+   procedure Set_Id (Object : in out Receipt_Ref;
+                     Value  : in ADO.Identifier);
+
+   --  Get the receipt id
+   function Get_Id (Object : in Receipt_Ref)
+                 return ADO.Identifier;
+
+   --  Set the receipt creation date
+   procedure Set_Create_Date (Object : in out Receipt_Ref;
+                              Value  : in Ada.Calendar.Time);
+
+   --  Get the receipt creation date
+   function Get_Create_Date (Object : in Receipt_Ref)
+                 return Ada.Calendar.Time;
+
+   --
+   procedure Set_Member (Object : in out Receipt_Ref;
+                         Value  : in ADO.Identifier);
+
+   --
+   function Get_Member (Object : in Receipt_Ref)
+                 return ADO.Identifier;
+
+   --  Load the entity identified by 'Id'.
+   --  Raises the NOT_FOUND exception if it does not exist.
+   procedure Load (Object  : in out Receipt_Ref;
+                   Session : in out ADO.Sessions.Session'Class;
+                   Id      : in ADO.Identifier);
+
+   --  Load the entity identified by 'Id'.
+   --  Returns True in <b>Found</b> if the object was found and False if it does not exist.
+   procedure Load (Object  : in out Receipt_Ref;
+                   Session : in out ADO.Sessions.Session'Class;
+                   Id      : in ADO.Identifier;
+                   Found   : out Boolean);
+
+   --  Find and load the entity.
+   overriding
+   procedure Find (Object  : in out Receipt_Ref;
+                   Session : in out ADO.Sessions.Session'Class;
+                   Query   : in ADO.SQL.Query'Class;
+                   Found   : out Boolean);
+
+   --  Save the entity.  If the entity does not have an identifier, an identifier is allocated
+   --  and it is inserted in the table.  Otherwise, only data fields which have been changed
+   --  are updated.
+   overriding
+   procedure Save (Object  : in out Receipt_Ref;
+                   Session : in out ADO.Sessions.Master_Session'Class);
+
+   --  Delete the entity.
+   overriding
+   procedure Delete (Object  : in out Receipt_Ref;
+                     Session : in out ADO.Sessions.Master_Session'Class);
+
+   overriding
+   function Get_Value (From : in Receipt_Ref;
+                       Name : in String) return Util.Beans.Objects.Object;
+
+   --  Table definition
+   RECEIPT_TABLE : constant ADO.Schemas.Class_Mapping_Access;
+
+   --  Internal method to allocate the Object_Record instance
+   overriding
+   procedure Allocate (Object : in out Receipt_Ref);
+
+   --  Copy of the object.
+   procedure Copy (Object : in Receipt_Ref;
+                   Into   : in out Receipt_Ref);
 
    --  --------------------
    --  The Member table holds the list of Ada France members with the necessary
@@ -250,6 +332,14 @@ package Adafr.Members.Models is
    --  Get date when the information was updated.
    function Get_Update_Date (Object : in Member_Ref)
                  return Ada.Calendar.Time;
+
+   --
+   procedure Set_Receipt (Object : in out Member_Ref;
+                          Value  : in Adafr.Members.Models.Receipt_Ref'Class);
+
+   --
+   function Get_Receipt (Object : in Member_Ref)
+                 return Adafr.Members.Models.Receipt_Ref'Class;
 
    --  Set the member's email address.
    procedure Set_Email (Object : in out Member_Ref;
@@ -478,6 +568,9 @@ package Adafr.Members.Models is
    procedure Save_Payment (Bean : in out Member_Bean;
                           Outcome : in out Ada.Strings.Unbounded.Unbounded_String) is abstract;
 
+   procedure Create (Bean : in out Member_Bean;
+                    Outcome : in out Ada.Strings.Unbounded.Unbounded_String) is abstract;
+
    type Member_List_Bean is abstract limited
      new Util.Beans.Basic.Bean and Util.Beans.Methods.Method_Bean with  record
       Page : Integer;
@@ -507,50 +600,111 @@ package Adafr.Members.Models is
 
 
 private
-   MEMBER_NAME : aliased constant String := "adafr_member";
+   RECEIPT_NAME : aliased constant String := "adafr_receipt";
    COL_0_1_NAME : aliased constant String := "id";
-   COL_1_1_NAME : aliased constant String := "version";
-   COL_2_1_NAME : aliased constant String := "first_name";
-   COL_3_1_NAME : aliased constant String := "last_name";
-   COL_4_1_NAME : aliased constant String := "company";
-   COL_5_1_NAME : aliased constant String := "address1";
-   COL_6_1_NAME : aliased constant String := "address2";
-   COL_7_1_NAME : aliased constant String := "address3";
-   COL_8_1_NAME : aliased constant String := "postal_code";
-   COL_9_1_NAME : aliased constant String := "city";
-   COL_10_1_NAME : aliased constant String := "country";
-   COL_11_1_NAME : aliased constant String := "create_date";
-   COL_12_1_NAME : aliased constant String := "mail_verify_date";
-   COL_13_1_NAME : aliased constant String := "payment_date";
-   COL_14_1_NAME : aliased constant String := "status";
-   COL_15_1_NAME : aliased constant String := "ada_europe";
-   COL_16_1_NAME : aliased constant String := "salt";
-   COL_17_1_NAME : aliased constant String := "update_date";
-   COL_18_1_NAME : aliased constant String := "email_id";
+   COL_1_1_NAME : aliased constant String := "create_date";
+   COL_2_1_NAME : aliased constant String := "member";
 
-   MEMBER_DEF : aliased constant ADO.Schemas.Class_Mapping :=
-     (Count   => 19,
-      Table   => MEMBER_NAME'Access,
+   RECEIPT_DEF : aliased constant ADO.Schemas.Class_Mapping :=
+     (Count   => 3,
+      Table   => RECEIPT_NAME'Access,
       Members => (
          1 => COL_0_1_NAME'Access,
          2 => COL_1_1_NAME'Access,
-         3 => COL_2_1_NAME'Access,
-         4 => COL_3_1_NAME'Access,
-         5 => COL_4_1_NAME'Access,
-         6 => COL_5_1_NAME'Access,
-         7 => COL_6_1_NAME'Access,
-         8 => COL_7_1_NAME'Access,
-         9 => COL_8_1_NAME'Access,
-         10 => COL_9_1_NAME'Access,
-         11 => COL_10_1_NAME'Access,
-         12 => COL_11_1_NAME'Access,
-         13 => COL_12_1_NAME'Access,
-         14 => COL_13_1_NAME'Access,
-         15 => COL_14_1_NAME'Access,
-         16 => COL_15_1_NAME'Access,
-         17 => COL_16_1_NAME'Access,
-         18 => COL_17_1_NAME'Access,
-         19 => COL_18_1_NAME'Access)
+         3 => COL_2_1_NAME'Access)
+     );
+   RECEIPT_TABLE : constant ADO.Schemas.Class_Mapping_Access
+      := RECEIPT_DEF'Access;
+
+
+   Null_Receipt : constant Receipt_Ref
+      := Receipt_Ref'(ADO.Objects.Object_Ref with null record);
+
+   type Receipt_Impl is
+      new ADO.Objects.Object_Record (Key_Type => ADO.Objects.KEY_INTEGER,
+                                     Of_Class => RECEIPT_DEF'Access)
+   with record
+       Create_Date : Ada.Calendar.Time;
+       Member : ADO.Identifier;
+   end record;
+
+   type Receipt_Access is access all Receipt_Impl;
+
+   overriding
+   procedure Destroy (Object : access Receipt_Impl);
+
+   overriding
+   procedure Find (Object  : in out Receipt_Impl;
+                   Session : in out ADO.Sessions.Session'Class;
+                   Query   : in ADO.SQL.Query'Class;
+                   Found   : out Boolean);
+
+   overriding
+   procedure Load (Object  : in out Receipt_Impl;
+                   Session : in out ADO.Sessions.Session'Class);
+   procedure Load (Object  : in out Receipt_Impl;
+                   Stmt    : in out ADO.Statements.Query_Statement'Class;
+                   Session : in out ADO.Sessions.Session'Class);
+
+   overriding
+   procedure Save (Object  : in out Receipt_Impl;
+                   Session : in out ADO.Sessions.Master_Session'Class);
+
+   procedure Create (Object  : in out Receipt_Impl;
+                     Session : in out ADO.Sessions.Master_Session'Class);
+
+   overriding
+   procedure Delete (Object  : in out Receipt_Impl;
+                     Session : in out ADO.Sessions.Master_Session'Class);
+
+   procedure Set_Field (Object : in out Receipt_Ref'Class;
+                        Impl   : out Receipt_Access);
+   MEMBER_NAME : aliased constant String := "adafr_member";
+   COL_0_2_NAME : aliased constant String := "id";
+   COL_1_2_NAME : aliased constant String := "version";
+   COL_2_2_NAME : aliased constant String := "first_name";
+   COL_3_2_NAME : aliased constant String := "last_name";
+   COL_4_2_NAME : aliased constant String := "company";
+   COL_5_2_NAME : aliased constant String := "address1";
+   COL_6_2_NAME : aliased constant String := "address2";
+   COL_7_2_NAME : aliased constant String := "address3";
+   COL_8_2_NAME : aliased constant String := "postal_code";
+   COL_9_2_NAME : aliased constant String := "city";
+   COL_10_2_NAME : aliased constant String := "country";
+   COL_11_2_NAME : aliased constant String := "create_date";
+   COL_12_2_NAME : aliased constant String := "mail_verify_date";
+   COL_13_2_NAME : aliased constant String := "payment_date";
+   COL_14_2_NAME : aliased constant String := "status";
+   COL_15_2_NAME : aliased constant String := "ada_europe";
+   COL_16_2_NAME : aliased constant String := "salt";
+   COL_17_2_NAME : aliased constant String := "update_date";
+   COL_18_2_NAME : aliased constant String := "receipt_id";
+   COL_19_2_NAME : aliased constant String := "email_id";
+
+   MEMBER_DEF : aliased constant ADO.Schemas.Class_Mapping :=
+     (Count   => 20,
+      Table   => MEMBER_NAME'Access,
+      Members => (
+         1 => COL_0_2_NAME'Access,
+         2 => COL_1_2_NAME'Access,
+         3 => COL_2_2_NAME'Access,
+         4 => COL_3_2_NAME'Access,
+         5 => COL_4_2_NAME'Access,
+         6 => COL_5_2_NAME'Access,
+         7 => COL_6_2_NAME'Access,
+         8 => COL_7_2_NAME'Access,
+         9 => COL_8_2_NAME'Access,
+         10 => COL_9_2_NAME'Access,
+         11 => COL_10_2_NAME'Access,
+         12 => COL_11_2_NAME'Access,
+         13 => COL_12_2_NAME'Access,
+         14 => COL_13_2_NAME'Access,
+         15 => COL_14_2_NAME'Access,
+         16 => COL_15_2_NAME'Access,
+         17 => COL_16_2_NAME'Access,
+         18 => COL_17_2_NAME'Access,
+         19 => COL_18_2_NAME'Access,
+         20 => COL_19_2_NAME'Access)
      );
    MEMBER_TABLE : constant ADO.Schemas.Class_Mapping_Access
       := MEMBER_DEF'Access;
@@ -601,6 +755,7 @@ private
        Ada_Europe : Boolean;
        Salt : Ada.Strings.Unbounded.Unbounded_String;
        Update_Date : Ada.Calendar.Time;
+       Receipt : Adafr.Members.Models.Receipt_Ref;
        Email : AWA.Users.Models.Email_Ref;
    end record;
 

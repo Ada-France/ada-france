@@ -30,6 +30,343 @@ package body Adafr.Members.Models is
 
    pragma Warnings (Off, "formal parameter * is not referenced");
 
+   function Receipt_Key (Id : in ADO.Identifier) return ADO.Objects.Object_Key is
+      Result : ADO.Objects.Object_Key (Of_Type  => ADO.Objects.KEY_INTEGER,
+                                       Of_Class => RECEIPT_DEF'Access);
+   begin
+      ADO.Objects.Set_Value (Result, Id);
+      return Result;
+   end Receipt_Key;
+
+   function Receipt_Key (Id : in String) return ADO.Objects.Object_Key is
+      Result : ADO.Objects.Object_Key (Of_Type  => ADO.Objects.KEY_INTEGER,
+                                       Of_Class => RECEIPT_DEF'Access);
+   begin
+      ADO.Objects.Set_Value (Result, Id);
+      return Result;
+   end Receipt_Key;
+
+   function "=" (Left, Right : Receipt_Ref'Class) return Boolean is
+   begin
+      return ADO.Objects.Object_Ref'Class (Left) = ADO.Objects.Object_Ref'Class (Right);
+   end "=";
+
+   procedure Set_Field (Object : in out Receipt_Ref'Class;
+                        Impl   : out Receipt_Access) is
+      Result : ADO.Objects.Object_Record_Access;
+   begin
+      Object.Prepare_Modify (Result);
+      Impl := Receipt_Impl (Result.all)'Access;
+   end Set_Field;
+
+   --  Internal method to allocate the Object_Record instance
+   procedure Allocate (Object : in out Receipt_Ref) is
+      Impl : Receipt_Access;
+   begin
+      Impl := new Receipt_Impl;
+      Impl.Create_Date := ADO.DEFAULT_TIME;
+      Impl.Member := ADO.NO_IDENTIFIER;
+      ADO.Objects.Set_Object (Object, Impl.all'Access);
+   end Allocate;
+
+   -- ----------------------------------------
+   --  Data object: Receipt
+   -- ----------------------------------------
+
+   procedure Set_Id (Object : in out Receipt_Ref;
+                     Value  : in ADO.Identifier) is
+      Impl : Receipt_Access;
+   begin
+      Set_Field (Object, Impl);
+      ADO.Objects.Set_Field_Key_Value (Impl.all, 1, Value);
+   end Set_Id;
+
+   function Get_Id (Object : in Receipt_Ref)
+                  return ADO.Identifier is
+      Impl : constant Receipt_Access
+         := Receipt_Impl (Object.Get_Object.all)'Access;
+   begin
+      return Impl.Get_Key_Value;
+   end Get_Id;
+
+
+   procedure Set_Create_Date (Object : in out Receipt_Ref;
+                              Value  : in Ada.Calendar.Time) is
+      Impl : Receipt_Access;
+   begin
+      Set_Field (Object, Impl);
+      ADO.Objects.Set_Field_Time (Impl.all, 2, Impl.Create_Date, Value);
+   end Set_Create_Date;
+
+   function Get_Create_Date (Object : in Receipt_Ref)
+                  return Ada.Calendar.Time is
+      Impl : constant Receipt_Access
+         := Receipt_Impl (Object.Get_Load_Object.all)'Access;
+   begin
+      return Impl.Create_Date;
+   end Get_Create_Date;
+
+
+   procedure Set_Member (Object : in out Receipt_Ref;
+                         Value  : in ADO.Identifier) is
+      Impl : Receipt_Access;
+   begin
+      Set_Field (Object, Impl);
+      ADO.Objects.Set_Field_Identifier (Impl.all, 3, Impl.Member, Value);
+   end Set_Member;
+
+   function Get_Member (Object : in Receipt_Ref)
+                  return ADO.Identifier is
+      Impl : constant Receipt_Access
+         := Receipt_Impl (Object.Get_Load_Object.all)'Access;
+   begin
+      return Impl.Member;
+   end Get_Member;
+
+   --  Copy of the object.
+   procedure Copy (Object : in Receipt_Ref;
+                   Into   : in out Receipt_Ref) is
+      Result : Receipt_Ref;
+   begin
+      if not Object.Is_Null then
+         declare
+            Impl : constant Receipt_Access
+              := Receipt_Impl (Object.Get_Load_Object.all)'Access;
+            Copy : constant Receipt_Access
+              := new Receipt_Impl;
+         begin
+            ADO.Objects.Set_Object (Result, Copy.all'Access);
+            Copy.Copy (Impl.all);
+            Copy.all.Set_Key (Impl.all.Get_Key);
+            Copy.Create_Date := Impl.Create_Date;
+            Copy.Member := Impl.Member;
+         end;
+      end if;
+      Into := Result;
+   end Copy;
+
+   procedure Find (Object  : in out Receipt_Ref;
+                   Session : in out ADO.Sessions.Session'Class;
+                   Query   : in ADO.SQL.Query'Class;
+                   Found   : out Boolean) is
+      Impl  : constant Receipt_Access := new Receipt_Impl;
+   begin
+      Impl.Find (Session, Query, Found);
+      if Found then
+         ADO.Objects.Set_Object (Object, Impl.all'Access);
+      else
+         ADO.Objects.Set_Object (Object, null);
+         Destroy (Impl);
+      end if;
+   end Find;
+
+   procedure Load (Object  : in out Receipt_Ref;
+                   Session : in out ADO.Sessions.Session'Class;
+                   Id      : in ADO.Identifier) is
+      Impl  : constant Receipt_Access := new Receipt_Impl;
+      Found : Boolean;
+      Query : ADO.SQL.Query;
+   begin
+      Query.Bind_Param (Position => 1, Value => Id);
+      Query.Set_Filter ("id = ?");
+      Impl.Find (Session, Query, Found);
+      if not Found then
+         Destroy (Impl);
+         raise ADO.Objects.NOT_FOUND;
+      end if;
+      ADO.Objects.Set_Object (Object, Impl.all'Access);
+   end Load;
+
+   procedure Load (Object  : in out Receipt_Ref;
+                   Session : in out ADO.Sessions.Session'Class;
+                   Id      : in ADO.Identifier;
+                   Found   : out Boolean) is
+      Impl  : constant Receipt_Access := new Receipt_Impl;
+      Query : ADO.SQL.Query;
+   begin
+      Query.Bind_Param (Position => 1, Value => Id);
+      Query.Set_Filter ("id = ?");
+      Impl.Find (Session, Query, Found);
+      if not Found then
+         Destroy (Impl);
+      else
+         ADO.Objects.Set_Object (Object, Impl.all'Access);
+      end if;
+   end Load;
+
+   procedure Save (Object  : in out Receipt_Ref;
+                   Session : in out ADO.Sessions.Master_Session'Class) is
+      Impl : ADO.Objects.Object_Record_Access := Object.Get_Object;
+   begin
+      if Impl = null then
+         Impl := new Receipt_Impl;
+         ADO.Objects.Set_Object (Object, Impl);
+      end if;
+      if not ADO.Objects.Is_Created (Impl.all) then
+         Impl.Create (Session);
+      else
+         Impl.Save (Session);
+      end if;
+   end Save;
+
+   procedure Delete (Object  : in out Receipt_Ref;
+                     Session : in out ADO.Sessions.Master_Session'Class) is
+      Impl : constant ADO.Objects.Object_Record_Access := Object.Get_Object;
+   begin
+      if Impl /= null then
+         Impl.Delete (Session);
+      end if;
+   end Delete;
+
+   --  --------------------
+   --  Free the object
+   --  --------------------
+   procedure Destroy (Object : access Receipt_Impl) is
+      type Receipt_Impl_Ptr is access all Receipt_Impl;
+      procedure Unchecked_Free is new Ada.Unchecked_Deallocation
+              (Receipt_Impl, Receipt_Impl_Ptr);
+      pragma Warnings (Off, "*redundant conversion*");
+      Ptr : Receipt_Impl_Ptr := Receipt_Impl (Object.all)'Access;
+      pragma Warnings (On, "*redundant conversion*");
+   begin
+      Unchecked_Free (Ptr);
+   end Destroy;
+
+   procedure Find (Object  : in out Receipt_Impl;
+                   Session : in out ADO.Sessions.Session'Class;
+                   Query   : in ADO.SQL.Query'Class;
+                   Found   : out Boolean) is
+      Stmt : ADO.Statements.Query_Statement
+          := Session.Create_Statement (Query, RECEIPT_DEF'Access);
+   begin
+      Stmt.Execute;
+      if Stmt.Has_Elements then
+         Object.Load (Stmt, Session);
+         Stmt.Next;
+         Found := not Stmt.Has_Elements;
+      else
+         Found := False;
+      end if;
+   end Find;
+
+   overriding
+   procedure Load (Object  : in out Receipt_Impl;
+                   Session : in out ADO.Sessions.Session'Class) is
+      Found : Boolean;
+      Query : ADO.SQL.Query;
+      Id    : constant ADO.Identifier := Object.Get_Key_Value;
+   begin
+      Query.Bind_Param (Position => 1, Value => Id);
+      Query.Set_Filter ("id = ?");
+      Object.Find (Session, Query, Found);
+      if not Found then
+         raise ADO.Objects.NOT_FOUND;
+      end if;
+   end Load;
+
+   procedure Save (Object  : in out Receipt_Impl;
+                   Session : in out ADO.Sessions.Master_Session'Class) is
+      Stmt : ADO.Statements.Update_Statement
+         := Session.Create_Statement (RECEIPT_DEF'Access);
+   begin
+      if Object.Is_Modified (1) then
+         Stmt.Save_Field (Name  => COL_0_1_NAME, --  id
+                          Value => Object.Get_Key);
+         Object.Clear_Modified (1);
+      end if;
+      if Object.Is_Modified (2) then
+         Stmt.Save_Field (Name  => COL_1_1_NAME, --  create_date
+                          Value => Object.Create_Date);
+         Object.Clear_Modified (2);
+      end if;
+      if Object.Is_Modified (3) then
+         Stmt.Save_Field (Name  => COL_2_1_NAME, --  member
+                          Value => Object.Member);
+         Object.Clear_Modified (3);
+      end if;
+      if Stmt.Has_Save_Fields then
+         Stmt.Set_Filter (Filter => "id = ?");
+         Stmt.Add_Param (Value => Object.Get_Key);
+         declare
+            Result : Integer;
+         begin
+            Stmt.Execute (Result);
+            if Result /= 1 then
+               if Result /= 0 then
+                  raise ADO.Objects.UPDATE_ERROR;
+               end if;
+            end if;
+         end;
+      end if;
+   end Save;
+
+   procedure Create (Object  : in out Receipt_Impl;
+                     Session : in out ADO.Sessions.Master_Session'Class) is
+      Query : ADO.Statements.Insert_Statement
+                  := Session.Create_Statement (RECEIPT_DEF'Access);
+      Result : Integer;
+   begin
+      Query.Save_Field (Name  => COL_0_1_NAME, --  id
+                        Value => Object.Get_Key);
+      Query.Save_Field (Name  => COL_1_1_NAME, --  create_date
+                        Value => Object.Create_Date);
+      Query.Save_Field (Name  => COL_2_1_NAME, --  member
+                        Value => Object.Member);
+      Query.Execute (Result);
+      if Result /= 1 then
+         raise ADO.Objects.INSERT_ERROR;
+      end if;
+      ADO.Objects.Set_Created (Object);
+   end Create;
+
+   procedure Delete (Object  : in out Receipt_Impl;
+                     Session : in out ADO.Sessions.Master_Session'Class) is
+      Stmt : ADO.Statements.Delete_Statement
+         := Session.Create_Statement (RECEIPT_DEF'Access);
+   begin
+      Stmt.Set_Filter (Filter => "id = ?");
+      Stmt.Add_Param (Value => Object.Get_Key);
+      Stmt.Execute;
+   end Delete;
+
+   --  ------------------------------
+   --  Get the bean attribute identified by the name.
+   --  ------------------------------
+   overriding
+   function Get_Value (From : in Receipt_Ref;
+                       Name : in String) return Util.Beans.Objects.Object is
+      Obj  : ADO.Objects.Object_Record_Access;
+      Impl : access Receipt_Impl;
+   begin
+      if From.Is_Null then
+         return Util.Beans.Objects.Null_Object;
+      end if;
+      Obj := From.Get_Load_Object;
+      Impl := Receipt_Impl (Obj.all)'Access;
+      if Name = "id" then
+         return ADO.Objects.To_Object (Impl.Get_Key);
+      elsif Name = "create_date" then
+         return Util.Beans.Objects.Time.To_Object (Impl.Create_Date);
+      elsif Name = "member" then
+         return Util.Beans.Objects.To_Object (Long_Long_Integer (Impl.Member));
+      end if;
+      return Util.Beans.Objects.Null_Object;
+   end Get_Value;
+
+
+
+   --  ------------------------------
+   --  Load the object from current iterator position
+   --  ------------------------------
+   procedure Load (Object  : in out Receipt_Impl;
+                   Stmt    : in out ADO.Statements.Query_Statement'Class;
+                   Session : in out ADO.Sessions.Session'Class) is
+   begin
+      Object.Set_Key_Value (Stmt.Get_Identifier (0));
+      Object.Create_Date := Stmt.Get_Time (1);
+      Object.Member := Stmt.Get_Identifier (2);
+      ADO.Objects.Set_Created (Object);
+   end Load;
    function Member_Key (Id : in ADO.Identifier) return ADO.Objects.Object_Key is
       Result : ADO.Objects.Object_Key (Of_Type  => ADO.Objects.KEY_INTEGER,
                                        Of_Class => MEMBER_DEF'Access);
@@ -509,12 +846,29 @@ package body Adafr.Members.Models is
    end Get_Update_Date;
 
 
+   procedure Set_Receipt (Object : in out Member_Ref;
+                          Value  : in Adafr.Members.Models.Receipt_Ref'Class) is
+      Impl : Member_Access;
+   begin
+      Set_Field (Object, Impl);
+      ADO.Objects.Set_Field_Object (Impl.all, 19, Impl.Receipt, Value);
+   end Set_Receipt;
+
+   function Get_Receipt (Object : in Member_Ref)
+                  return Adafr.Members.Models.Receipt_Ref'Class is
+      Impl : constant Member_Access
+         := Member_Impl (Object.Get_Load_Object.all)'Access;
+   begin
+      return Impl.Receipt;
+   end Get_Receipt;
+
+
    procedure Set_Email (Object : in out Member_Ref;
                         Value  : in AWA.Users.Models.Email_Ref'Class) is
       Impl : Member_Access;
    begin
       Set_Field (Object, Impl);
-      ADO.Objects.Set_Field_Object (Impl.all, 19, Impl.Email, Value);
+      ADO.Objects.Set_Field_Object (Impl.all, 20, Impl.Email, Value);
    end Set_Email;
 
    function Get_Email (Object : in Member_Ref)
@@ -556,6 +910,7 @@ package body Adafr.Members.Models is
             Copy.Ada_Europe := Impl.Ada_Europe;
             Copy.Salt := Impl.Salt;
             Copy.Update_Date := Impl.Update_Date;
+            Copy.Receipt := Impl.Receipt;
             Copy.Email := Impl.Email;
          end;
       end if;
@@ -687,94 +1042,99 @@ package body Adafr.Members.Models is
          := Session.Create_Statement (MEMBER_DEF'Access);
    begin
       if Object.Is_Modified (1) then
-         Stmt.Save_Field (Name  => COL_0_1_NAME, --  id
+         Stmt.Save_Field (Name  => COL_0_2_NAME, --  id
                           Value => Object.Get_Key);
          Object.Clear_Modified (1);
       end if;
       if Object.Is_Modified (3) then
-         Stmt.Save_Field (Name  => COL_2_1_NAME, --  first_name
+         Stmt.Save_Field (Name  => COL_2_2_NAME, --  first_name
                           Value => Object.First_Name);
          Object.Clear_Modified (3);
       end if;
       if Object.Is_Modified (4) then
-         Stmt.Save_Field (Name  => COL_3_1_NAME, --  last_name
+         Stmt.Save_Field (Name  => COL_3_2_NAME, --  last_name
                           Value => Object.Last_Name);
          Object.Clear_Modified (4);
       end if;
       if Object.Is_Modified (5) then
-         Stmt.Save_Field (Name  => COL_4_1_NAME, --  company
+         Stmt.Save_Field (Name  => COL_4_2_NAME, --  company
                           Value => Object.Company);
          Object.Clear_Modified (5);
       end if;
       if Object.Is_Modified (6) then
-         Stmt.Save_Field (Name  => COL_5_1_NAME, --  address1
+         Stmt.Save_Field (Name  => COL_5_2_NAME, --  address1
                           Value => Object.Address1);
          Object.Clear_Modified (6);
       end if;
       if Object.Is_Modified (7) then
-         Stmt.Save_Field (Name  => COL_6_1_NAME, --  address2
+         Stmt.Save_Field (Name  => COL_6_2_NAME, --  address2
                           Value => Object.Address2);
          Object.Clear_Modified (7);
       end if;
       if Object.Is_Modified (8) then
-         Stmt.Save_Field (Name  => COL_7_1_NAME, --  address3
+         Stmt.Save_Field (Name  => COL_7_2_NAME, --  address3
                           Value => Object.Address3);
          Object.Clear_Modified (8);
       end if;
       if Object.Is_Modified (9) then
-         Stmt.Save_Field (Name  => COL_8_1_NAME, --  postal_code
+         Stmt.Save_Field (Name  => COL_8_2_NAME, --  postal_code
                           Value => Object.Postal_Code);
          Object.Clear_Modified (9);
       end if;
       if Object.Is_Modified (10) then
-         Stmt.Save_Field (Name  => COL_9_1_NAME, --  city
+         Stmt.Save_Field (Name  => COL_9_2_NAME, --  city
                           Value => Object.City);
          Object.Clear_Modified (10);
       end if;
       if Object.Is_Modified (11) then
-         Stmt.Save_Field (Name  => COL_10_1_NAME, --  country
+         Stmt.Save_Field (Name  => COL_10_2_NAME, --  country
                           Value => Object.Country);
          Object.Clear_Modified (11);
       end if;
       if Object.Is_Modified (12) then
-         Stmt.Save_Field (Name  => COL_11_1_NAME, --  create_date
+         Stmt.Save_Field (Name  => COL_11_2_NAME, --  create_date
                           Value => Object.Create_Date);
          Object.Clear_Modified (12);
       end if;
       if Object.Is_Modified (13) then
-         Stmt.Save_Field (Name  => COL_12_1_NAME, --  mail_verify_date
+         Stmt.Save_Field (Name  => COL_12_2_NAME, --  mail_verify_date
                           Value => Object.Mail_Verify_Date);
          Object.Clear_Modified (13);
       end if;
       if Object.Is_Modified (14) then
-         Stmt.Save_Field (Name  => COL_13_1_NAME, --  payment_date
+         Stmt.Save_Field (Name  => COL_13_2_NAME, --  payment_date
                           Value => Object.Payment_Date);
          Object.Clear_Modified (14);
       end if;
       if Object.Is_Modified (15) then
-         Stmt.Save_Field (Name  => COL_14_1_NAME, --  status
+         Stmt.Save_Field (Name  => COL_14_2_NAME, --  status
                           Value => Integer (Status_Type'Pos (Object.Status)));
          Object.Clear_Modified (15);
       end if;
       if Object.Is_Modified (16) then
-         Stmt.Save_Field (Name  => COL_15_1_NAME, --  ada_europe
+         Stmt.Save_Field (Name  => COL_15_2_NAME, --  ada_europe
                           Value => Object.Ada_Europe);
          Object.Clear_Modified (16);
       end if;
       if Object.Is_Modified (17) then
-         Stmt.Save_Field (Name  => COL_16_1_NAME, --  salt
+         Stmt.Save_Field (Name  => COL_16_2_NAME, --  salt
                           Value => Object.Salt);
          Object.Clear_Modified (17);
       end if;
       if Object.Is_Modified (18) then
-         Stmt.Save_Field (Name  => COL_17_1_NAME, --  update_date
+         Stmt.Save_Field (Name  => COL_17_2_NAME, --  update_date
                           Value => Object.Update_Date);
          Object.Clear_Modified (18);
       end if;
       if Object.Is_Modified (19) then
-         Stmt.Save_Field (Name  => COL_18_1_NAME, --  email_id
-                          Value => Object.Email);
+         Stmt.Save_Field (Name  => COL_18_2_NAME, --  receipt_id
+                          Value => Object.Receipt);
          Object.Clear_Modified (19);
+      end if;
+      if Object.Is_Modified (20) then
+         Stmt.Save_Field (Name  => COL_19_2_NAME, --  email_id
+                          Value => Object.Email);
+         Object.Clear_Modified (20);
       end if;
       if Stmt.Has_Save_Fields then
          Object.Version := Object.Version + 1;
@@ -807,43 +1167,45 @@ package body Adafr.Members.Models is
    begin
       Object.Version := 1;
       Session.Allocate (Id => Object);
-      Query.Save_Field (Name  => COL_0_1_NAME, --  id
+      Query.Save_Field (Name  => COL_0_2_NAME, --  id
                         Value => Object.Get_Key);
-      Query.Save_Field (Name  => COL_1_1_NAME, --  version
+      Query.Save_Field (Name  => COL_1_2_NAME, --  version
                         Value => Object.Version);
-      Query.Save_Field (Name  => COL_2_1_NAME, --  first_name
+      Query.Save_Field (Name  => COL_2_2_NAME, --  first_name
                         Value => Object.First_Name);
-      Query.Save_Field (Name  => COL_3_1_NAME, --  last_name
+      Query.Save_Field (Name  => COL_3_2_NAME, --  last_name
                         Value => Object.Last_Name);
-      Query.Save_Field (Name  => COL_4_1_NAME, --  company
+      Query.Save_Field (Name  => COL_4_2_NAME, --  company
                         Value => Object.Company);
-      Query.Save_Field (Name  => COL_5_1_NAME, --  address1
+      Query.Save_Field (Name  => COL_5_2_NAME, --  address1
                         Value => Object.Address1);
-      Query.Save_Field (Name  => COL_6_1_NAME, --  address2
+      Query.Save_Field (Name  => COL_6_2_NAME, --  address2
                         Value => Object.Address2);
-      Query.Save_Field (Name  => COL_7_1_NAME, --  address3
+      Query.Save_Field (Name  => COL_7_2_NAME, --  address3
                         Value => Object.Address3);
-      Query.Save_Field (Name  => COL_8_1_NAME, --  postal_code
+      Query.Save_Field (Name  => COL_8_2_NAME, --  postal_code
                         Value => Object.Postal_Code);
-      Query.Save_Field (Name  => COL_9_1_NAME, --  city
+      Query.Save_Field (Name  => COL_9_2_NAME, --  city
                         Value => Object.City);
-      Query.Save_Field (Name  => COL_10_1_NAME, --  country
+      Query.Save_Field (Name  => COL_10_2_NAME, --  country
                         Value => Object.Country);
-      Query.Save_Field (Name  => COL_11_1_NAME, --  create_date
+      Query.Save_Field (Name  => COL_11_2_NAME, --  create_date
                         Value => Object.Create_Date);
-      Query.Save_Field (Name  => COL_12_1_NAME, --  mail_verify_date
+      Query.Save_Field (Name  => COL_12_2_NAME, --  mail_verify_date
                         Value => Object.Mail_Verify_Date);
-      Query.Save_Field (Name  => COL_13_1_NAME, --  payment_date
+      Query.Save_Field (Name  => COL_13_2_NAME, --  payment_date
                         Value => Object.Payment_Date);
-      Query.Save_Field (Name  => COL_14_1_NAME, --  status
+      Query.Save_Field (Name  => COL_14_2_NAME, --  status
                         Value => Integer (Status_Type'Pos (Object.Status)));
-      Query.Save_Field (Name  => COL_15_1_NAME, --  ada_europe
+      Query.Save_Field (Name  => COL_15_2_NAME, --  ada_europe
                         Value => Object.Ada_Europe);
-      Query.Save_Field (Name  => COL_16_1_NAME, --  salt
+      Query.Save_Field (Name  => COL_16_2_NAME, --  salt
                         Value => Object.Salt);
-      Query.Save_Field (Name  => COL_17_1_NAME, --  update_date
+      Query.Save_Field (Name  => COL_17_2_NAME, --  update_date
                         Value => Object.Update_Date);
-      Query.Save_Field (Name  => COL_18_1_NAME, --  email_id
+      Query.Save_Field (Name  => COL_18_2_NAME, --  receipt_id
+                        Value => Object.Receipt);
+      Query.Save_Field (Name  => COL_19_2_NAME, --  email_id
                         Value => Object.Email);
       Query.Execute (Result);
       if Result /= 1 then
@@ -950,7 +1312,10 @@ package body Adafr.Members.Models is
       Object.Salt := Stmt.Get_Unbounded_String (16);
       Object.Update_Date := Stmt.Get_Time (17);
       if not Stmt.Is_Null (18) then
-         Object.Email.Set_Key_Value (Stmt.Get_Identifier (18), Session);
+         Object.Receipt.Set_Key_Value (Stmt.Get_Identifier (18), Session);
+      end if;
+      if not Stmt.Is_Null (19) then
+         Object.Email.Set_Key_Value (Stmt.Get_Identifier (19), Session);
       end if;
       Object.Version := Stmt.Get_Integer (1);
       ADO.Objects.Set_Created (Object);
@@ -1289,6 +1654,17 @@ package body Adafr.Members.Models is
      new ASF.Events.Faces.Actions.Action_Method.Bind (Bean   => Member_Bean,
                                                       Method => Op_Save_Payment,
                                                       Name   => "save_payment");
+   procedure Op_Create (Bean    : in out Member_Bean;
+                        Outcome : in out Ada.Strings.Unbounded.Unbounded_String);
+   procedure Op_Create (Bean    : in out Member_Bean;
+                        Outcome : in out Ada.Strings.Unbounded.Unbounded_String) is
+   begin
+      Member_Bean'Class (Bean).Create (Outcome);
+   end Op_Create;
+   package Binding_Member_Bean_7 is
+     new ASF.Events.Faces.Actions.Action_Method.Bind (Bean   => Member_Bean,
+                                                      Method => Op_Create,
+                                                      Name   => "create");
 
    Binding_Member_Bean_Array : aliased constant Util.Beans.Methods.Method_Binding_Array
      := (1 => Binding_Member_Bean_1.Proxy'Access,
@@ -1296,7 +1672,8 @@ package body Adafr.Members.Models is
          3 => Binding_Member_Bean_3.Proxy'Access,
          4 => Binding_Member_Bean_4.Proxy'Access,
          5 => Binding_Member_Bean_5.Proxy'Access,
-         6 => Binding_Member_Bean_6.Proxy'Access
+         6 => Binding_Member_Bean_6.Proxy'Access,
+         7 => Binding_Member_Bean_7.Proxy'Access
      );
 
    --  ------------------------------
