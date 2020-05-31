@@ -335,6 +335,9 @@ div.awa-error {
 .awa-tag-input {
     background: #fff;
 }
+#awa-post-editor {
+    border: none;
+}
 .blog-post-tag-info {
     border: none;
 }
