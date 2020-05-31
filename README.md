@@ -18,6 +18,6 @@ Ensuite lancer la compilation avec:
 
 Pour lancer l'application, utilisez:
 ```
-   bin/adafr-server
+   bin/adafr-server start
 ```
       
