@@ -1,0 +1,64 @@
+\enableregime[utf-8]
+
+\usemodule[letter]
+\useletterstyle[french]
+
+\mainlanguage[fr]
+\setuppapersize[A4][A4]
+
+\setupbodyfont[12pt]
+\usetypescript[palatino]
+\setupbodyfont[palatino]
+
+\defineletterelement[layer][foot][coord]%
+{Ada France – Association loi 1901 – Numéro d'association 19980014 – Numéro d'annonce 2317 – Parution au journal official le 4 avril 1998}
+
+\setupletterlayout
+  [firstpage,secondpage]
+  [backspace=15mm]
+%   bottomspace=5mm]
+\setupletterlayer[head][y=15mm]
+\setupletterlayer[location][y=15mm]
+\setupletterlayer[foot][alternative=coord,style=\tfxx\sans]
+\setupletterframe[foot][align=middle]
+
+\setupletter
+  [fromname={\externalfigure[config/AdaFrance-cropped.png][width=70mm]},
+   fromaddress={115 avenue du Maine\\
+75014 Paris},
+   date={Boulogne-Billancourt, le @_DATE_@},
+   toname={@_COMPANY_@\\
+@_FIRST_NAME_@ @_LAST_NAME_@},
+   toaddress={@_ADDRESS1_@\\
+@@IF@@ not @_IS_EMPTY:ADDRESS1_@
+@_ADDRESS2_@
+@@END_IF@@
+@@IF@@ not @_IS_EMPTY:ADDRESS3_@
+@_ADDRESS3_@
+@@END_IF@@
+@_POSTAL_CODE_@ @_CITY_@\\
+@_COUNTRY_@}]
+
+\startletter[]
+
+Je, soussignée Natacha {\sc Porté}, trésorière de l'association Ada France,
+reconnaît avoir reçu @_AMOUNT_@ euros de cotisations à Ada~France
+@@IF@@ @_ADA_EUROPE_@
+et à Ada~Europe
+@@END_IF@@,
+@@IF@@ not @_IS_EMPTY:COMPANY_@
+de la société @_COMPANY_@.
+@@ELSE@@
+de @_FIRST_NAME_@ @_LAST_NAME_@.
+@@END_IF@@
+
+@@IF@@ not @_IS_EMPTY:SIGNATURE_@
+\blank[small]
+
+Signature électronique
+\blank[small]
+
+@_SIGNATURE_@
+@@END_IF@@
+
+\stopletter
