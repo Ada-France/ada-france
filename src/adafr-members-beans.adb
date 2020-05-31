@@ -166,6 +166,22 @@ package body Adafr.Members.Beans is
    end Save_Payment;
 
    --  ------------------------------
+   --  Create a new member.
+   --  ------------------------------
+   overriding
+   procedure Create (Bean    : in out Member_Bean;
+                     Outcome : in out Ada.Strings.Unbounded.Unbounded_String) is
+   begin
+      Bean.Module.Create (To_String (Bean.Email), Bean);
+      Outcome := To_Unbounded_String ("created");
+
+   exception
+      when Adafr.Members.Modules.Member_Exist =>
+         Outcome := To_Unbounded_String ("failure");
+         Messages.Factory.Add_Field_Message ("email", "members.member_already_registered");
+   end Create;
+
+   --  ------------------------------
    --  Create the Member_Bean bean instance.
    --  ------------------------------
    function Create_Member_Bean (Module : in Adafr.Members.Modules.Member_Module_Access)
