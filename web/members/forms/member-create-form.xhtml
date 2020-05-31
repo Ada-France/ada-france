@@ -1,0 +1,69 @@
+<div class='ui-widget awa-form'
+     xmlns:f="http://java.sun.com/jsf/core"
+     xmlns:w="http://code.google.com/p/ada-asf/widget"
+     xmlns:h="http://java.sun.com/jsf/html">
+    <h:form id='subscribe-send'>
+        <div class='col-md-8'>
+            <h:inputHidden id="member-id" value="#{adafrMember.id}"/>
+            <h:messages styleClass='awa-error'/>
+            <w:inputText styleClass="awa-required ui-corner-all"
+                         id='email' size='30' required='true'
+                         validatorMessage="Addresse e-mail non valide"
+                         value='#{adafrMember.email}'
+                         title='Adresse e-mail'>
+                <f:validateRegex pattern="^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$"/>
+            </w:inputText>
+            <w:inputText styleClass="awa-required ui-corner-all"
+                         id='lastName' size='30' required='true'
+                         value='#{adafrMember.last_name}'
+                         title='Nom'/>
+            <w:inputText styleClass="awa-required ui-corner-all"
+                         id='firstName' size='30' required='true'
+                         value='#{adafrMember.first_name}'
+                         title='Prénom'/>
+            <w:inputText styleClass="awa-required ui-corner-all"
+                         id='company' size='30' required='false'
+                         value='#{adafrMember.company}'
+                         title='Société'/>
+            <dl class="awa-required ui-corner-all">
+                <dt>Adresse</dt>
+                <dd>
+                    <h:inputText id='address1' size='50' required='true'
+                                 styleClass="ui-corner-all"
+                                 value='#{adafrMember.address1}'/>
+                    <h:inputText id='address2' size='50' required='false'
+                                 styleClass="ui-corner-all"
+                                 value='#{adafrMember.address2}'/>
+                    <h:inputText id='address3' size='50' required='false'
+                                 styleClass="ui-corner-all"
+                                 value='#{adafrMember.address3}'/>
+                </dd>
+            </dl>
+            <div class="col-md-4">
+                <w:inputText styleClass="awa-required ui-corner-all"
+                             id='postalCode' size='10' required='true'
+                             value='#{adafrMember.postal_code}'
+                             title='Code postal'/>
+            </div>
+            <div class="col-md-8">
+                <w:inputText styleClass="awa-required ui-corner-all"
+                             id='city' size='50' required='true'
+                             value='#{adafrMember.city}'
+                             title='Ville'/>
+            </div>
+            <w:inputText styleClass="awa-required ui-corner-all"
+                         id='country' size='50' required='true'
+                         value='#{adafrMember.country}'
+                         title='Pays'/>
+            <ul class='awa-buttons'>
+                <li>
+                    <h:commandButton id='send-mail'
+                                     title="Envoyer le formulaire d'enregistrement"
+                                     value='Enregistrer'
+                                     styleClass="ui-button ui-state-default ui-corner-all"
+                                     action="#{adafrMember.create}"/>
+                </li>
+            </ul>
+        </div>
+    </h:form>
+</div>
