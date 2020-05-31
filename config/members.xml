@@ -113,6 +113,15 @@
     </navigation-case>
   </navigation-rule>
 
+  <navigation-rule>
+    <from-view-id>/members/create.xhtml</from-view-id>
+    <navigation-case>
+      <from-outcome>created</from-outcome>
+      <to-view-id>/members/index.xhtml</to-view-id>
+      <redirect/>
+    </navigation-case>
+  </navigation-rule>
+
   <filter-mapping>
     <filter-name>service</filter-name>
     <url-pattern>/members/*.html</url-pattern>
@@ -148,6 +157,19 @@
             AND acl.user_id = :user_id
             AND acl.entity_id = 1
             AND acl.permission = $permission[member-update]
+    </sql>
+  </entity-permission>
+
+  <entity-permission>
+    <name>member-create</name>
+    <entity-type>awa_workspace</entity-type>
+    <description>Grant the create member</description>
+    <sql>
+       SELECT acl.id FROM awa_acl AS acl
+            WHERE acl.entity_type = :entity_type
+            AND acl.user_id = :user_id
+            AND acl.entity_id = 1
+            AND acl.permission = $permission[member-create]
     </sql>
   </entity-permission>
 
