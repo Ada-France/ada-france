@@ -23,15 +23,22 @@ with AWA.Modules.Get;
 with AWA.Users.Models;
 with Util.Log.Loggers;
 with Util.Strings;
+with Util.Files;
 with Util.Beans.Objects;
 with Util.Beans.Basic;
 with Util.Encoders.HMAC.SHA256;
+with Util.Dates.Formats;
 with Adafr.Members.Beans;
 with ADO.Sessions;
 with ADO.Queries;
 with ADO.Objects;
+with ADO.Statements;
+with ASF.Locales;
 with AWA.Permissions;
 with AWA.Services.Contexts;
+with AWA.Workspaces.Models;
+with AWA.Workspaces.Modules;
+with Adafr.Receipt;
 package body Adafr.Members.Modules is
 
    use Ada.Strings.Unbounded;
@@ -46,6 +53,8 @@ package body Adafr.Members.Modules is
    package Register_Bean is
      new AWA.Modules.Beans (Module => Member_Module,
                             Module_Access => Member_Module_Access);
+
+   function Get_Next_Receipt_Id (DB : in ADO.Sessions.Session'Class) return ADO.Identifier;
 
    --  ------------------------------
    --  Initialize the members module.
@@ -77,6 +86,9 @@ package body Adafr.Members.Modules is
                         Props  : in ASF.Applications.Config) is
    begin
       Plugin.Sign_Key := Props.Get (PARAM_SIGN_KEY);
+      Plugin.Receipt_Template := Props.Get (PARAM_RECEIPT_TEMPLATE);
+      Plugin.Receipt_Directory := Props.Get (PARAM_RECEIPT_DIRECTORY);
+      Plugin.Receipt_Sign_Key := Props.Get (PARAM_RECEIPT_KEY);
    end Configure;
 
    --  ------------------------------
@@ -352,6 +364,7 @@ package body Adafr.Members.Modules is
       Ctx   : constant ASC.Service_Context_Access := ASC.Current;
       DB    : ADO.Sessions.Master_Session := ASC.Get_Master_Session (Ctx);
       Current_Entity : aliased Adafr.Members.Models.Member_Ref;
+      Receipt : Adafr.Members.Models.Receipt_Ref;
    begin
       Log.Info ("Update member's status and contribution with id {0}",
                 ADO.Identifier'Image (Id));
@@ -370,14 +383,23 @@ package body Adafr.Members.Modules is
 
       --  Id is now validated, update member.
       Member.Set_Id (Id);
+      Ctx.Start;
+
+      if Member.Get_Receipt.Is_Null then
+         Receipt.Set_Id (Get_Next_Receipt_Id (DB));
+         Receipt.Set_Create_Date (Ada.Calendar.Clock);
+         Receipt.Set_Member (Member.Get_Id);
+         Receipt.Save (DB);
+         Member.Set_Receipt (Receipt);
+      end if;
 
       --  Avoid sending the email again if there is no change.
       if not Current_Entity.Is_Modified then
+         Ctx.Commit;
          return;
       end if;
 
       --  Save the member information and send the event to trigger the email.
-      Ctx.Start;
       Current_Entity.Set_Update_Date (Value => Ada.Calendar.Clock);
       Current_Entity.Save (DB);
       Ctx.Commit;
@@ -389,13 +411,117 @@ package body Adafr.Members.Modules is
            := Util.Beans.Objects.To_Object (Ptr, Util.Beans.Objects.STATIC);
          Email : constant AWA.Users.Models.Email_Ref'Class := Current_Entity.Get_Email;
          Event : AWA.Events.Module_Event;
+         Receipt_Path : constant String := Model.Create_Receipt (Current_Entity, Receipt);
       begin
          Event.Set_Event_Kind (Send_Registered_Member_Event.Kind);
          Event.Set_Parameter ("email", Email.Get_Email);
          Event.Set_Parameter ("name", Email.Get_Email);
          Event.Set_Parameter ("member", Bean);
+         Event.Set_Parameter ("receipt", Receipt_Path);
+         Event.Set_Parameter ("receipt_id", Util.Strings.Image (Integer (Receipt.Get_Id)));
          Model.Send_Event (Event);
       end;
    end Save_Payment;
+
+   --  ------------------------------
+   --  Create a new member with the given email address.
+   --  ------------------------------
+   procedure Create (Model  : in out Member_Module;
+                     Email  : in String;
+                     Member : in out Adafr.Members.Models.Member_Bean'Class) is
+      pragma Unreferenced (Model);
+
+      Ctx          : constant ASC.Service_Context_Access := ASC.Current;
+      DB           : ADO.Sessions.Master_Session := ASC.Get_Master_Session (Ctx);
+      Email_Entity : AWA.Users.Models.Email_Ref;
+      Query        : ADO.Queries.Context;
+      Check_Member : Adafr.Members.Models.Member_Ref;
+      Found        : Boolean;
+      Workspace    : AWA.Workspaces.Models.Workspace_Ref;
+   begin
+      Log.Info ("Create a new member {0}", Email);
+
+      --  Check that the user has the create member permission.
+      AWA.Workspaces.Modules.Get_Workspace (DB, Ctx, Workspace);
+
+      AWA.Permissions.Check (Permission => ACL_Create_Member.Permission,
+                             Entity     => Workspace);
+
+      Ctx.Start;
+
+      --  Check that this member does not exist.
+      Query.Set_Join ("INNER JOIN awa_email e ON e.id = o.email_id");
+      Query.Set_Filter ("LOWER(e.email) = LOWER(?)");
+      Query.Bind_Param (1, Email);
+      Check_Member.Find (DB, Query, Found);
+      if Found then
+         Log.Info ("Member {0} already registered", Email);
+         raise Member_Exist;
+      end if;
+
+      --  Check if the email address is known.
+      Query.Clear;
+      Query.Set_Filter ("LOWER(o.email) = LOWER(?)");
+      Query.Bind_Param (1, Email);
+      Email_Entity.Find (DB, Query, Found);
+      if not Found then
+         Email_Entity.Set_Email (Email);
+         Email_Entity.Save (DB);
+      end if;
+
+      --  Create the new member in the waiting payment state.
+      Member.Set_Status (Models.WAITING_PAYMENT);
+      Member.Set_Email (Email_Entity);
+      Member.Set_Create_Date (Ada.Calendar.Clock);
+      Member.Set_Update_Date (Ada.Calendar.Clock);
+      Member.Save (DB);
+      Ctx.Commit;
+   end Create;
+
+   function Get_Next_Receipt_Id (DB : in ADO.Sessions.Session'Class) return ADO.Identifier is
+      Stmt : ADO.Statements.Query_Statement
+        := DB.Create_Statement ("SELECT MAX(id) FROM adafr_receipt");
+   begin
+      Stmt.Execute;
+      return ADO.Identifier (1 + Stmt.Get_Result_Integer);
+   end Get_Next_Receipt_Id;
+
+   function Get_Receipt_Path (Model   : in Member_Module;
+                              Receipt : in Adafr.Members.Models.Receipt_Ref) return String is
+      Ident : constant String := Util.Strings.Image (Integer (Receipt.Get_Id));
+      Dir   : constant String := To_String (Model.Receipt_Directory);
+   begin
+      return Util.Files.Compose (Dir, Util.Files.Compose (Ident, "receipt"));
+   end Get_Receipt_Path;
+
+   function Create_Receipt (Model   : in Member_Module;
+                            Member  : in Adafr.Members.Models.Member_Ref;
+                            Receipt : in Adafr.Members.Models.Receipt_Ref) return String is
+      Info    : Adafr.Receipt.Information;
+      Bundle  : ASF.Locales.Bundle;
+      Path    : constant String := Model.Get_Receipt_Path (Receipt);
+   begin
+      Model.Get_Application.Load_Bundle ("dates", "fr", Bundle);
+      Info.Company := Member.Get_Company;
+      Info.First_Name := Member.Get_First_Name;
+      Info.Last_Name := Member.Get_Last_Name;
+      Info.Address1 := Member.Get_Address1;
+      Info.Address2 := Member.Get_Address2;
+      Info.Address3 := Member.Get_Address3;
+      Info.Postal_Code := Member.Get_Postal_Code;
+      Info.City := Member.Get_City;
+      Info.Country := Member.Get_Country;
+      Info.Amount := To_Unbounded_String ((if Member.Get_Ada_Europe then "65" else "30"));
+      Info.Ada_Europe := Member.Get_Ada_Europe;
+      Util.Dates.Formats.Format (Into    => Info.Date,
+                                 Pattern => "%A %d %B %Y",
+                                 Date    => Member.Get_Payment_Date.Value,
+                                 Bundle  => Bundle);
+
+      Adafr.Receipt.Sign (Info, To_String (Model.Receipt_Sign_Key));
+      Adafr.Receipt.Create (Path & ".tex", To_String (Model.Receipt_Template), Info);
+      Adafr.Receipt.Generate (Path & ".tex");
+      return Path & ".pdf";
+   end Create_Receipt;
 
 end Adafr.Members.Modules;
