@@ -883,12 +883,25 @@ CREATE TABLE adafr_member (
   `salt` VARCHAR(255) BINARY NOT NULL,
   /* date when the information was updated. */
   `update_date` DATETIME NOT NULL,
+  /*  */
+  `receipt_id` BIGINT ,
   /* the member's email address. */
   `email_id` BIGINT NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*  */
+CREATE TABLE adafr_receipt (
+  /* the receipt id */
+  `id` BIGINT NOT NULL,
+  /* the receipt creation date */
+  `create_date` DATE NOT NULL,
+  /*  */
+  `member` BIGINT NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 INSERT INTO entity_type (name) VALUES
 ("adafr_member")
+,("adafr_receipt")
 ;
 INSERT INTO awa_audit_field (entity_type, name)
   VALUES ((SELECT id FROM entity_type WHERE name = "adafr_member"), "first_name");

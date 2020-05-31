@@ -1,6 +1,7 @@
 pragma synchronous=OFF;
 /* Copied from adafr-drop-sqlite.sql*/
 /* File generated automatically by dynamo */
+DROP TABLE IF EXISTS `adafr_receipt`;
 DROP TABLE IF EXISTS `adafr_member`;
 /* Copied from awa-wikis-drop-sqlite.sql*/
 /* File generated automatically by dynamo */
