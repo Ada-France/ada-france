@@ -51,8 +51,10 @@
                             </li>
                         </ul>
                     </h:panelGroup>
+                    <h:panelGroup rendered="#{auth:hasPermission('member-view',1)}">
                     <h2>Membres</h2>
                     <ui:include src="/workspaces/views/workspace-nav.xhtml"/>
+                    </h:panelGroup>
                 </c:when>
                 <c:otherwise>
                     Vous n'avez pas accès à cette page.

@@ -18,16 +18,27 @@
     xmlns:auth="http://code.google.com/p/ada-awa/auth"
     xmlns:h="http://java.sun.com/jsf/html"
     xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:auth="http://code.google.com/p/ada-awa/auth"
     xmlns:w="http://code.google.com/p/ada-asf/widget"
     xmlns:ui="http://java.sun.com/jsf/facelets">
     <li class="awa-nav-left">
         <a href="#{contextPath}/workspaces/invite.html" class="awa-nav-icon"
-           title="#{workspaceMsg.workspace_add_members_title}">
+           title="#{workspaceMsg.workspace_invite_members_title}">
             <img src="#{contextPath}/images/workspaces/icon-add-members-64.png"
-                 alt="#{workspaceMsg.workspace_add_members_label}"/>
-            <span>#{workspaceMsg.workspace_add_members_label}</span>
+                 alt="#{workspaceMsg.workspace_invite_members_label}"/>
+            <span>#{workspaceMsg.workspace_invite_members_label}</span>
         </a>
     </li>
+    <h:panelGroup rendered="#{auth:hasPermission('member-create', 1)}">
+        <li class="awa-nav-left">
+            <a href="#{contextPath}/members/create.html" class="awa-nav-icon"
+               title="#{workspaceMsg.workspace_add_members_title}">
+                <img src="#{contextPath}/images/workspaces/icon-add-members-64.png"
+                     alt="#{workspaceMsg.workspace_add_members_label}"/>
+                <span>#{workspaceMsg.workspace_add_members_label}</span>
+            </a>
+        </li>
+    </h:panelGroup>
     <li class="awa-nav-left">
         <a href="#{contextPath}/members/index.html" class="awa-nav-icon"
            title="#{workspaceMsg.workspace_list_members_title}">
