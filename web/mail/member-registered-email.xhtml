@@ -2,12 +2,14 @@
              xmlns:mail="http://code.google.com/p/ada-awa/mail"
              xmlns:h="http://java.sun.com/jsf/html"
              xmlns:f="http://java.sun.com/jsf/core"
+             xmlns:util="http://code.google.com/p/ada-asf/util"
              xmlns:ui="http://java.sun.com/jsf/facelets">
     <ui:define name="subject">Réception de cotisation #{event.member.ada_europe ? 'Ada-France et Ada-Europe' : 'Ada-France'}</ui:define>
     <ui:define name="mailTo">
     <mail:from address="#{initParam['bureau_email']}">#{initParam['bureau_email']}</mail:from>
     <mail:to address="#{event.name}">#{event.email}</mail:to>
     <mail:cc address="#{initParam['bureau_email']}">#{initParam['bureau_email']}</mail:cc>
+    <mail:attachment fileName="recu-ada-france-#{util:formatDate(event.member.payment_date,'%Y')}.pdf" value="#{event.receipt}" contentType="application/pdf"/>
     </ui:define>
     <ui:define name="mailTextBody">
 Nous accusons réception de votre cotisation reçue le <h:outputText value="#{event.member.payment_date}">
