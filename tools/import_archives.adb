@@ -46,7 +46,6 @@ with AWA.Blogs.Models;
 procedure Import_Archives is
 
    use Ada.Strings.Unbounded;
-   use Ada.Text_IO;
 
    type State_Type is (PARSE_TITLE, PARSE_DATE, PARSE_POST);
 
