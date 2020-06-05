@@ -36,6 +36,13 @@
     <property name="workspace_id">1</property>
     <property name="permission">wiki-page-create,wiki-page-update,wiki-page-delete,wiki-page-view,wiki-space-delete,wiki-space-update</property>
   </on-event>
+  <on-event name="member-user-created">
+    <action>#{permission.create}</action>
+    <property name="entity_type">awa_wiki_space</property>
+    <property name="entity_id">1</property>
+    <property name="workspace_id">1</property>
+    <property name="permission">wiki-page-create,wiki-page-update,wiki-page-delete,wiki-page-view,wiki-space-delete,wiki-space-update</property>
+  </on-event>
 
   <!--  When a user is created and has accepted the invitation, add a permission to the blog.  -->
   <on-event name="accept-invitation">
@@ -45,9 +52,23 @@
     <property name="workspace_id">1</property>
     <property name="permission">blog-create-post,blog-delete-post,blog-add-comment,blog-publish-comment,blog-delete-comment,blog-update-post</property>
   </on-event>
+  <on-event name="member-user-created">
+    <action>#{permission.create}</action>
+    <property name="entity_type">awa_blog</property>
+    <property name="entity_id">1</property>
+    <property name="workspace_id">1</property>
+    <property name="permission">blog-create-post,blog-delete-post,blog-add-comment,blog-publish-comment,blog-delete-comment,blog-update-post</property>
+  </on-event>
 
   <!--  When a user is created and has accepted the invitation, add a permission for the storage space.  -->
   <on-event name="accept-invitation">
+    <action>#{permission.create}</action>
+    <property name="entity_type">awa_workspace</property>
+    <property name="entity_id">1</property>
+    <property name="workspace_id">1</property>
+    <property name="permission">storage-create,storage-delete,folder-create</property>
+  </on-event>
+  <on-event name="member-user-created">
     <action>#{permission.create}</action>
     <property name="entity_type">awa_workspace</property>
     <property name="entity_id">1</property>
