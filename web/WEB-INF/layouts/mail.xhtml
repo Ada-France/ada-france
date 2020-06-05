@@ -1,7 +1,8 @@
-<ui:composition xmlns:ui="http://java.sun.com/jsf/facelets"
-                xmlns:mail="http://code.google.com/p/ada-awa/mail"
-                xmlns:f="http://java.sun.com/jsf/core"
-                 xmlns:h="http://java.sun.com/jsf/html">
+<f:view xmlns:ui="http://java.sun.com/jsf/facelets"
+        xmlns:mail="http://code.google.com/p/ada-awa/mail"
+        xmlns:f="http://java.sun.com/jsf/core"
+        xmlns:h="http://java.sun.com/jsf/html"
+        locale="fr_FR">
 <mail:message>
   <ui:insert name="mailTo"/>
   <mail:subject><ui:insert name="subject">Missing subject</ui:insert></mail:subject>
@@ -63,4 +64,4 @@
 </html>
   </mail:body>
 </mail:message>
-</ui:composition>
+</f:view>
