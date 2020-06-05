@@ -156,6 +156,7 @@ dl.adafr-version dd {
     float: left;
     clear: both;
     width: 140px;
+    height: 24px;
 }
 .adafr-bureau dd {
     float: left;
