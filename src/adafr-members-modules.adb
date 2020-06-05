@@ -361,10 +361,13 @@ package body Adafr.Members.Modules is
    procedure Save_Payment (Model  : in out Member_Module;
                            Id     : in ADO.Identifier;
                            Member : in out Adafr.Members.Models.Member_Bean'Class) is
-      Ctx   : constant ASC.Service_Context_Access := ASC.Current;
-      DB    : ADO.Sessions.Master_Session := ASC.Get_Master_Session (Ctx);
+      Ctx            : constant ASC.Service_Context_Access := ASC.Current;
+      DB             : ADO.Sessions.Master_Session := ASC.Get_Master_Session (Ctx);
       Current_Entity : aliased Adafr.Members.Models.Member_Ref;
-      Receipt : Adafr.Members.Models.Receipt_Ref;
+      Receipt        : Adafr.Members.Models.Receipt_Ref;
+      User           : AWA.Users.Models.User_Ref;
+      Query          : ADO.Queries.Context;
+      Found          : Boolean;
    begin
       Log.Info ("Update member's status and contribution with id {0}",
                 ADO.Identifier'Image (Id));
@@ -385,12 +388,55 @@ package body Adafr.Members.Modules is
       Member.Set_Id (Id);
       Ctx.Start;
 
-      if Member.Get_Receipt.Is_Null then
+      if Current_Entity.Get_Receipt.Is_Null then
          Receipt.Set_Id (Get_Next_Receipt_Id (DB));
          Receipt.Set_Create_Date (Ada.Calendar.Clock);
-         Receipt.Set_Member (Member.Get_Id);
+         Receipt.Set_Member (Id);
          Receipt.Save (DB);
-         Member.Set_Receipt (Receipt);
+         Current_Entity.Set_Receipt (Receipt);
+      else
+         Receipt := Models.Receipt_Ref (Current_Entity.Get_Receipt);
+      end if;
+
+      --  Check if this member has a user record.
+      Query.Set_Join ("INNER JOIN awa_email e ON e.user_id = o.id");
+      Query.Set_Filter ("LOWER(e.email) = LOWER(?)");
+      Query.Bind_Param (1, String '(Current_Entity.Get_Email.Get_Email));
+      User.Find (DB, Query, Found);
+      if not Found then
+         declare
+            procedure Send_User_Created_Event;
+
+            procedure Send_User_Created_Event is
+               Event : AWA.Events.Module_Event;
+            begin
+               Event.Set_Event_Kind (Member_User_Created_Event.Kind);
+               Model.Send_Event (Event);
+            end Send_User_Created_Event;
+
+            procedure Send_As_Created_User is
+               new AWA.Services.Contexts.Run_As (Send_User_Created_Event);
+
+            Email      : AWA.Users.Models.Email_Ref'Class := Current_Entity.Get_Email;
+            First_Name : constant String := Current_Entity.Get_First_Name;
+            Last_Name  : constant String := Current_Entity.Get_Last_Name;
+            Country    : constant String := Current_Entity.Get_Country;
+         begin
+            --  Create the user in the database (we trust our paied members).
+            User.Set_First_Name (First_Name);
+            User.Set_Last_Name (Last_Name);
+            User.Set_Name (First_Name & " " & Last_Name);
+            User.Set_Email (Email);
+            User.Set_Country (Country);
+            User.Save (DB);
+
+            --  Setup the user link.
+            Email.Set_User_Id (User.Get_Id);
+            Email.Save (DB);
+
+            --  Send the event to finish the user setup (permission creation).
+            Send_As_Created_User (User, Ctx.Get_User_Session);
+         end;
       end if;
 
       --  Avoid sending the email again if there is no change.
