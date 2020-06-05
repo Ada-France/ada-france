@@ -55,7 +55,7 @@
     LEFT JOIN adafr_member AS m ON m.email_id = email.id
     LEFT JOIN awa_user AS user ON user.email_id = email.id
     LEFT JOIN awa_workspace_member AS wm ON wm.member_id = user.id AND wm.workspace_id = 1
-    WHERE (m.status = :status OR m.status = 1) OR wm.id IS NOT NULL
+    WHERE (m.status = :status OR m.status = 3 OR m.status = 1) OR wm.id IS NOT NULL
     ORDER BY last_name, first_name, email, user_name
        </sql>
        <sql-count>
