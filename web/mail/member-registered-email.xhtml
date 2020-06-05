@@ -13,7 +13,7 @@
     </ui:define>
     <ui:define name="mailTextBody">
 Nous accusons réception de votre cotisation reçue le <h:outputText value="#{event.member.payment_date}">
-            <f:convertDateTime pattern="%Y-%m-%d"/>
+            <f:convertDateTime pattern="%A %d %B %Y"/>
 </h:outputText> et nous vous en remercions.
 
 Vous êtes membre de #{event.member.ada_europe ? 'Ada-France et Ada-Europe' : 'Ada-France'} en <h:outputText value="#{event.member.payment_date}">
@@ -29,7 +29,7 @@ L'équipe Ada-France
 <p>
   Nous accusons réception de votre cotisation reçue le
   <h:outputText value="#{event.member.payment_date}">
-     <f:convertDateTime pattern="%x"/>
+     <f:convertDateTime pattern="%A %d %B %Y"/>
   </h:outputText>
   et nous vous en remercions.
 </p>
