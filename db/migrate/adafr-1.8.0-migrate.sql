@@ -12,3 +12,5 @@ CREATE TABLE adafr_receipt (
 INSERT INTO entity_type (name) VALUES
 ("adafr_receipt")
 ;
+
+UPDATE awa_blog SET format = 1 WHERE id = 1;
