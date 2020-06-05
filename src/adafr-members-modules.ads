@@ -36,6 +36,8 @@ package Adafr.Members.Modules is
      new AWA.Events.Definition (Name => "member-registered");
    package Send_Updated_Member_Event is
      new AWA.Events.Definition (Name => "member-updated");
+   package Member_User_Created_Event is
+     new AWA.Events.Definition (Name => "member-user-created");
 
    package ACL_View_Member is
      new Security.Permissions.Definition ("member-view");
