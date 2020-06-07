@@ -488,10 +488,8 @@ package body Adafr.Members.Modules is
       Log.Info ("Create a new member {0}", Email);
 
       --  Check that the user has the create member permission.
-      AWA.Workspaces.Modules.Get_Workspace (DB, Ctx, Workspace);
-
       AWA.Permissions.Check (Permission => ACL_Create_Member.Permission,
-                             Entity     => Workspace);
+                             Entity     => Ctx.Get_User_Identifier);
 
       Ctx.Start;
 
