@@ -152,13 +152,27 @@ dl.adafr-version dd {
 #nav-contact-footer {
     display: none;
 }
+.adafr-bureau {
+    float: left;
+    padding-bottom: 2em;
+}
 .adafr-bureau dt {
     float: left;
     clear: both;
-    width: 140px;
+    width: 240px;
     height: 24px;
 }
 .adafr-bureau dd {
+    float: left;
+}
+
+.adafr-mailing-list dt {
+    float: left;
+    clear: both;
+    width: 240px;
+    height: 24px;
+}
+.adafr-mailing-list dd {
     float: left;
 }
 
@@ -363,10 +377,11 @@ div.blog-post div.post-title h2 a:hover {
 div.blog-post div.post-title {
     border-color: #333;
 }
-/* div.blog-post {
-    padding-left: 0;
-    width: 98%;
-}*/
+div.post-text pre.moz-quote-pre {
+    background: none;
+    border: none;
+    font-family: inherit;
+}
 .tagedit-list li.tagedit-listelement-old {
     background-color: #eee;
 }
