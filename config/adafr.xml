@@ -85,6 +85,12 @@
     <property name="permission">workspace-invite-user,workspace-delete-user</property>
   </on-event>
 
+  <!--  When a blog post is published, send an email to the Ada France mailing list -->
+  <on-event name="blog-post-publish">
+    <action>#{userMail.send}</action>
+    <property name="template">/mail/blog-post-publish-email.html</property>
+  </on-event>
+
   <managed-bean>
     <description>Bean used to create a new permission for the current user.</description>
     <managed-bean-name>permission</managed-bean-name>
