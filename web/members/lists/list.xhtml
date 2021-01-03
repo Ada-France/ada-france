@@ -33,12 +33,11 @@
                 #{member.email}
             </div>
             <div class='member-status'>
+                <div></div>
                 <h:panelGroup rendered="#{member.status eq 'WAITING_PAYMENT'}">
                     Pending
                 </h:panelGroup>
-                <h:panelGroup rendered="#{member.status eq 'MEMBER_ADA_FRANCE'}">
-                </h:panelGroup>
-                <h:panelGroup rendered="#{member.status eq 'MEMBER_ADA_EUROPE'}">
+                <h:panelGroup layout='block' styleClass='adafr-expired' rendered='#{member.id gt 0 and adafrMemberList.expired}'>
                 </h:panelGroup>
             </div>
             <div class='member-subscription'>
