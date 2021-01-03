@@ -5,7 +5,7 @@
 --  Template used: templates/model/package-body.xhtml
 --  Ada Generator: https://ada-gen.googlecode.com/svn/trunk Revision 1095
 -----------------------------------------------------------------------
---  Copyright (C) 2020 Stephane Carrez
+--  Copyright (C) 2021 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -65,6 +65,7 @@ package body Adafr.Members.Models is
    begin
       Impl := new Receipt_Impl;
       Impl.Create_Date := ADO.DEFAULT_TIME;
+      Impl.Amount := 0;
       Impl.Member := ADO.NO_IDENTIFIER;
       ADO.Objects.Set_Object (Object, Impl.all'Access);
    end Allocate;
@@ -107,12 +108,29 @@ package body Adafr.Members.Models is
    end Get_Create_Date;
 
 
+   procedure Set_Amount (Object : in out Receipt_Ref;
+                         Value  : in Integer) is
+      Impl : Receipt_Access;
+   begin
+      Set_Field (Object, Impl);
+      ADO.Objects.Set_Field_Integer (Impl.all, 3, Impl.Amount, Value);
+   end Set_Amount;
+
+   function Get_Amount (Object : in Receipt_Ref)
+                  return Integer is
+      Impl : constant Receipt_Access
+         := Receipt_Impl (Object.Get_Load_Object.all)'Access;
+   begin
+      return Impl.Amount;
+   end Get_Amount;
+
+
    procedure Set_Member (Object : in out Receipt_Ref;
                          Value  : in ADO.Identifier) is
       Impl : Receipt_Access;
    begin
       Set_Field (Object, Impl);
-      ADO.Objects.Set_Field_Identifier (Impl.all, 3, Impl.Member, Value);
+      ADO.Objects.Set_Field_Identifier (Impl.all, 4, Impl.Member, Value);
    end Set_Member;
 
    function Get_Member (Object : in Receipt_Ref)
@@ -139,6 +157,7 @@ package body Adafr.Members.Models is
             Copy.Copy (Impl.all);
             Copy.all.Set_Key (Impl.all.Get_Key);
             Copy.Create_Date := Impl.Create_Date;
+            Copy.Amount := Impl.Amount;
             Copy.Member := Impl.Member;
          end;
       end if;
@@ -280,9 +299,14 @@ package body Adafr.Members.Models is
          Object.Clear_Modified (2);
       end if;
       if Object.Is_Modified (3) then
-         Stmt.Save_Field (Name  => COL_2_1_NAME, --  member
-                          Value => Object.Member);
+         Stmt.Save_Field (Name  => COL_2_1_NAME, --  amount
+                          Value => Object.Amount);
          Object.Clear_Modified (3);
+      end if;
+      if Object.Is_Modified (4) then
+         Stmt.Save_Field (Name  => COL_3_1_NAME, --  member
+                          Value => Object.Member);
+         Object.Clear_Modified (4);
       end if;
       if Stmt.Has_Save_Fields then
          Stmt.Set_Filter (Filter => "id = ?");
@@ -310,7 +334,9 @@ package body Adafr.Members.Models is
                         Value => Object.Get_Key);
       Query.Save_Field (Name  => COL_1_1_NAME, --  create_date
                         Value => Object.Create_Date);
-      Query.Save_Field (Name  => COL_2_1_NAME, --  member
+      Query.Save_Field (Name  => COL_2_1_NAME, --  amount
+                        Value => Object.Amount);
+      Query.Save_Field (Name  => COL_3_1_NAME, --  member
                         Value => Object.Member);
       Query.Execute (Result);
       if Result /= 1 then
@@ -347,6 +373,8 @@ package body Adafr.Members.Models is
          return ADO.Objects.To_Object (Impl.Get_Key);
       elsif Name = "create_date" then
          return Util.Beans.Objects.Time.To_Object (Impl.Create_Date);
+      elsif Name = "amount" then
+         return Util.Beans.Objects.To_Object (Long_Long_Integer (Impl.Amount));
       elsif Name = "member" then
          return Util.Beans.Objects.To_Object (Long_Long_Integer (Impl.Member));
       end if;
@@ -364,7 +392,8 @@ package body Adafr.Members.Models is
    begin
       Object.Set_Key_Value (Stmt.Get_Identifier (0));
       Object.Create_Date := Stmt.Get_Time (1);
-      Object.Member := Stmt.Get_Identifier (2);
+      Object.Amount := Stmt.Get_Integer (2);
+      Object.Member := Stmt.Get_Identifier (3);
       ADO.Objects.Set_Created (Object);
    end Load;
    function Member_Key (Id : in ADO.Identifier) return ADO.Objects.Object_Key is
@@ -408,6 +437,8 @@ package body Adafr.Members.Models is
       Impl.Status := Adafr.Members.Models.Status_Type'First;
       Impl.Ada_Europe := False;
       Impl.Update_Date := ADO.DEFAULT_TIME;
+      Impl.Subscription_Deadline.Is_Null := True;
+      Impl.Amount := 0;
       ADO.Objects.Set_Object (Object, Impl.all'Access);
    end Allocate;
 
@@ -846,12 +877,46 @@ package body Adafr.Members.Models is
    end Get_Update_Date;
 
 
+   procedure Set_Subscription_Deadline (Object : in out Member_Ref;
+                                        Value  : in ADO.Nullable_Time) is
+      Impl : Member_Access;
+   begin
+      Set_Field (Object, Impl);
+      ADO.Objects.Set_Field_Time (Impl.all, 19, Impl.Subscription_Deadline, Value);
+   end Set_Subscription_Deadline;
+
+   function Get_Subscription_Deadline (Object : in Member_Ref)
+                  return ADO.Nullable_Time is
+      Impl : constant Member_Access
+         := Member_Impl (Object.Get_Load_Object.all)'Access;
+   begin
+      return Impl.Subscription_Deadline;
+   end Get_Subscription_Deadline;
+
+
+   procedure Set_Amount (Object : in out Member_Ref;
+                         Value  : in Integer) is
+      Impl : Member_Access;
+   begin
+      Set_Field (Object, Impl);
+      ADO.Objects.Set_Field_Integer (Impl.all, 20, Impl.Amount, Value);
+   end Set_Amount;
+
+   function Get_Amount (Object : in Member_Ref)
+                  return Integer is
+      Impl : constant Member_Access
+         := Member_Impl (Object.Get_Load_Object.all)'Access;
+   begin
+      return Impl.Amount;
+   end Get_Amount;
+
+
    procedure Set_Receipt (Object : in out Member_Ref;
                           Value  : in Adafr.Members.Models.Receipt_Ref'Class) is
       Impl : Member_Access;
    begin
       Set_Field (Object, Impl);
-      ADO.Objects.Set_Field_Object (Impl.all, 19, Impl.Receipt, Value);
+      ADO.Objects.Set_Field_Object (Impl.all, 21, Impl.Receipt, Value);
    end Set_Receipt;
 
    function Get_Receipt (Object : in Member_Ref)
@@ -868,7 +933,7 @@ package body Adafr.Members.Models is
       Impl : Member_Access;
    begin
       Set_Field (Object, Impl);
-      ADO.Objects.Set_Field_Object (Impl.all, 20, Impl.Email, Value);
+      ADO.Objects.Set_Field_Object (Impl.all, 22, Impl.Email, Value);
    end Set_Email;
 
    function Get_Email (Object : in Member_Ref)
@@ -910,6 +975,8 @@ package body Adafr.Members.Models is
             Copy.Ada_Europe := Impl.Ada_Europe;
             Copy.Salt := Impl.Salt;
             Copy.Update_Date := Impl.Update_Date;
+            Copy.Subscription_Deadline := Impl.Subscription_Deadline;
+            Copy.Amount := Impl.Amount;
             Copy.Receipt := Impl.Receipt;
             Copy.Email := Impl.Email;
          end;
@@ -1127,14 +1194,24 @@ package body Adafr.Members.Models is
          Object.Clear_Modified (18);
       end if;
       if Object.Is_Modified (19) then
-         Stmt.Save_Field (Name  => COL_18_2_NAME, --  receipt_id
-                          Value => Object.Receipt);
+         Stmt.Save_Field (Name  => COL_18_2_NAME, --  subscription_deadline
+                          Value => Object.Subscription_Deadline);
          Object.Clear_Modified (19);
       end if;
       if Object.Is_Modified (20) then
-         Stmt.Save_Field (Name  => COL_19_2_NAME, --  email_id
-                          Value => Object.Email);
+         Stmt.Save_Field (Name  => COL_19_2_NAME, --  amount
+                          Value => Object.Amount);
          Object.Clear_Modified (20);
+      end if;
+      if Object.Is_Modified (21) then
+         Stmt.Save_Field (Name  => COL_20_2_NAME, --  receipt_id
+                          Value => Object.Receipt);
+         Object.Clear_Modified (21);
+      end if;
+      if Object.Is_Modified (22) then
+         Stmt.Save_Field (Name  => COL_21_2_NAME, --  email_id
+                          Value => Object.Email);
+         Object.Clear_Modified (22);
       end if;
       if Stmt.Has_Save_Fields then
          Object.Version := Object.Version + 1;
@@ -1203,9 +1280,13 @@ package body Adafr.Members.Models is
                         Value => Object.Salt);
       Query.Save_Field (Name  => COL_17_2_NAME, --  update_date
                         Value => Object.Update_Date);
-      Query.Save_Field (Name  => COL_18_2_NAME, --  receipt_id
+      Query.Save_Field (Name  => COL_18_2_NAME, --  subscription_deadline
+                        Value => Object.Subscription_Deadline);
+      Query.Save_Field (Name  => COL_19_2_NAME, --  amount
+                        Value => Object.Amount);
+      Query.Save_Field (Name  => COL_20_2_NAME, --  receipt_id
                         Value => Object.Receipt);
-      Query.Save_Field (Name  => COL_19_2_NAME, --  email_id
+      Query.Save_Field (Name  => COL_21_2_NAME, --  email_id
                         Value => Object.Email);
       Query.Execute (Result);
       if Result /= 1 then
@@ -1281,6 +1362,14 @@ package body Adafr.Members.Models is
          return Util.Beans.Objects.To_Object (Impl.Salt);
       elsif Name = "update_date" then
          return Util.Beans.Objects.Time.To_Object (Impl.Update_Date);
+      elsif Name = "subscription_deadline" then
+         if Impl.Subscription_Deadline.Is_Null then
+            return Util.Beans.Objects.Null_Object;
+         else
+            return Util.Beans.Objects.Time.To_Object (Impl.Subscription_Deadline.Value);
+         end if;
+      elsif Name = "amount" then
+         return Util.Beans.Objects.To_Object (Long_Long_Integer (Impl.Amount));
       end if;
       return Util.Beans.Objects.Null_Object;
    end Get_Value;
@@ -1311,11 +1400,13 @@ package body Adafr.Members.Models is
       Object.Ada_Europe := Stmt.Get_Boolean (15);
       Object.Salt := Stmt.Get_Unbounded_String (16);
       Object.Update_Date := Stmt.Get_Time (17);
-      if not Stmt.Is_Null (18) then
-         Object.Receipt.Set_Key_Value (Stmt.Get_Identifier (18), Session);
+      Object.Subscription_Deadline := Stmt.Get_Nullable_Time (18);
+      Object.Amount := Stmt.Get_Integer (19);
+      if not Stmt.Is_Null (20) then
+         Object.Receipt.Set_Key_Value (Stmt.Get_Identifier (20), Session);
       end if;
-      if not Stmt.Is_Null (19) then
-         Object.Email.Set_Key_Value (Stmt.Get_Identifier (19), Session);
+      if not Stmt.Is_Null (21) then
+         Object.Email.Set_Key_Value (Stmt.Get_Identifier (21), Session);
       end if;
       Object.Version := Stmt.Get_Integer (1);
       ADO.Objects.Set_Created (Object);
@@ -1470,6 +1561,12 @@ package body Adafr.Members.Models is
          else
             return Util.Beans.Objects.Time.To_Object (From.Payment_Date.Value);
          end if;
+      elsif Name = "subscription_deadline" then
+         if From.Subscription_Deadline.Is_Null then
+            return Util.Beans.Objects.Null_Object;
+         else
+            return Util.Beans.Objects.Time.To_Object (From.Subscription_Deadline.Value);
+         end if;
       elsif Name = "email" then
          return Util.Beans.Objects.To_Object (From.Email);
       elsif Name = "login_name" then
@@ -1526,6 +1623,11 @@ package body Adafr.Members.Models is
          if not Item.Payment_Date.Is_Null then
             Item.Payment_Date.Value := Util.Beans.Objects.Time.To_Time (Value);
          end if;
+      elsif Name = "subscription_deadline" then
+         Item.Subscription_Deadline.Is_Null := Util.Beans.Objects.Is_Null (Value);
+         if not Item.Subscription_Deadline.Is_Null then
+            Item.Subscription_Deadline.Value := Util.Beans.Objects.Time.To_Time (Value);
+         end if;
       elsif Name = "email" then
          Item.Email := Util.Beans.Objects.To_Unbounded_String (Value);
       elsif Name = "login_name" then
@@ -1572,9 +1674,10 @@ package body Adafr.Members.Models is
          Into.Ada_Europe := Stmt.Get_Nullable_Boolean (4);
          Into.Create_Date := Stmt.Get_Nullable_Time (5);
          Into.Payment_Date := Stmt.Get_Nullable_Time (6);
-         Into.Email := Stmt.Get_Unbounded_String (7);
-         Into.Login_Name := Stmt.Get_Nullable_String (8);
-         Into.Role := Stmt.Get_Nullable_String (9);
+         Into.Subscription_Deadline := Stmt.Get_Nullable_Time (7);
+         Into.Email := Stmt.Get_Unbounded_String (8);
+         Into.Login_Name := Stmt.Get_Nullable_String (9);
+         Into.Role := Stmt.Get_Nullable_String (10);
       end Read;
    begin
       Stmt.Execute;
@@ -1756,6 +1859,15 @@ package body Adafr.Members.Models is
          Item.Set_Salt (Util.Beans.Objects.To_String (Value));
       elsif Name = "update_date" then
          Item.Set_Update_Date (Util.Beans.Objects.Time.To_Time (Value));
+      elsif Name = "subscription_deadline" then
+         if Util.Beans.Objects.Is_Null (Value) then
+            Item.Set_Subscription_Deadline (ADO.Nullable_Time '(Is_Null => True, others => <>));
+         else
+            Item.Set_Subscription_Deadline (ADO.Nullable_Time '(Is_Null => False,
+                                        Value   => Util.Beans.Objects.Time.To_Time (Value)));
+         end if;
+      elsif Name = "amount" then
+         Item.Set_Amount (Util.Beans.Objects.To_Integer (Value));
       end if;
    end Set_Value;
 

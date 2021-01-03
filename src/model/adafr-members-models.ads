@@ -5,7 +5,7 @@
 --  Template used: templates/model/package-spec.xhtml
 --  Ada Generator: https://ada-gen.googlecode.com/svn/trunk Revision 1095
 -----------------------------------------------------------------------
---  Copyright (C) 2020 Stephane Carrez
+--  Copyright (C) 2021 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -80,6 +80,14 @@ package Adafr.Members.Models is
    --  Get the receipt creation date
    function Get_Create_Date (Object : in Receipt_Ref)
                  return Ada.Calendar.Time;
+
+   --  Set the amount in euros
+   procedure Set_Amount (Object : in out Receipt_Ref;
+                         Value  : in Integer);
+
+   --  Get the amount in euros
+   function Get_Amount (Object : in Receipt_Ref)
+                 return Integer;
 
    --
    procedure Set_Member (Object : in out Receipt_Ref;
@@ -333,6 +341,22 @@ package Adafr.Members.Models is
    function Get_Update_Date (Object : in Member_Ref)
                  return Ada.Calendar.Time;
 
+   --  Set the subscription deadline
+   procedure Set_Subscription_Deadline (Object : in out Member_Ref;
+                                        Value  : in ADO.Nullable_Time);
+
+   --  Get the subscription deadline
+   function Get_Subscription_Deadline (Object : in Member_Ref)
+                 return ADO.Nullable_Time;
+
+   --  Set amount in euros
+   procedure Set_Amount (Object : in out Member_Ref;
+                         Value  : in Integer);
+
+   --  Get amount in euros
+   function Get_Amount (Object : in Member_Ref)
+                 return Integer;
+
    --
    procedure Set_Receipt (Object : in out Member_Ref;
                           Value  : in Adafr.Members.Models.Receipt_Ref'Class);
@@ -479,6 +503,9 @@ package Adafr.Members.Models is
       --  the date when the invitation was sent to the user.
       Payment_Date : ADO.Nullable_Time;
 
+      --  the date when the subscription terminates.
+      Subscription_Deadline : ADO.Nullable_Time;
+
       --  the member email address.
       Email : Ada.Strings.Unbounded.Unbounded_String;
 
@@ -603,15 +630,17 @@ private
    RECEIPT_NAME : aliased constant String := "adafr_receipt";
    COL_0_1_NAME : aliased constant String := "id";
    COL_1_1_NAME : aliased constant String := "create_date";
-   COL_2_1_NAME : aliased constant String := "member";
+   COL_2_1_NAME : aliased constant String := "amount";
+   COL_3_1_NAME : aliased constant String := "member";
 
    RECEIPT_DEF : aliased constant ADO.Schemas.Class_Mapping :=
-     (Count   => 3,
+     (Count   => 4,
       Table   => RECEIPT_NAME'Access,
       Members => (
          1 => COL_0_1_NAME'Access,
          2 => COL_1_1_NAME'Access,
-         3 => COL_2_1_NAME'Access)
+         3 => COL_2_1_NAME'Access,
+         4 => COL_3_1_NAME'Access)
      );
    RECEIPT_TABLE : constant ADO.Schemas.Class_Mapping_Access
       := RECEIPT_DEF'Access;
@@ -625,6 +654,7 @@ private
                                      Of_Class => RECEIPT_DEF'Access)
    with record
        Create_Date : Ada.Calendar.Time;
+       Amount : Integer;
        Member : ADO.Identifier;
    end record;
 
@@ -678,11 +708,13 @@ private
    COL_15_2_NAME : aliased constant String := "ada_europe";
    COL_16_2_NAME : aliased constant String := "salt";
    COL_17_2_NAME : aliased constant String := "update_date";
-   COL_18_2_NAME : aliased constant String := "receipt_id";
-   COL_19_2_NAME : aliased constant String := "email_id";
+   COL_18_2_NAME : aliased constant String := "subscription_deadline";
+   COL_19_2_NAME : aliased constant String := "amount";
+   COL_20_2_NAME : aliased constant String := "receipt_id";
+   COL_21_2_NAME : aliased constant String := "email_id";
 
    MEMBER_DEF : aliased constant ADO.Schemas.Class_Mapping :=
-     (Count   => 20,
+     (Count   => 22,
       Table   => MEMBER_NAME'Access,
       Members => (
          1 => COL_0_2_NAME'Access,
@@ -704,7 +736,9 @@ private
          17 => COL_16_2_NAME'Access,
          18 => COL_17_2_NAME'Access,
          19 => COL_18_2_NAME'Access,
-         20 => COL_19_2_NAME'Access)
+         20 => COL_19_2_NAME'Access,
+         21 => COL_20_2_NAME'Access,
+         22 => COL_21_2_NAME'Access)
      );
    MEMBER_TABLE : constant ADO.Schemas.Class_Mapping_Access
       := MEMBER_DEF'Access;
@@ -755,6 +789,8 @@ private
        Ada_Europe : Boolean;
        Salt : Ada.Strings.Unbounded.Unbounded_String;
        Update_Date : Ada.Calendar.Time;
+       Subscription_Deadline : ADO.Nullable_Time;
+       Amount : Integer;
        Receipt : Adafr.Members.Models.Receipt_Ref;
        Email : AWA.Users.Models.Email_Ref;
    end record;
@@ -803,7 +839,7 @@ private
 
    package File_2 is
       new ADO.Queries.Loaders.File (Path => "adafr-members.xml",
-                                    Sha1 => "34812F80343AD5EBFDC21037F8A410EBAD5A9F90");
+                                    Sha1 => "4AC5A1DCF0193D455D6866C6E9450788C890CA04");
 
    package Def_Memberinfo_Adafr_Member_List is
       new ADO.Queries.Loaders.Query (Name => "adafr-member-list",
