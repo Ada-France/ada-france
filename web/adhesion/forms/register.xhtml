@@ -12,7 +12,12 @@
                 <h:inputHidden id="key" value="#{adafrMember.key}"/>
                 <p>
                     Votre adresse email <b>#{adafrMember.email}</b> est validée.
-                    Entrez vos coordonnées.
+                    <h:panelGroup rendered="#{not empty adafrMember.create_date}">
+                      Vous êtes déjà enregistré, vous pouvez mettre à jour vos coordonnées.
+                    </h:panelGroup>
+                    <h:panelGroup rendered="#{empty adafrMember.create_date}">
+                      Entrez vos coordonnées.
+                    </h:panelGroup>
                 </p>
                 <h:messages styleClass='awa-error'/>
                 <w:inputText styleClass="awa-required ui-corner-all"

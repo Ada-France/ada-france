@@ -26,7 +26,7 @@
         <h:panelGroup rendered="#{adafrMember.status eq 'WAITING_PAYMENT'}">
             <p>
                 Vous êtes actuellement enregistré et nous attendons votre
-                paiement de #{adafrMember.ada_europe ? '65' : '30'} euros
+                paiement de #{adafrMember.amount} euros
                 pour finaliser l'enregistrement.
             </p>
             <ui:include src="/adhesion/views/payment-info.xhtml"/>

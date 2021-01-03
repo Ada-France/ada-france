@@ -7,7 +7,7 @@
     </f:metadata>
     <div class='ui-widget awa-form'>
         <h:form id='subscribe-send'>
-            <div class='col-md-8' style="display: #{adafrMember.status eq 'WAITING_PAYMENT' or adafrMember.status eq 'PENDING' ? 'block' : 'none'}">
+            <div class='col-md-8' style="display: #{adafrMember.status eq 'WAITING_PAYMENT' or adafrMember.status eq 'PENDING' or adafrMember.expired ? 'block' : 'none'}">
                 <h:inputHidden id="key" value="#{adafrMember.key}"/>
                 <p>
                     Vous pouvez adhérer à Ada-France et Ada-Europe.
@@ -17,6 +17,18 @@
                     une voix supplémentaire dans les votes au sein
                     de l'organisation Ada-Europe.
                 </p>
+                <h:panelGroup rendered="#{adafrMember.status eq 'MEMBER_ADA_FRANCE' and adafrMember.expired}">
+                  <p>
+                    Votre adhésion à Ada-France a expiré, vous pouvez la renouveler.
+                  </p>
+                </h:panelGroup>
+                <h:panelGroup rendered="#{adafrMember.status eq 'MEMBER_ADA_EUROPE' and adafrMember.expired}">
+                  <p>
+                    Votre adhésion à Ada-France et Ada-Europe a expiré.
+                    Ada-Europe ayant prolongé l'adhésion 2020 d'une année,
+                    vous pouvez renouveler votre adhésion pour 30 euros.
+                  </p>
+                </h:panelGroup>
                 <h:messages styleClass='awa-error'/>
                 <h:selectOneRadio styleClass="awa-radio" id="mode" value="#{adafrMember.ada_europe}">
                     <f:selectItem id="ada-europe-no" name="mode"
@@ -24,7 +36,7 @@
                                   itemLabel="Ada-France (30 euros)" />
                     <f:selectItem id="ada-europe-yes" name="mode"
                                   itemValue="TRUE"
-                                  itemLabel="Ada-France + Ada-Europe (65 euros)" />
+                                  itemLabel="Ada-France + Ada-Europe (#{adafrMember.expired and adafrMember.status eq 'MEMBER_ADA_EUROPE' ? '30' : 65} euros)" />
                 </h:selectOneRadio>
                 <ul class='awa-buttons'>
                     <li>
@@ -37,11 +49,15 @@
                 </ul>
             </div>
         </h:form>
-        <h:panelGroup rendered="#{adafrMember.status eq 'MEMBER_ADA_FRANCE'}">
-            Vous êtes actuellement membre de Ada-France et votre cotisation est à jour.
+        <h:panelGroup rendered="#{adafrMember.status eq 'MEMBER_ADA_FRANCE' and not adafrMember.expired}">
+            Vous êtes actuellement membre de Ada-France et votre cotisation est à jour jusqu'au <h:outputText value="#{adafrMember.subscription_deadline}">
+     <f:convertDateTime pattern="%A %d %B %Y"/>
+  </h:outputText>.
         </h:panelGroup>
-        <h:panelGroup rendered="#{adafrMember.status eq 'MEMBER_ADA_EUROPE'}">
-            Vous êtes actuellement membre de Ada-France et Ada-Europe et votre cotisation est à jour.
+        <h:panelGroup rendered="#{adafrMember.status eq 'MEMBER_ADA_EUROPE' and not adafrMember.expired}">
+            Vous êtes actuellement membre de Ada-France et Ada-Europe et votre cotisation est à jour jusqu'au <h:outputText value="#{adafrMember.subscription_deadline}">
+     <f:convertDateTime pattern="%A %d %B %Y"/>
+  </h:outputText>.
         </h:panelGroup>
     </div>
 </f:view>
