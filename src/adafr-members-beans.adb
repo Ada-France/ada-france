@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  adafr-members-beans -- Beans for module members
---  Copyright (C) 2020 Stephane Carrez
+--  Copyright (C) 2020, 2021 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,10 +15,12 @@
 --  See the License for the specific language governing permissions and
 --  limitations under the License.
 -----------------------------------------------------------------------
+with Ada.Calendar;
 with ADO.Utils;
 with ADO.Objects;
 with ADO.Sessions;
 with ADO.Queries;
+with Util.Beans.Objects.Time;
 with ASF.Contexts.Faces;
 with ASF.Contexts.Flash;
 with ASF.Applications.Messages.Factory;
@@ -28,6 +30,7 @@ package body Adafr.Members.Beans is
    use ASF.Applications;
    use Ada.Strings.Unbounded;
    use type ADO.Identifier;
+   use type Ada.Calendar.Time;
 
    package ASC renames AWA.Services.Contexts;
 
@@ -71,6 +74,15 @@ package body Adafr.Members.Beans is
       if Name = "history" then
          return Util.Beans.Objects.To_Object (Value   => From.History_Bean,
                                               Storage => Util.Beans.Objects.STATIC);
+
+      elsif Name = "expired" then
+         return Util.Beans.Objects.To_Object (Modules.Is_Expired (From));
+
+      elsif Name = "payment_date" and then Modules.Is_Expired (From) then
+         return Util.Beans.Objects.Time.To_Object (Ada.Calendar.Clock);
+
+      elsif Name = "last_payment_date" then
+         return Models.Member_Bean (From).Get_Value ("payment_date");
 
       else
          return Models.Member_Bean (From).Get_Value (Name);
@@ -199,6 +211,7 @@ package body Adafr.Members.Beans is
    overriding
    function Get_Value (From : in Member_List_Bean;
                        Name : in String) return Util.Beans.Objects.Object is
+      Pos : Natural;
    begin
       if Name = "members" then
          return Util.Beans.Objects.To_Object (Value   => From.Members_Bean,
@@ -209,6 +222,19 @@ package body Adafr.Members.Beans is
 
       elsif Name = "count" then
          return Util.Beans.Objects.To_Object (From.Count);
+
+      elsif Name = "expired" then
+         Pos := From.Members.Get_Row_Index;
+         if Pos = 0 then
+            return Util.Beans.Objects.Null_Object;
+         end if;
+         declare
+            Item : constant Models.Member_Info := From.Members.List.Element (Pos);
+            Now  : constant Ada.Calendar.Time := Ada.Calendar.Clock;
+            Date : constant ADO.Nullable_Time := Item.Subscription_Deadline;
+         begin
+            return Util.Beans.Objects.To_Object (Date.Is_Null or else Date.Value < Now);
+         end;
 
       else
          return From.Members.Get_Value (Name);
