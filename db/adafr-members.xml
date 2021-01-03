@@ -26,6 +26,9 @@
         <property type='Nullable_Date' name="payment_date" not-null="no">
             <comment>the date when the invitation was sent to the user.</comment>
         </property>
+        <property type='Nullable_Date' name="subscription_deadline" not-null="no">
+            <comment>the date when the subscription terminates.</comment>
+        </property>
         <property type='String' name="email">
             <comment>the member email address.</comment>
         </property>
@@ -48,6 +51,7 @@
       COALESCE(m.ada_europe, 0) AS ada_europe,
       m.create_date AS create_date,
       m.payment_date AS payment_date,
+      m.subscription_deadline AS deadline,
       email.email AS email,
       user.name AS user_name,
       wm.role AS user_role
