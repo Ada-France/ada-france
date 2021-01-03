@@ -25,9 +25,21 @@
         <dt>Mis à jour le</dt>
         <dd>#{adafrMember.update_date}</dd>
         <dt>Date de paiement</dt>
-        <dd><h:outputText rendered="#{not empty adafrMember.payment_date}"
-                          value="#{adafrMember.payment_date}">
+        <dd><h:outputText rendered="#{not empty adafrMember.last_payment_date}"
+                          value="#{adafrMember.last_payment_date}">
             <f:convertDateTime pattern="%Y-%m-%d"/>
-        </h:outputText></dd>
+        </h:outputText>
+        </dd>
+        <h:panelGroup rendered="#{not empty adafrMember.last_payment_date}">
+        <dt>Expiration</dt>
+        <dd class='adafr-member-expiration'>
+          <div><h:outputText value="#{adafrMember.subscription_deadline}">
+            <f:convertDateTime pattern="%Y-%m-%d"/>
+            </h:outputText>
+          </div>
+          <h:panelGroup layout="block" styleClass='adafr-expired' rendered="#{adafrMember.expired}">
+          </h:panelGroup>
+        </dd>
+        </h:panelGroup>
     </dl>
 </div>
