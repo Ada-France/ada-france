@@ -1,0 +1,39 @@
+<ui:decorate template="/WEB-INF/layouts/mail.xhtml"
+             xmlns:mail="http://code.google.com/p/ada-awa/mail"
+             xmlns:h="http://java.sun.com/jsf/html"
+             xmlns:f="http://java.sun.com/jsf/core"
+             xmlns:util="http://code.google.com/p/ada-asf/util"
+             xmlns:ui="http://java.sun.com/jsf/facelets">
+    <ui:define name="subject">Nouvel article: #{event.title}</ui:define>
+    <ui:define name="mailTo">
+    <mail:from address="#{initParam['bureau_email']}">#{initParam['bureau_email']}</mail:from>
+    <mail:to address="#{initParam['members_email']}">#{initParam['members_email']}</mail:to>
+    </ui:define>
+    <ui:define name="mailTextBody">
+Un nouvel article a été publié par #{event.author} sur le site Ada France:
+
+#{event.title}
+
+<h:outputText value="#{event.summary}" escape="false"/>
+
+<a href="#{initParam['app_url_base']}/blogs/post.html?post=#{event.uri}">
+#{event.title}
+</a>
+
+L'équipe Ada-France
+</ui:define>
+<ui:define name="mailBody">
+<p>
+  Un nouvel article a été publié par #{event.author} sur le site Ada France:
+</p>
+<p>
+  <a href="#{initParam['app_url_base']}/blogs/post.html?post=#{event.uri}">#{event.title}</a>
+</p>
+<blockquote style="font-style: italic;">
+  <h:outputText value="#{event.summary}" escape="false"/>
+</blockquote>
+<p>
+  L'équipe Ada-France
+</p>
+</ui:define>
+</ui:decorate>
