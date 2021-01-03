@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  adafr-members-modules -- Module members
---  Copyright (C) 2020 Stephane Carrez
+--  Copyright (C) 2020, 2021 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -36,8 +36,6 @@ with ADO.Statements;
 with ASF.Locales;
 with AWA.Permissions;
 with AWA.Services.Contexts;
-with AWA.Workspaces.Models;
-with AWA.Workspaces.Modules;
 with Adafr.Receipt;
 package body Adafr.Members.Modules is
 
@@ -169,6 +167,7 @@ package body Adafr.Members.Modules is
          Entity.Set_Create_Date (Ada.Calendar.Clock);
          Entity.Set_Country ("France");
          Entity.Set_Ada_Europe (Ada_Europe);
+         Entity.Set_Amount (65);
       end if;
       Entity.Set_Salt (Salt);
       Entity.Save (DB);
@@ -309,10 +308,18 @@ package body Adafr.Members.Modules is
 
       Model.Validate_Key (Key, Current_Entity);
       Current_Entity.Set_Ada_Europe (Member.Get_Ada_Europe);
-      if Current_Entity.Get_Status = Models.PENDING then
+      if not Member.Get_Ada_Europe then
+         Current_Entity.Set_Amount (30);
+      elsif Current_Entity.Get_Receipt.Is_Null
+        or else Current_Entity.Get_Status = Models.MEMBER_ADA_FRANCE
+      then
+         Current_Entity.Set_Amount (65);
+      else
+         Current_Entity.Set_Amount (30);
+      end if;
+      if Current_Entity.Get_Status = Models.PENDING or else Is_Expired (Member) then
          Current_Entity.Set_Status (Models.WAITING_PAYMENT);
       end if;
-      --  Member.Load (DB, Current_Entity.Get_Id);
 
       --  Avoid sending the email again if there is no change.
       if not Current_Entity.Is_Modified then
@@ -355,6 +362,15 @@ package body Adafr.Members.Modules is
       end;
    end Register;
 
+   function Is_Expired (Member : in Adafr.Members.Models.Member_Ref'Class) return Boolean is
+      use type Ada.Calendar.Time;
+
+      Now  : constant Ada.Calendar.Time := Ada.Calendar.Clock;
+      Date : constant ADO.Nullable_Time := Member.Get_Subscription_Deadline;
+   begin
+      return Date.Is_Null or else Date.Value < Now;
+   end Is_Expired;
+
    --  ------------------------------
    --  Update the status and payment information for the member.
    --  ------------------------------
@@ -368,6 +384,7 @@ package body Adafr.Members.Modules is
       User           : AWA.Users.Models.User_Ref;
       Query          : ADO.Queries.Context;
       Found          : Boolean;
+      Has_Receipt    : Boolean;
    begin
       Log.Info ("Update member's status and contribution with id {0}",
                 ADO.Identifier'Image (Id));
@@ -388,12 +405,28 @@ package body Adafr.Members.Modules is
       Member.Set_Id (Id);
       Ctx.Start;
 
-      if Current_Entity.Get_Receipt.Is_Null then
+      Has_Receipt := not Current_Entity.Get_Receipt.Is_Null;
+      if not Has_Receipt or else Is_Expired (Current_Entity) then
          Receipt.Set_Id (Get_Next_Receipt_Id (DB));
          Receipt.Set_Create_Date (Ada.Calendar.Clock);
          Receipt.Set_Member (Id);
+         Receipt.Set_Amount (Current_Entity.Get_Amount);
          Receipt.Save (DB);
          Current_Entity.Set_Receipt (Receipt);
+
+         --  Subscription deadline is end of current year.
+         declare
+            Deadline : Util.Dates.Date_Record;
+         begin
+            Util.Dates.Split (Deadline, Receipt.Get_Create_Date);
+            Deadline.Month := 12;
+            Deadline.Month_Day := 31;
+            Deadline.Hour := 23;
+            Deadline.Minute := 59;
+            Deadline.Second := 59;
+            Current_Entity.Set_Subscription_Deadline ((Is_Null => False,
+                                                       Value => Util.Dates.Time_Of (Deadline)));
+         end;
       else
          Receipt := Models.Receipt_Ref (Current_Entity.Get_Receipt);
       end if;
@@ -483,7 +516,6 @@ package body Adafr.Members.Modules is
       Query        : ADO.Queries.Context;
       Check_Member : Adafr.Members.Models.Member_Ref;
       Found        : Boolean;
-      Workspace    : AWA.Workspaces.Models.Workspace_Ref;
    begin
       Log.Info ("Create a new member {0}", Email);
 
@@ -518,6 +550,7 @@ package body Adafr.Members.Modules is
       Member.Set_Email (Email_Entity);
       Member.Set_Create_Date (Ada.Calendar.Clock);
       Member.Set_Update_Date (Ada.Calendar.Clock);
+      Member.Set_Amount ((if Member.Get_Ada_Europe then 65 else 30));
       Member.Save (DB);
       Ctx.Commit;
    end Create;
@@ -555,7 +588,7 @@ package body Adafr.Members.Modules is
       Info.Postal_Code := Member.Get_Postal_Code;
       Info.City := Member.Get_City;
       Info.Country := Member.Get_Country;
-      Info.Amount := To_Unbounded_String ((if Member.Get_Ada_Europe then "65" else "30"));
+      Info.Amount := To_Unbounded_String (Util.Strings.Image (Receipt.Get_Amount));
       Info.Ada_Europe := Member.Get_Ada_Europe;
       Util.Dates.Formats.Format (Into    => Info.Date,
                                  Pattern => "%A %d %B %Y",
