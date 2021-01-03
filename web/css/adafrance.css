@@ -252,19 +252,29 @@ dl.adafr-version dd {
 #member-list-action {
     width: 300px;
 }
+.member-list .ui-list-item {
+    line-height: 32px;
+    height: 32px;
+}
+.member-status, .member-title, .member-email, .member-role, .member-date {
+    height: 32px;
+}
 .adafr-members .member-email {
     width: 20%;
+    height: 32px;
 }
 .adafr-members .member-title {
     width: 15%;
+    height: 32px;
 }
 .adafr-members .member-subscription {
     width: 15%;
     float: left;
-    height: 1em;
+    height: 32px;
 }
 .adafr-members .member-date {
     width: 10%;
+    height: 32px;
 }
 .adafr-MEMBER_NONE {
 }
@@ -278,6 +288,19 @@ dl.adafr-version dd {
     background: url(../images/ada-europe-icon.png) no-repeat;
     height: 32px;
 }
+.adafr-expired {
+    margin-left: 100px;
+    background: url(../images/icon-expired-32.png) no-repeat;
+    height: 32px;
+    width: 32px;
+    background-position: 0 -5px;
+}
+.adafr-member-expiration .adafr-expired {
+    margin-left: 5px;
+    height: 32px;
+    width: 32px;
+    background-position: 0 0;
+}
 .adafr-member-info dl {
     padding: 1em;
 }
@@ -289,6 +312,9 @@ dl.adafr-version dd {
 .adafr-member-info dl dd {
     float: left;
     width: 70%;
+}
+.adafr-member-expiration div {
+    float: left;
 }
 .adafr-member-title {
     float: left;
