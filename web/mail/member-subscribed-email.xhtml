@@ -11,7 +11,7 @@
     <ui:define name="mailTextBody">
 Vous avez souhaité devenir membre d'#{event.member.ada_europe ? 'Ada-France+Ada-Europe' : 'Ada-France'} et nous vous en remercions.
 
-Votre enregistrement est actuellement en attente du paiement de #{event.member.ada_europe ? '65' : '30'} euros.
+Votre enregistrement est actuellement en attente du paiement de #{event.member.amount} euros.
 
 <ui:include src="/adhesion/views/payment-info-text.xhtml"/>
 
@@ -25,7 +25,7 @@ L'équipe Ada-France
   Vous avez souhaité devenir membre d'#{event.member.ada_europe ? 'Ada-France+Ada-Europe' : 'Ada-France'} et nous vous en remercions.
 </p>
 <p>
-  Votre enregistrement est actuellement en attente du paiement de #{event.member.ada_europe ? '65' : '30'} euros.
+  Votre enregistrement est actuellement en attente du paiement de #{event.member.amount} euros.
   Vous pouvez payer par chèque ou par virement bancaire.
 </p>
 <ui:include src="/adhesion/views/payment-info.xhtml"/>
