@@ -20,7 +20,7 @@
                               itemLabel="Ada-France (30 euros)" />
                 <f:selectItem id="ada-europe-yes" name="mode"
                               itemValue="TRUE"
-                              itemLabel="Ada-France + Ada-Europe (65 euros)" />
+                              itemLabel="Ada-France + Ada-Europe (#{(empty adafrMember.payment_date and adafrMember.expired) or not adafrMember.ada_europe ? '30' : 65} euros)" />
             </h:selectOneRadio>
             <dl class="awa-required#{util:hasMessage('payment-date') ? ' awa-error' : ''}">
                 <dt>
