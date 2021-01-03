@@ -1,36 +1,34 @@
 /* Copied from ado-mysql.sql*/
 /* File generated automatically by dynamo */
-/* Entity types */
-CREATE TABLE entity_type (
-  /* the entity type identifier */
+/* Entity table that enumerates all known database tables */
+CREATE TABLE IF NOT EXISTS entity_type (
+  /* the database table unique entity index */
   `id` INTEGER  AUTO_INCREMENT,
-  /* the entity type name (table name) */
-  `name` VARCHAR(127) UNIQUE NOT NULL,
+  /* the database entity name */
+  `name` VARCHAR(127) BINARY UNIQUE ,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /* Sequence generator */
-CREATE TABLE sequence (
+CREATE TABLE IF NOT EXISTS sequence (
   /* the sequence name */
-  `name` VARCHAR(127) NOT NULL,
+  `name` VARCHAR(127) UNIQUE NOT NULL,
   /* the sequence record version */
-  `version` int ,
+  `version` INTEGER NOT NULL,
   /* the sequence value */
-  `value` BIGINT ,
+  `value` BIGINT NOT NULL,
   /* the sequence block size */
-  `block_size` BIGINT ,
+  `block_size` BIGINT NOT NULL,
   PRIMARY KEY (`name`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;;
-INSERT INTO entity_type (name) VALUES
-("entity_type")
-,("sequence")
-;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+INSERT IGNORE INTO entity_type (name) VALUES
+("entity_type"), ("sequence");
 /* Copied from awa-mysql.sql*/
 /* File generated automatically by dynamo */
 /* The Audit table records the changes made on database on behalf of a user.
 The record indicates the database table and row, the field being updated,
 the old and new value. The old and new values are converted to a string
 and they truncated if necessary to 256 characters. */
-CREATE TABLE awa_audit (
+CREATE TABLE IF NOT EXISTS awa_audit (
   /* the audit identifier */
   `id` BIGINT NOT NULL,
   /* the date when the field was modified. */
@@ -51,7 +49,7 @@ CREATE TABLE awa_audit (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /* The Audit_Field table describes
 the database field being updated. */
-CREATE TABLE awa_audit_field (
+CREATE TABLE IF NOT EXISTS awa_audit_field (
   /* the audit field identifier. */
   `id` INTEGER NOT NULL AUTO_INCREMENT,
   /* the audit field name. */
@@ -61,7 +59,7 @@ CREATE TABLE awa_audit_field (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*  */
-CREATE TABLE awa_message (
+CREATE TABLE IF NOT EXISTS awa_message (
   /* the message identifier */
   `id` BIGINT NOT NULL,
   /* the message creation date */
@@ -99,7 +97,7 @@ CREATE TABLE awa_message (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*  */
-CREATE TABLE awa_message_type (
+CREATE TABLE IF NOT EXISTS awa_message_type (
   /*  */
   `id` BIGINT NOT NULL,
   /* the message type name */
@@ -108,7 +106,7 @@ CREATE TABLE awa_message_type (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /* The message queue tracks the event messages that must be dispatched by
 a given server. */
-CREATE TABLE awa_queue (
+CREATE TABLE IF NOT EXISTS awa_queue (
   /*  */
   `id` BIGINT NOT NULL,
   /*  */
@@ -118,7 +116,7 @@ CREATE TABLE awa_queue (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /* The application that is granted access to the database. */
-CREATE TABLE awa_application (
+CREATE TABLE IF NOT EXISTS awa_application (
   /* the application identifier. */
   `id` BIGINT NOT NULL,
   /* the application name. */
@@ -146,7 +144,7 @@ CREATE TABLE awa_application (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*  */
-CREATE TABLE awa_callback (
+CREATE TABLE IF NOT EXISTS awa_callback (
   /*  */
   `id` BIGINT NOT NULL,
   /*  */
@@ -159,7 +157,7 @@ CREATE TABLE awa_callback (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /* The session is created when the user has granted an access to an application
 or when the application has refreshed its access token. */
-CREATE TABLE awa_oauth_session (
+CREATE TABLE IF NOT EXISTS awa_oauth_session (
   /* the session identifier. */
   `id` BIGINT NOT NULL,
   /* the session creation date. */
@@ -177,7 +175,7 @@ CREATE TABLE awa_oauth_session (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /* The ACL table records permissions which are granted for a user to access a given database entity. */
-CREATE TABLE awa_acl (
+CREATE TABLE IF NOT EXISTS awa_acl (
   /* the ACL identifier */
   `id` BIGINT NOT NULL,
   /* the entity identifier to which the ACL applies */
@@ -197,7 +195,7 @@ CREATE TABLE awa_acl (
 /* The permission table lists all the application permissions that are defined.
 This is a system table shared by every user and workspace.
 The list of permission is fixed and never changes. */
-CREATE TABLE awa_permission (
+CREATE TABLE IF NOT EXISTS awa_permission (
   /* the permission database identifier. */
   `id` BIGINT NOT NULL,
   /* the permission name */
@@ -205,7 +203,7 @@ CREATE TABLE awa_permission (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*  */
-CREATE TABLE awa_access_key (
+CREATE TABLE IF NOT EXISTS awa_access_key (
   /* the secure access key. */
   `access_key` VARCHAR(255) BINARY NOT NULL,
   /* the access key expiration date. */
@@ -224,7 +222,7 @@ CREATE TABLE awa_access_key (
 The user has a primary email address that is obtained
 from the registration process (either through a form
 submission or through OpenID authentication). */
-CREATE TABLE awa_email (
+CREATE TABLE IF NOT EXISTS awa_email (
   /* the email address. */
   `email` VARCHAR(255) BINARY NOT NULL,
   /* the last mail delivery status (if known). */
@@ -236,11 +234,11 @@ CREATE TABLE awa_email (
   /* the email primary key. */
   `id` BIGINT NOT NULL,
   /* the user. */
-  `user_id` BIGINT NOT NULL,
+  `user_id` BIGINT ,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*  */
-CREATE TABLE awa_session (
+CREATE TABLE IF NOT EXISTS awa_session (
   /*  */
   `start_date` DATETIME NOT NULL,
   /*  */
@@ -262,7 +260,7 @@ CREATE TABLE awa_session (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /* The User entity represents a user that can access and use the application. */
-CREATE TABLE awa_user (
+CREATE TABLE IF NOT EXISTS awa_user (
   /* the user first name. */
   `first_name` VARCHAR(255) BINARY NOT NULL,
   /* the user last name. */
@@ -285,34 +283,20 @@ CREATE TABLE awa_user (
   `email_id` BIGINT NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-INSERT INTO entity_type (name) VALUES
-("awa_audit")
-,("awa_audit_field")
-,("awa_message")
-,("awa_message_type")
-,("awa_queue")
-,("awa_application")
-,("awa_callback")
-,("awa_oauth_session")
-,("awa_acl")
-,("awa_permission")
-,("awa_access_key")
-,("awa_email")
-,("awa_session")
-,("awa_user")
-;
-INSERT INTO awa_audit_field (entity_type, name)
+INSERT IGNORE INTO entity_type (name) VALUES
+("awa_audit"), ("awa_audit_field"), ("awa_message"), ("awa_message_type"), ("awa_queue"), ("awa_application"), ("awa_callback"), ("awa_oauth_session"), ("awa_acl"), ("awa_permission"), ("awa_access_key"), ("awa_email"), ("awa_session"), ("awa_user");
+INSERT IGNORE INTO awa_audit_field (entity_type, name)
   VALUES ((SELECT id FROM entity_type WHERE name = "awa_user"), "first_name");
-INSERT INTO awa_audit_field (entity_type, name)
+INSERT IGNORE INTO awa_audit_field (entity_type, name)
   VALUES ((SELECT id FROM entity_type WHERE name = "awa_user"), "last_name");
-INSERT INTO awa_audit_field (entity_type, name)
+INSERT IGNORE INTO awa_audit_field (entity_type, name)
   VALUES ((SELECT id FROM entity_type WHERE name = "awa_user"), "country");
-INSERT INTO awa_audit_field (entity_type, name)
+INSERT IGNORE INTO awa_audit_field (entity_type, name)
   VALUES ((SELECT id FROM entity_type WHERE name = "awa_user"), "name");
 /* Copied from awa-workspaces-mysql.sql*/
 /* File generated automatically by dynamo */
 /*  */
-CREATE TABLE awa_invitation (
+CREATE TABLE IF NOT EXISTS awa_invitation (
   /* the invitation identifier. */
   `id` BIGINT NOT NULL,
   /* version optimistic lock. */
@@ -341,7 +325,7 @@ CREATE TABLE awa_invitation (
 for a set of users: the workspace members.  A user could create
 several workspaces and be part of several workspaces that other
 users have created. */
-CREATE TABLE awa_workspace (
+CREATE TABLE IF NOT EXISTS awa_workspace (
   /* the workspace identifier */
   `id` BIGINT NOT NULL,
   /*  */
@@ -353,7 +337,7 @@ CREATE TABLE awa_workspace (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*  */
-CREATE TABLE awa_workspace_feature (
+CREATE TABLE IF NOT EXISTS awa_workspace_feature (
   /*  */
   `id` BIGINT NOT NULL,
   /*  */
@@ -365,7 +349,7 @@ CREATE TABLE awa_workspace_feature (
 /* The workspace member indicates the users who
 are part of the workspace. The join_date is NULL when
 a user was invited but has not accepted the invitation. */
-CREATE TABLE awa_workspace_member (
+CREATE TABLE IF NOT EXISTS awa_workspace_member (
   /*  */
   `id` BIGINT NOT NULL,
   /* the date when the user has joined the workspace. */
@@ -378,17 +362,13 @@ CREATE TABLE awa_workspace_member (
   `workspace_id` BIGINT NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-INSERT INTO entity_type (name) VALUES
-("awa_invitation")
-,("awa_workspace")
-,("awa_workspace_feature")
-,("awa_workspace_member")
-;
+INSERT IGNORE INTO entity_type (name) VALUES
+("awa_invitation"), ("awa_workspace"), ("awa_workspace_feature"), ("awa_workspace_member");
 /* Copied from awa-comments-mysql.sql*/
 /* File generated automatically by dynamo */
 /* The Comment table records a user comment associated with a database entity.
 The comment can be associated with any other database record. */
-CREATE TABLE awa_comment (
+CREATE TABLE IF NOT EXISTS awa_comment (
   /* the comment publication date */
   `create_date` DATETIME NOT NULL,
   /* the comment message. */
@@ -409,19 +389,18 @@ CREATE TABLE awa_comment (
   `author_id` BIGINT NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-INSERT INTO entity_type (name) VALUES
-("awa_comment")
-;
-INSERT INTO awa_audit_field (entity_type, name)
+INSERT IGNORE INTO entity_type (name) VALUES
+("awa_comment");
+INSERT IGNORE INTO awa_audit_field (entity_type, name)
   VALUES ((SELECT id FROM entity_type WHERE name = "awa_comment"), "message");
-INSERT INTO awa_audit_field (entity_type, name)
+INSERT IGNORE INTO awa_audit_field (entity_type, name)
   VALUES ((SELECT id FROM entity_type WHERE name = "awa_comment"), "status");
-INSERT INTO awa_audit_field (entity_type, name)
+INSERT IGNORE INTO awa_audit_field (entity_type, name)
   VALUES ((SELECT id FROM entity_type WHERE name = "awa_comment"), "format");
 /* Copied from awa-tags-mysql.sql*/
 /* File generated automatically by dynamo */
 /* The tag definition. */
-CREATE TABLE awa_tag (
+CREATE TABLE IF NOT EXISTS awa_tag (
   /* the tag identifier */
   `id` BIGINT NOT NULL,
   /* the tag name */
@@ -429,7 +408,7 @@ CREATE TABLE awa_tag (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*  */
-CREATE TABLE awa_tagged_entity (
+CREATE TABLE IF NOT EXISTS awa_tagged_entity (
   /* the tag entity identifier */
   `id` BIGINT NOT NULL,
   /* Title: Tag model
@@ -441,17 +420,15 @@ Date: 2013-02-23the database entity to which the tag is associated */
   `tag_id` BIGINT NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-INSERT INTO entity_type (name) VALUES
-("awa_tag")
-,("awa_tagged_entity")
-;
+INSERT IGNORE INTO entity_type (name) VALUES
+("awa_tag"), ("awa_tagged_entity");
 /* Copied from awa-storages-mysql.sql*/
 /* File generated automatically by dynamo */
 /* The uri member holds the URI if the storage type is URL.
 
 When storage is FILE, the local file path is built by using
 the workspace identifier and the storage identifier. */
-CREATE TABLE awa_storage (
+CREATE TABLE IF NOT EXISTS awa_storage (
   /* the storage type which defines where the content is stored */
   `storage` TINYINT NOT NULL,
   /* the storage creation date */
@@ -484,7 +461,7 @@ CREATE TABLE awa_storage (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /* The storage data is created only if the storage type
 is set to DATABASE.  It holds the file content in the blob. */
-CREATE TABLE awa_storage_data (
+CREATE TABLE IF NOT EXISTS awa_storage_data (
   /* the storage data identifier */
   `id` BIGINT NOT NULL,
   /*  */
@@ -494,7 +471,7 @@ CREATE TABLE awa_storage_data (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*  */
-CREATE TABLE awa_storage_folder (
+CREATE TABLE IF NOT EXISTS awa_storage_folder (
   /* the storage folder identifier */
   `id` BIGINT NOT NULL,
   /*  */
@@ -513,7 +490,7 @@ CREATE TABLE awa_storage_folder (
 The creation date refers to the date when the data was copied to the local file system.
 The expiration date indicates a date after which the local file can be removed
 from the local file system. */
-CREATE TABLE awa_store_local (
+CREATE TABLE IF NOT EXISTS awa_store_local (
   /* the local store identifier */
   `id` BIGINT NOT NULL,
   /*  */
@@ -532,16 +509,12 @@ CREATE TABLE awa_store_local (
   `storage_id` BIGINT ,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-INSERT INTO entity_type (name) VALUES
-("awa_storage")
-,("awa_storage_data")
-,("awa_storage_folder")
-,("awa_store_local")
-;
+INSERT IGNORE INTO entity_type (name) VALUES
+("awa_storage"), ("awa_storage_data"), ("awa_storage_folder"), ("awa_store_local");
 /* Copied from awa-jobs-mysql.sql*/
 /* File generated automatically by dynamo */
 /* The job is associated with a dispatching queue. */
-CREATE TABLE awa_job (
+CREATE TABLE IF NOT EXISTS awa_job (
   /* the job identifier */
   `id` BIGINT NOT NULL,
   /* the job status */
@@ -572,16 +545,15 @@ CREATE TABLE awa_job (
   `session_id` BIGINT ,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-INSERT INTO entity_type (name) VALUES
-("awa_job")
-;
+INSERT IGNORE INTO entity_type (name) VALUES
+("awa_job");
 /* Copied from awa-images-mysql.sql*/
 /* File generated automatically by dynamo */
 /* - The workspace contains one or several folders.
 - Each image folder contains a set of images that have been uploaded by the user.
 - An image can be visible if a user has an ACL permission to read the associated folder.
 - An image marked as 'public=True' can be visible by anybody */
-CREATE TABLE awa_image (
+CREATE TABLE IF NOT EXISTS awa_image (
   /* the image identifier */
   `id` BIGINT NOT NULL,
   /* the image width */
@@ -608,13 +580,12 @@ CREATE TABLE awa_image (
   `storage_id` BIGINT NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-INSERT INTO entity_type (name) VALUES
-("awa_image")
-;
+INSERT IGNORE INTO entity_type (name) VALUES
+("awa_image");
 /* Copied from awa_counters-mysql.sql*/
 /* File generated automatically by dynamo */
 /*  */
-CREATE TABLE awa_counter (
+CREATE TABLE IF NOT EXISTS awa_counter (
   /* the object associated with the counter. */
   `object_id` BIGINT NOT NULL,
   /* the day associated with the counter. */
@@ -628,7 +599,7 @@ CREATE TABLE awa_counter (
 /* A counter definition defines what the counter represents. It uniquely identifies
 the counter for the Counter table. A counter may be associated with a database
 table. In that case, the counter definition has a relation to the corresponding Entity_Type. */
-CREATE TABLE awa_counter_definition (
+CREATE TABLE IF NOT EXISTS awa_counter_definition (
   /* the counter name. */
   `name` VARCHAR(255) BINARY NOT NULL,
   /* the counter unique id. */
@@ -638,7 +609,7 @@ CREATE TABLE awa_counter_definition (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*  */
-CREATE TABLE awa_visit (
+CREATE TABLE IF NOT EXISTS awa_visit (
   /* the entity identifier. */
   `object_id` BIGINT NOT NULL,
   /* the number of times the entity was visited by the user. */
@@ -651,15 +622,12 @@ CREATE TABLE awa_visit (
   `definition_id` BIGINT NOT NULL,
   PRIMARY KEY (`object_id`, `user`, `definition_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-INSERT INTO entity_type (name) VALUES
-("awa_counter")
-,("awa_counter_definition")
-,("awa_visit")
-;
+INSERT IGNORE INTO entity_type (name) VALUES
+("awa_counter"), ("awa_counter_definition"), ("awa_visit");
 /* Copied from awa-blogs-mysql.sql*/
 /* File generated automatically by dynamo */
 /*  */
-CREATE TABLE awa_blog (
+CREATE TABLE IF NOT EXISTS awa_blog (
   /* the blog identifier */
   `id` BIGINT NOT NULL,
   /* the blog name */
@@ -683,7 +651,7 @@ CREATE TABLE awa_blog (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*  */
-CREATE TABLE awa_post (
+CREATE TABLE IF NOT EXISTS awa_post (
   /* the post identifier */
   `id` BIGINT NOT NULL,
   /* the post title */
@@ -705,7 +673,7 @@ CREATE TABLE awa_post (
   /* the number of times the post was read. */
   `read_count` INTEGER NOT NULL,
   /* the post summary. */
-  `summary` VARCHAR(255) BINARY NOT NULL,
+  `summary` VARCHAR(4096) BINARY NOT NULL,
   /* the blog post format. */
   `format` TINYINT NOT NULL,
   /*  */
@@ -716,38 +684,36 @@ CREATE TABLE awa_post (
   `image_id` BIGINT ,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-INSERT INTO entity_type (name) VALUES
-("awa_blog")
-,("awa_post")
-;
-INSERT INTO awa_audit_field (entity_type, name)
+INSERT IGNORE INTO entity_type (name) VALUES
+("awa_blog"), ("awa_post");
+INSERT IGNORE INTO awa_audit_field (entity_type, name)
   VALUES ((SELECT id FROM entity_type WHERE name = "awa_blog"), "name");
-INSERT INTO awa_audit_field (entity_type, name)
+INSERT IGNORE INTO awa_audit_field (entity_type, name)
   VALUES ((SELECT id FROM entity_type WHERE name = "awa_blog"), "uid");
-INSERT INTO awa_audit_field (entity_type, name)
+INSERT IGNORE INTO awa_audit_field (entity_type, name)
   VALUES ((SELECT id FROM entity_type WHERE name = "awa_blog"), "url");
-INSERT INTO awa_audit_field (entity_type, name)
+INSERT IGNORE INTO awa_audit_field (entity_type, name)
   VALUES ((SELECT id FROM entity_type WHERE name = "awa_blog"), "format");
-INSERT INTO awa_audit_field (entity_type, name)
+INSERT IGNORE INTO awa_audit_field (entity_type, name)
   VALUES ((SELECT id FROM entity_type WHERE name = "awa_blog"), "default_image_url");
-INSERT INTO awa_audit_field (entity_type, name)
+INSERT IGNORE INTO awa_audit_field (entity_type, name)
   VALUES ((SELECT id FROM entity_type WHERE name = "awa_post"), "title");
-INSERT INTO awa_audit_field (entity_type, name)
+INSERT IGNORE INTO awa_audit_field (entity_type, name)
   VALUES ((SELECT id FROM entity_type WHERE name = "awa_post"), "uri");
-INSERT INTO awa_audit_field (entity_type, name)
+INSERT IGNORE INTO awa_audit_field (entity_type, name)
   VALUES ((SELECT id FROM entity_type WHERE name = "awa_post"), "publish_date");
-INSERT INTO awa_audit_field (entity_type, name)
+INSERT IGNORE INTO awa_audit_field (entity_type, name)
   VALUES ((SELECT id FROM entity_type WHERE name = "awa_post"), "status");
-INSERT INTO awa_audit_field (entity_type, name)
+INSERT IGNORE INTO awa_audit_field (entity_type, name)
   VALUES ((SELECT id FROM entity_type WHERE name = "awa_post"), "allow_comments");
-INSERT INTO awa_audit_field (entity_type, name)
+INSERT IGNORE INTO awa_audit_field (entity_type, name)
   VALUES ((SELECT id FROM entity_type WHERE name = "awa_post"), "summary");
-INSERT INTO awa_audit_field (entity_type, name)
+INSERT IGNORE INTO awa_audit_field (entity_type, name)
   VALUES ((SELECT id FROM entity_type WHERE name = "awa_post"), "format");
 /* Copied from awa-wikis-mysql.sql*/
 /* File generated automatically by dynamo */
 /*  */
-CREATE TABLE awa_wiki_content (
+CREATE TABLE IF NOT EXISTS awa_wiki_content (
   /* the wiki page content identifier */
   `id` BIGINT NOT NULL,
   /* the wiki content creation date */
@@ -772,7 +738,7 @@ CREATE TABLE awa_wiki_content (
 It refers to the last version which is currently visible.
 It has an optional preview image which defines
 the thumbnail preview of the last/current wiki content. */
-CREATE TABLE awa_wiki_page (
+CREATE TABLE IF NOT EXISTS awa_wiki_page (
   /* the wiki page identifier */
   `id` BIGINT NOT NULL,
   /* the wiki page name */
@@ -797,7 +763,7 @@ CREATE TABLE awa_wiki_page (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /* Permission is granted to display a wiki page if there is
 an ACL entry between the wiki space and the user. */
-CREATE TABLE awa_wiki_space (
+CREATE TABLE IF NOT EXISTS awa_wiki_space (
   /* the wiki space identifier */
   `id` BIGINT NOT NULL,
   /* the wiki name */
@@ -818,24 +784,21 @@ CREATE TABLE awa_wiki_space (
   `workspace_id` BIGINT NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-INSERT INTO entity_type (name) VALUES
-("awa_wiki_content")
-,("awa_wiki_page")
-,("awa_wiki_space")
-;
-INSERT INTO awa_audit_field (entity_type, name)
+INSERT IGNORE INTO entity_type (name) VALUES
+("awa_wiki_content"), ("awa_wiki_page"), ("awa_wiki_space");
+INSERT IGNORE INTO awa_audit_field (entity_type, name)
   VALUES ((SELECT id FROM entity_type WHERE name = "awa_wiki_page"), "name");
-INSERT INTO awa_audit_field (entity_type, name)
+INSERT IGNORE INTO awa_audit_field (entity_type, name)
   VALUES ((SELECT id FROM entity_type WHERE name = "awa_wiki_page"), "last_version");
-INSERT INTO awa_audit_field (entity_type, name)
+INSERT IGNORE INTO awa_audit_field (entity_type, name)
   VALUES ((SELECT id FROM entity_type WHERE name = "awa_wiki_page"), "is_public");
-INSERT INTO awa_audit_field (entity_type, name)
+INSERT IGNORE INTO awa_audit_field (entity_type, name)
   VALUES ((SELECT id FROM entity_type WHERE name = "awa_wiki_page"), "title");
-INSERT INTO awa_audit_field (entity_type, name)
+INSERT IGNORE INTO awa_audit_field (entity_type, name)
   VALUES ((SELECT id FROM entity_type WHERE name = "awa_wiki_space"), "name");
-INSERT INTO awa_audit_field (entity_type, name)
+INSERT IGNORE INTO awa_audit_field (entity_type, name)
   VALUES ((SELECT id FROM entity_type WHERE name = "awa_wiki_space"), "is_public");
-INSERT INTO awa_audit_field (entity_type, name)
+INSERT IGNORE INTO awa_audit_field (entity_type, name)
   VALUES ((SELECT id FROM entity_type WHERE name = "awa_wiki_space"), "format");
 /* Copied from adafr-mysql.sql*/
 /* File generated automatically by dynamo */
@@ -846,7 +809,7 @@ until we receive the validation of the email address. Then, it enters
 int the WAITNG_PAYMENT state until the payment is acknowledged.
 The payment process is manual (wire transfer or by check) and
 switch to MEMBER once it is received.the member identifier */
-CREATE TABLE adafr_member (
+CREATE TABLE IF NOT EXISTS adafr_member (
   /*  */
   `id` BIGINT NOT NULL,
   /* optimistic locking version */
@@ -883,6 +846,10 @@ CREATE TABLE adafr_member (
   `salt` VARCHAR(255) BINARY NOT NULL,
   /* date when the information was updated. */
   `update_date` DATETIME NOT NULL,
+  /* the subscription deadline */
+  `subscription_deadline` DATE ,
+  /* amount in euros */
+  `amount` INTEGER NOT NULL,
   /*  */
   `receipt_id` BIGINT ,
   /* the member's email address. */
@@ -890,43 +857,43 @@ CREATE TABLE adafr_member (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*  */
-CREATE TABLE adafr_receipt (
+CREATE TABLE IF NOT EXISTS adafr_receipt (
   /* the receipt id */
   `id` BIGINT NOT NULL,
   /* the receipt creation date */
   `create_date` DATE NOT NULL,
+  /* the amount in euros */
+  `amount` INTEGER NOT NULL,
   /*  */
   `member` BIGINT NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-INSERT INTO entity_type (name) VALUES
-("adafr_member")
-,("adafr_receipt")
-;
-INSERT INTO awa_audit_field (entity_type, name)
+INSERT IGNORE INTO entity_type (name) VALUES
+("adafr_member"), ("adafr_receipt");
+INSERT IGNORE INTO awa_audit_field (entity_type, name)
   VALUES ((SELECT id FROM entity_type WHERE name = "adafr_member"), "first_name");
-INSERT INTO awa_audit_field (entity_type, name)
+INSERT IGNORE INTO awa_audit_field (entity_type, name)
   VALUES ((SELECT id FROM entity_type WHERE name = "adafr_member"), "last_name");
-INSERT INTO awa_audit_field (entity_type, name)
+INSERT IGNORE INTO awa_audit_field (entity_type, name)
   VALUES ((SELECT id FROM entity_type WHERE name = "adafr_member"), "company");
-INSERT INTO awa_audit_field (entity_type, name)
+INSERT IGNORE INTO awa_audit_field (entity_type, name)
   VALUES ((SELECT id FROM entity_type WHERE name = "adafr_member"), "address1");
-INSERT INTO awa_audit_field (entity_type, name)
+INSERT IGNORE INTO awa_audit_field (entity_type, name)
   VALUES ((SELECT id FROM entity_type WHERE name = "adafr_member"), "address2");
-INSERT INTO awa_audit_field (entity_type, name)
+INSERT IGNORE INTO awa_audit_field (entity_type, name)
   VALUES ((SELECT id FROM entity_type WHERE name = "adafr_member"), "address3");
-INSERT INTO awa_audit_field (entity_type, name)
+INSERT IGNORE INTO awa_audit_field (entity_type, name)
   VALUES ((SELECT id FROM entity_type WHERE name = "adafr_member"), "postal_code");
-INSERT INTO awa_audit_field (entity_type, name)
+INSERT IGNORE INTO awa_audit_field (entity_type, name)
   VALUES ((SELECT id FROM entity_type WHERE name = "adafr_member"), "city");
-INSERT INTO awa_audit_field (entity_type, name)
+INSERT IGNORE INTO awa_audit_field (entity_type, name)
   VALUES ((SELECT id FROM entity_type WHERE name = "adafr_member"), "country");
-INSERT INTO awa_audit_field (entity_type, name)
+INSERT IGNORE INTO awa_audit_field (entity_type, name)
   VALUES ((SELECT id FROM entity_type WHERE name = "adafr_member"), "mail_verify_date");
-INSERT INTO awa_audit_field (entity_type, name)
+INSERT IGNORE INTO awa_audit_field (entity_type, name)
   VALUES ((SELECT id FROM entity_type WHERE name = "adafr_member"), "payment_date");
-INSERT INTO awa_audit_field (entity_type, name)
+INSERT IGNORE INTO awa_audit_field (entity_type, name)
   VALUES ((SELECT id FROM entity_type WHERE name = "adafr_member"), "status");
-INSERT INTO awa_audit_field (entity_type, name)
+INSERT IGNORE INTO awa_audit_field (entity_type, name)
   VALUES ((SELECT id FROM entity_type WHERE name = "adafr_member"), "ada_europe");
 /* Copied from adafr-init-mysql.sql*/

@@ -6,7 +6,7 @@ until we receive the validation of the email address. Then, it enters
 int the WAITNG_PAYMENT state until the payment is acknowledged.
 The payment process is manual (wire transfer or by check) and
 switch to MEMBER once it is received.the member identifier */
-CREATE TABLE adafr_member (
+CREATE TABLE IF NOT EXISTS adafr_member (
   /*  */
   `id` BIGINT NOT NULL,
   /* optimistic locking version */
@@ -43,6 +43,10 @@ CREATE TABLE adafr_member (
   `salt` VARCHAR(255) BINARY NOT NULL,
   /* date when the information was updated. */
   `update_date` DATETIME NOT NULL,
+  /* the subscription deadline */
+  `subscription_deadline` DATE ,
+  /* amount in euros */
+  `amount` INTEGER NOT NULL,
   /*  */
   `receipt_id` BIGINT ,
   /* the member's email address. */
@@ -50,42 +54,42 @@ CREATE TABLE adafr_member (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*  */
-CREATE TABLE adafr_receipt (
+CREATE TABLE IF NOT EXISTS adafr_receipt (
   /* the receipt id */
   `id` BIGINT NOT NULL,
   /* the receipt creation date */
   `create_date` DATE NOT NULL,
+  /* the amount in euros */
+  `amount` INTEGER NOT NULL,
   /*  */
   `member` BIGINT NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-INSERT INTO entity_type (name) VALUES
-("adafr_member")
-,("adafr_receipt")
-;
-INSERT INTO awa_audit_field (entity_type, name)
+INSERT IGNORE INTO entity_type (name) VALUES
+("adafr_member"), ("adafr_receipt");
+INSERT IGNORE INTO awa_audit_field (entity_type, name)
   VALUES ((SELECT id FROM entity_type WHERE name = "adafr_member"), "first_name");
-INSERT INTO awa_audit_field (entity_type, name)
+INSERT IGNORE INTO awa_audit_field (entity_type, name)
   VALUES ((SELECT id FROM entity_type WHERE name = "adafr_member"), "last_name");
-INSERT INTO awa_audit_field (entity_type, name)
+INSERT IGNORE INTO awa_audit_field (entity_type, name)
   VALUES ((SELECT id FROM entity_type WHERE name = "adafr_member"), "company");
-INSERT INTO awa_audit_field (entity_type, name)
+INSERT IGNORE INTO awa_audit_field (entity_type, name)
   VALUES ((SELECT id FROM entity_type WHERE name = "adafr_member"), "address1");
-INSERT INTO awa_audit_field (entity_type, name)
+INSERT IGNORE INTO awa_audit_field (entity_type, name)
   VALUES ((SELECT id FROM entity_type WHERE name = "adafr_member"), "address2");
-INSERT INTO awa_audit_field (entity_type, name)
+INSERT IGNORE INTO awa_audit_field (entity_type, name)
   VALUES ((SELECT id FROM entity_type WHERE name = "adafr_member"), "address3");
-INSERT INTO awa_audit_field (entity_type, name)
+INSERT IGNORE INTO awa_audit_field (entity_type, name)
   VALUES ((SELECT id FROM entity_type WHERE name = "adafr_member"), "postal_code");
-INSERT INTO awa_audit_field (entity_type, name)
+INSERT IGNORE INTO awa_audit_field (entity_type, name)
   VALUES ((SELECT id FROM entity_type WHERE name = "adafr_member"), "city");
-INSERT INTO awa_audit_field (entity_type, name)
+INSERT IGNORE INTO awa_audit_field (entity_type, name)
   VALUES ((SELECT id FROM entity_type WHERE name = "adafr_member"), "country");
-INSERT INTO awa_audit_field (entity_type, name)
+INSERT IGNORE INTO awa_audit_field (entity_type, name)
   VALUES ((SELECT id FROM entity_type WHERE name = "adafr_member"), "mail_verify_date");
-INSERT INTO awa_audit_field (entity_type, name)
+INSERT IGNORE INTO awa_audit_field (entity_type, name)
   VALUES ((SELECT id FROM entity_type WHERE name = "adafr_member"), "payment_date");
-INSERT INTO awa_audit_field (entity_type, name)
+INSERT IGNORE INTO awa_audit_field (entity_type, name)
   VALUES ((SELECT id FROM entity_type WHERE name = "adafr_member"), "status");
-INSERT INTO awa_audit_field (entity_type, name)
+INSERT IGNORE INTO awa_audit_field (entity_type, name)
   VALUES ((SELECT id FROM entity_type WHERE name = "adafr_member"), "ada_europe");

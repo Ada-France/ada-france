@@ -6,7 +6,7 @@ until we receive the validation of the email address. Then, it enters
 int the WAITNG_PAYMENT state until the payment is acknowledged.
 The payment process is manual (wire transfer or by check) and
 switch to MEMBER once it is received.the member identifier */
-CREATE TABLE adafr_member (
+CREATE TABLE IF NOT EXISTS adafr_member (
   /*  */
   "id" BIGINT NOT NULL,
   /* optimistic locking version */
@@ -43,6 +43,10 @@ CREATE TABLE adafr_member (
   "salt" VARCHAR(255) NOT NULL,
   /* date when the information was updated. */
   "update_date" TIMESTAMP NOT NULL,
+  /* the subscription deadline */
+  "subscription_deadline" DATE ,
+  /* amount in euros */
+  "amount" INTEGER NOT NULL,
   /*  */
   "receipt_id" BIGINT ,
   /* the member's email address. */
@@ -50,42 +54,56 @@ CREATE TABLE adafr_member (
   PRIMARY KEY ("id")
 );
 /*  */
-CREATE TABLE adafr_receipt (
+CREATE TABLE IF NOT EXISTS adafr_receipt (
   /* the receipt id */
   "id" BIGINT NOT NULL,
   /* the receipt creation date */
   "create_date" DATE NOT NULL,
+  /* the amount in euros */
+  "amount" INTEGER NOT NULL,
   /*  */
   "member" BIGINT NOT NULL,
   PRIMARY KEY ("id")
 );
 INSERT INTO entity_type (name) VALUES
-('adafr_member')
-,('adafr_receipt')
-;
+('adafr_member'), ('adafr_receipt')
+  ON CONFLICT DO NOTHING;
 INSERT INTO awa_audit_field (entity_type, name)
-  VALUES ((SELECT id FROM entity_type WHERE name = 'adafr_member'), 'first_name');
+  VALUES ((SELECT id FROM entity_type WHERE name = 'adafr_member'), 'first_name')
+  ON CONFLICT DO NOTHING;
 INSERT INTO awa_audit_field (entity_type, name)
-  VALUES ((SELECT id FROM entity_type WHERE name = 'adafr_member'), 'last_name');
+  VALUES ((SELECT id FROM entity_type WHERE name = 'adafr_member'), 'last_name')
+  ON CONFLICT DO NOTHING;
 INSERT INTO awa_audit_field (entity_type, name)
-  VALUES ((SELECT id FROM entity_type WHERE name = 'adafr_member'), 'company');
+  VALUES ((SELECT id FROM entity_type WHERE name = 'adafr_member'), 'company')
+  ON CONFLICT DO NOTHING;
 INSERT INTO awa_audit_field (entity_type, name)
-  VALUES ((SELECT id FROM entity_type WHERE name = 'adafr_member'), 'address1');
+  VALUES ((SELECT id FROM entity_type WHERE name = 'adafr_member'), 'address1')
+  ON CONFLICT DO NOTHING;
 INSERT INTO awa_audit_field (entity_type, name)
-  VALUES ((SELECT id FROM entity_type WHERE name = 'adafr_member'), 'address2');
+  VALUES ((SELECT id FROM entity_type WHERE name = 'adafr_member'), 'address2')
+  ON CONFLICT DO NOTHING;
 INSERT INTO awa_audit_field (entity_type, name)
-  VALUES ((SELECT id FROM entity_type WHERE name = 'adafr_member'), 'address3');
+  VALUES ((SELECT id FROM entity_type WHERE name = 'adafr_member'), 'address3')
+  ON CONFLICT DO NOTHING;
 INSERT INTO awa_audit_field (entity_type, name)
-  VALUES ((SELECT id FROM entity_type WHERE name = 'adafr_member'), 'postal_code');
+  VALUES ((SELECT id FROM entity_type WHERE name = 'adafr_member'), 'postal_code')
+  ON CONFLICT DO NOTHING;
 INSERT INTO awa_audit_field (entity_type, name)
-  VALUES ((SELECT id FROM entity_type WHERE name = 'adafr_member'), 'city');
+  VALUES ((SELECT id FROM entity_type WHERE name = 'adafr_member'), 'city')
+  ON CONFLICT DO NOTHING;
 INSERT INTO awa_audit_field (entity_type, name)
-  VALUES ((SELECT id FROM entity_type WHERE name = 'adafr_member'), 'country');
+  VALUES ((SELECT id FROM entity_type WHERE name = 'adafr_member'), 'country')
+  ON CONFLICT DO NOTHING;
 INSERT INTO awa_audit_field (entity_type, name)
-  VALUES ((SELECT id FROM entity_type WHERE name = 'adafr_member'), 'mail_verify_date');
+  VALUES ((SELECT id FROM entity_type WHERE name = 'adafr_member'), 'mail_verify_date')
+  ON CONFLICT DO NOTHING;
 INSERT INTO awa_audit_field (entity_type, name)
-  VALUES ((SELECT id FROM entity_type WHERE name = 'adafr_member'), 'payment_date');
+  VALUES ((SELECT id FROM entity_type WHERE name = 'adafr_member'), 'payment_date')
+  ON CONFLICT DO NOTHING;
 INSERT INTO awa_audit_field (entity_type, name)
-  VALUES ((SELECT id FROM entity_type WHERE name = 'adafr_member'), 'status');
+  VALUES ((SELECT id FROM entity_type WHERE name = 'adafr_member'), 'status')
+  ON CONFLICT DO NOTHING;
 INSERT INTO awa_audit_field (entity_type, name)
-  VALUES ((SELECT id FROM entity_type WHERE name = 'adafr_member'), 'ada_europe');
+  VALUES ((SELECT id FROM entity_type WHERE name = 'adafr_member'), 'ada_europe')
+  ON CONFLICT DO NOTHING;
