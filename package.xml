@@ -50,7 +50,7 @@
      </install>
      <install mode='libs' dir='lib'>
        <library>libmysqlclient*</library>
-       <library>libmariadbclient*</library>
+       <library>libmariadb*</library>
        <library>libmysqlclient*</library>
        <library>libsqlite*</library>
        <library>libgnat*</library>
@@ -108,6 +108,7 @@
        <command>pngcrush -q #{src} #{dst}</command>
        <fileset dir="web">
          <include name="**/*.png"/>
+         <exclude name="css/jquery-chosen-1.4.2/**"/>
        </fileset>
      </install>
      <install mode='copy-exec' dir='web' >
