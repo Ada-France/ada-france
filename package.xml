@@ -9,7 +9,6 @@
          <include name="config/*.tmpl"/>
          <include name="config/*.png"/>
          <fileset dir="prod">
-            <include name="adafr*.properties"/>
             <include name="dynamo.xml"/>
          </fileset>
      </install>
