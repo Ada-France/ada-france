@@ -42,6 +42,7 @@
           <include name="**/*.html"/> 
           <include name="**/*.pdf"/>
           <include name="**/*.svg"/>
+          <include name="**/*.png"/>
           <include name="WEB-INF/**"/>
           <exclude name="preview/**"/>
           <exclude name="WEB-INF/layouts/**"/>
@@ -101,13 +102,6 @@
        </replace>
        <fileset dir="web">
           <include name="WEB-INF/layouts/*.xhtml"/>
-       </fileset>
-     </install>
-     <install mode='exec' dir='web'>
-       <command>pngcrush -q #{src} #{dst}</command>
-       <fileset dir="web">
-         <include name="**/*.png"/>
-         <exclude name="css/jquery-chosen-1.4.2/**"/>
        </fileset>
      </install>
      <install mode='copy-exec' dir='web' >
