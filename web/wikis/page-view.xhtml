@@ -16,6 +16,7 @@
   -->
 <div xmlns:h="http://java.sun.com/jsf/html"
      xmlns:awa="http://code.google.com/p/ada-awa/jsf"
+     xmlns:util="http://code.google.com/p/ada-asf/util"
      xmlns:f="http://java.sun.com/jsf/core"
      class='wiki-page-container'>
     <h:panelGroup rendered="#{not empty wikiView.left_side}">
@@ -31,7 +32,7 @@
          id="p_#{wikiView.id}">
 
         <awa:tagList value='#{wikiView.tags}' id='qtags' styleClass="wiki-tag-list tagedit-list"
-                     tagLink="#{contextPath}/wikis/tags/#{wikiView.wiki_id}/#{tagName}/recent"
+                     tagLink="#{contextPath}/wikis/tags/#{wikiView.wiki_id}/#{util:urlEncode(tagName)}/recent-tag"
                      var="tagName"
                      tagClass="tagedit-listelement tagedit-listelement-old"/>
         <awa:wiki styleClass='wiki-text'
