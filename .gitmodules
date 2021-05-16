@@ -1,3 +1,6 @@
 [submodule "ada-awa"]
 	path = ada-awa
 	url = git@github.com:stcarrez/ada-awa.git
+[submodule "excel-writer"]
+	path = excel-writer
+	url = https://github.com/zertovitch/excel-writer.git
