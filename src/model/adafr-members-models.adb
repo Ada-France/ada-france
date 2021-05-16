@@ -899,7 +899,7 @@ package body Adafr.Members.Models is
       Impl : Member_Access;
    begin
       Set_Field (Object, Impl);
-      ADO.Objects.Set_Field_Integer (Impl.all, 20, Impl.Amount, Value);
+      ADO.Audits.Set_Field_Integer (Impl.all, 20, Impl.Amount, Value);
    end Set_Amount;
 
    function Get_Amount (Object : in Member_Ref)
@@ -1908,8 +1908,8 @@ package body Adafr.Members.Models is
          return Util.Beans.Objects.To_Object (Long_Long_Integer (From.Page));
       elsif Name = "count" then
          return Util.Beans.Objects.To_Object (Long_Long_Integer (From.Count));
-      elsif Name = "status" then
-         return Status_Type_Objects.To_Object (From.Status);
+      elsif Name = "filter" then
+         return Filter_Type_Objects.To_Object (From.Filter);
       elsif Name = "page_size" then
          return Util.Beans.Objects.To_Object (Long_Long_Integer (From.Page_Size));
       end if;
@@ -1929,8 +1929,8 @@ package body Adafr.Members.Models is
          Item.Page := Util.Beans.Objects.To_Integer (Value);
       elsif Name = "count" then
          Item.Count := Util.Beans.Objects.To_Integer (Value);
-      elsif Name = "status" then
-         Item.Status := Status_Type_Objects.To_Value (Value);
+      elsif Name = "filter" then
+         Item.Filter := Filter_Type_Objects.To_Value (Value);
       elsif Name = "page_size" then
          Item.Page_Size := Util.Beans.Objects.To_Integer (Value);
       end if;

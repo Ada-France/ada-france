@@ -42,6 +42,16 @@ package Adafr.Members.Models is
 
    pragma Style_Checks ("-mr");
 
+   type Filter_Type is (LIST_ALL, LIST_MEMBERS, LIST_AE_MEMBERS, LIST_PENDING);
+   for Filter_Type use (LIST_ALL => 0, LIST_MEMBERS => 1, LIST_AE_MEMBERS => 2, LIST_PENDING => 3);
+   package Filter_Type_Objects is
+      new Util.Beans.Objects.Enums (Filter_Type);
+
+   type Nullable_Filter_Type is record
+      Is_Null : Boolean := True;
+      Value   : Filter_Type;
+   end record;
+
    type Status_Type is (PENDING, WAITING_PAYMENT, MEMBER_ADA_FRANCE, MEMBER_ADA_EUROPE);
    for Status_Type use (PENDING => 0, WAITING_PAYMENT => 1, MEMBER_ADA_FRANCE => 2, MEMBER_ADA_EUROPE => 3);
    package Status_Type_Objects is
@@ -547,6 +557,8 @@ package Adafr.Members.Models is
                    Session : in out ADO.Sessions.Session'Class;
                    Context : in out ADO.Queries.Context'Class);
 
+   Query_Adafr_User_List : constant ADO.Queries.Query_Definition_Access;
+
    Query_Adafr_Member_List : constant ADO.Queries.Query_Definition_Access;
 
 
@@ -600,9 +612,17 @@ package Adafr.Members.Models is
 
    type Member_List_Bean is abstract limited
      new Util.Beans.Basic.Bean and Util.Beans.Methods.Method_Bean with  record
+
+      --  the number of pages.
       Page : Integer;
+
+      --  the total number of members found.
       Count : Integer;
-      Status : Status_Type;
+
+      --  the list filter mode.
+      Filter : Filter_Type;
+
+      --  the number of members per page.
       Page_Size : Integer;
    end record;
 
@@ -744,7 +764,7 @@ private
       := MEMBER_DEF'Access;
 
    MEMBER_AUDIT_DEF : aliased constant ADO.Audits.Auditable_Mapping :=
-     (Count    => 13,
+     (Count    => 14,
       Of_Class => MEMBER_DEF'Access,
       Members  => (
          1 => 2,
@@ -759,7 +779,8 @@ private
          10 => 12,
          11 => 13,
          12 => 14,
-         13 => 15)
+         13 => 15,
+         14 => 19)
      );
    MEMBER_AUDIT_TABLE : constant ADO.Audits.Auditable_Mapping_Access
       := MEMBER_AUDIT_DEF'Access;
@@ -840,6 +861,12 @@ private
    package File_2 is
       new ADO.Queries.Loaders.File (Path => "adafr-members.xml",
                                     Sha1 => "4AC5A1DCF0193D455D6866C6E9450788C890CA04");
+
+   package Def_Memberinfo_Adafr_User_List is
+      new ADO.Queries.Loaders.Query (Name => "adafr-user-list",
+                                     File => File_2.File'Access);
+   Query_Adafr_User_List : constant ADO.Queries.Query_Definition_Access
+   := Def_Memberinfo_Adafr_User_List.Query'Access;
 
    package Def_Memberinfo_Adafr_Member_List is
       new ADO.Queries.Loaders.Query (Name => "adafr-member-list",
