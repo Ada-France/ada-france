@@ -40,6 +40,36 @@
         </property>
     </class>
 
+    <query name='adafr-user-list'>
+       <comment>List of Ada France users</comment>
+       <sql>
+    SELECT
+      m.id AS id,
+      m.first_name AS first_name,
+      m.last_name AS last_name,
+      COALESCE(m.status, 0) AS status,
+      COALESCE(m.ada_europe, 0) AS ada_europe,
+      m.create_date AS create_date,
+      m.payment_date AS payment_date,
+      m.subscription_deadline AS deadline,
+      email.email AS email,
+      user.name AS user_name,
+      wm.role AS user_role
+    FROM awa_email AS email
+    LEFT JOIN adafr_member AS m ON m.email_id = email.id
+    LEFT JOIN awa_user AS user ON user.email_id = email.id
+    LEFT JOIN awa_workspace_member AS wm ON wm.member_id = user.id AND wm.workspace_id = 1
+    WHERE (m.status = :status1 OR m.status = :status2 OR m.status = :status3) OR wm.id IS NOT NULL
+    ORDER BY last_name, first_name, email, user_name
+       </sql>
+       <sql-count>
+    SELECT
+       count(m.id)
+    FROM adafr_member AS m
+    WHERE m.status = :status   
+       </sql-count>
+    </query>
+
     <query name='adafr-member-list'>
        <comment>List of Ada France members</comment>
        <sql>
@@ -59,7 +89,7 @@
     LEFT JOIN adafr_member AS m ON m.email_id = email.id
     LEFT JOIN awa_user AS user ON user.email_id = email.id
     LEFT JOIN awa_workspace_member AS wm ON wm.member_id = user.id AND wm.workspace_id = 1
-    WHERE (m.status = :status OR m.status = 3 OR m.status = 1) OR wm.id IS NOT NULL
+    WHERE (m.status = :status1 OR m.status = :status2 OR m.status = :status3)
     ORDER BY last_name, first_name, email, user_name
        </sql>
        <sql-count>
