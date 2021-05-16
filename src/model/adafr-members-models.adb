@@ -1524,6 +1524,166 @@ package body Adafr.Members.Models is
    --  Get the bean attribute identified by the name.
    --  ------------------------------
    overriding
+   function Get_Value (From : in Export_Member_Info;
+                       Name : in String) return Util.Beans.Objects.Object is
+   begin
+      if Name = "id" then
+         return Util.Beans.Objects.To_Object (Long_Long_Integer (From.Id));
+      elsif Name = "first_name" then
+         return Util.Beans.Objects.To_Object (From.First_Name);
+      elsif Name = "last_name" then
+         return Util.Beans.Objects.To_Object (From.Last_Name);
+      elsif Name = "status" then
+         return Adafr.Members.Models.Status_Type_Objects.To_Object (From.Status);
+      elsif Name = "ada_europe" then
+         return Util.Beans.Objects.To_Object (From.Ada_Europe);
+      elsif Name = "create_date" then
+         return Util.Beans.Objects.Time.To_Object (From.Create_Date);
+      elsif Name = "payment_date" then
+         if From.Payment_Date.Is_Null then
+            return Util.Beans.Objects.Null_Object;
+         else
+            return Util.Beans.Objects.Time.To_Object (From.Payment_Date.Value);
+         end if;
+      elsif Name = "subscription_deadline" then
+         if From.Subscription_Deadline.Is_Null then
+            return Util.Beans.Objects.Null_Object;
+         else
+            return Util.Beans.Objects.Time.To_Object (From.Subscription_Deadline.Value);
+         end if;
+      elsif Name = "amount" then
+         return Util.Beans.Objects.To_Object (Long_Long_Integer (From.Amount));
+      elsif Name = "email" then
+         return Util.Beans.Objects.To_Object (From.Email);
+      elsif Name = "company" then
+         return Util.Beans.Objects.To_Object (From.Company);
+      elsif Name = "address1" then
+         return Util.Beans.Objects.To_Object (From.Address1);
+      elsif Name = "address2" then
+         return Util.Beans.Objects.To_Object (From.Address2);
+      elsif Name = "address3" then
+         return Util.Beans.Objects.To_Object (From.Address3);
+      elsif Name = "postal_code" then
+         return Util.Beans.Objects.To_Object (From.Postal_Code);
+      elsif Name = "city" then
+         return Util.Beans.Objects.To_Object (From.City);
+      elsif Name = "country" then
+         return Util.Beans.Objects.To_Object (From.Country);
+      end if;
+      return Util.Beans.Objects.Null_Object;
+   end Get_Value;
+
+
+   --  ------------------------------
+   --  Set the value identified by the name
+   --  ------------------------------
+   overriding
+   procedure Set_Value (Item  : in out Export_Member_Info;
+                        Name  : in String;
+                        Value : in Util.Beans.Objects.Object) is
+   begin
+      if Name = "id" then
+         Item.Id := ADO.Identifier (Util.Beans.Objects.To_Long_Long_Integer (Value));
+      elsif Name = "first_name" then
+         Item.First_Name := Util.Beans.Objects.To_Unbounded_String (Value);
+      elsif Name = "last_name" then
+         Item.Last_Name := Util.Beans.Objects.To_Unbounded_String (Value);
+      elsif Name = "status" then
+         Item.Status := Adafr.Members.Models.Status_Type_Objects.To_Value (Value);
+      elsif Name = "ada_europe" then
+         Item.Ada_Europe := Util.Beans.Objects.To_Boolean (Value);
+      elsif Name = "create_date" then
+         Item.Create_Date := Util.Beans.Objects.Time.To_Time (Value);
+      elsif Name = "payment_date" then
+         Item.Payment_Date.Is_Null := Util.Beans.Objects.Is_Null (Value);
+         if not Item.Payment_Date.Is_Null then
+            Item.Payment_Date.Value := Util.Beans.Objects.Time.To_Time (Value);
+         end if;
+      elsif Name = "subscription_deadline" then
+         Item.Subscription_Deadline.Is_Null := Util.Beans.Objects.Is_Null (Value);
+         if not Item.Subscription_Deadline.Is_Null then
+            Item.Subscription_Deadline.Value := Util.Beans.Objects.Time.To_Time (Value);
+         end if;
+      elsif Name = "amount" then
+         Item.Amount := Util.Beans.Objects.To_Integer (Value);
+      elsif Name = "email" then
+         Item.Email := Util.Beans.Objects.To_Unbounded_String (Value);
+      elsif Name = "company" then
+         Item.Company := Util.Beans.Objects.To_Unbounded_String (Value);
+      elsif Name = "address1" then
+         Item.Address1 := Util.Beans.Objects.To_Unbounded_String (Value);
+      elsif Name = "address2" then
+         Item.Address2 := Util.Beans.Objects.To_Unbounded_String (Value);
+      elsif Name = "address3" then
+         Item.Address3 := Util.Beans.Objects.To_Unbounded_String (Value);
+      elsif Name = "postal_code" then
+         Item.Postal_Code := Util.Beans.Objects.To_Unbounded_String (Value);
+      elsif Name = "city" then
+         Item.City := Util.Beans.Objects.To_Unbounded_String (Value);
+      elsif Name = "country" then
+         Item.Country := Util.Beans.Objects.To_Unbounded_String (Value);
+      end if;
+   end Set_Value;
+
+
+   --  --------------------
+   --  Run the query controlled by <b>Context</b> and append the list in <b>Object</b>.
+   --  --------------------
+   procedure List (Object  : in out Export_Member_Info_List_Bean'Class;
+                   Session : in out ADO.Sessions.Session'Class;
+                   Context : in out ADO.Queries.Context'Class) is
+   begin
+      List (Object.List, Session, Context);
+   end List;
+
+   --  --------------------
+   --  Describes the information about an Ada-France member.
+   --  --------------------
+   procedure List (Object  : in out Export_Member_Info_Vector;
+                   Session : in out ADO.Sessions.Session'Class;
+                   Context : in out ADO.Queries.Context'Class) is
+      procedure Read (Into : in out Export_Member_Info);
+
+      Stmt : ADO.Statements.Query_Statement
+          := Session.Create_Statement (Context);
+      Pos  : Positive := 1;
+      procedure Read (Into : in out Export_Member_Info) is
+      begin
+         Into.Id := Stmt.Get_Identifier (0);
+         Into.First_Name := Stmt.Get_Unbounded_String (1);
+         Into.Last_Name := Stmt.Get_Unbounded_String (2);
+         Into.Status := Adafr.Members.Models.Status_Type'Val (Stmt.Get_Integer (3));
+         Into.Ada_Europe := Stmt.Get_Boolean (4);
+         Into.Create_Date := Stmt.Get_Time (5);
+         Into.Payment_Date := Stmt.Get_Nullable_Time (6);
+         Into.Subscription_Deadline := Stmt.Get_Nullable_Time (7);
+         Into.Amount := Stmt.Get_Integer (8);
+         Into.Email := Stmt.Get_Unbounded_String (9);
+         Into.Company := Stmt.Get_Unbounded_String (10);
+         Into.Address1 := Stmt.Get_Unbounded_String (11);
+         Into.Address2 := Stmt.Get_Unbounded_String (12);
+         Into.Address3 := Stmt.Get_Unbounded_String (13);
+         Into.Postal_Code := Stmt.Get_Unbounded_String (14);
+         Into.City := Stmt.Get_Unbounded_String (15);
+         Into.Country := Stmt.Get_Unbounded_String (16);
+      end Read;
+   begin
+      Stmt.Execute;
+      Export_Member_Info_Vectors.Clear (Object);
+      while Stmt.Has_Elements loop
+         Object.Insert_Space (Before => Pos);
+         Object.Update_Element (Index => Pos, Process => Read'Access);
+         Pos := Pos + 1;
+         Stmt.Next;
+      end loop;
+   end List;
+
+
+
+   --  ------------------------------
+   --  Get the bean attribute identified by the name.
+   --  ------------------------------
+   overriding
    function Get_Value (From : in Member_Info;
                        Name : in String) return Util.Beans.Objects.Object is
    begin

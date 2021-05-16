@@ -489,6 +489,97 @@ package Adafr.Members.Models is
    --  --------------------
    --    Describes the information about an Ada-France member.
    --  --------------------
+   type Export_Member_Info is
+     new Util.Beans.Basic.Bean with  record
+
+      --  the member identifier.
+      Id : ADO.Identifier;
+
+      --  the member first name.
+      First_Name : Ada.Strings.Unbounded.Unbounded_String;
+
+      --  the member last name.
+      Last_Name : Ada.Strings.Unbounded.Unbounded_String;
+
+      --  the member status.
+      Status : Adafr.Members.Models.Status_Type;
+
+      --  whether the member is member of Ada-Europe.
+      Ada_Europe : Boolean;
+
+      --  the date when the member was created.
+      Create_Date : Ada.Calendar.Time;
+
+      --  the date when the subscription was paied.
+      Payment_Date : ADO.Nullable_Time;
+
+      --  the date when the subscription terminates.
+      Subscription_Deadline : ADO.Nullable_Time;
+
+      --  the subscription amount paid.
+      Amount : Integer;
+
+      --  the member email address.
+      Email : Ada.Strings.Unbounded.Unbounded_String;
+
+      --  the company.
+      Company : Ada.Strings.Unbounded.Unbounded_String;
+
+      --  the first address line.
+      Address1 : Ada.Strings.Unbounded.Unbounded_String;
+
+      --  the second address line.
+      Address2 : Ada.Strings.Unbounded.Unbounded_String;
+
+      --  the third address line.
+      Address3 : Ada.Strings.Unbounded.Unbounded_String;
+
+      --  the postal code.
+      Postal_Code : Ada.Strings.Unbounded.Unbounded_String;
+
+      --  the city.
+      City : Ada.Strings.Unbounded.Unbounded_String;
+
+      --  the country.
+      Country : Ada.Strings.Unbounded.Unbounded_String;
+   end record;
+
+   --  Get the bean attribute identified by the name.
+   overriding
+   function Get_Value (From : in Export_Member_Info;
+                       Name : in String) return Util.Beans.Objects.Object;
+
+   --  Set the bean attribute identified by the name.
+   overriding
+   procedure Set_Value (Item  : in out Export_Member_Info;
+                        Name  : in String;
+                        Value : in Util.Beans.Objects.Object);
+
+
+   package Export_Member_Info_Beans is
+      new Util.Beans.Basic.Lists (Element_Type => Export_Member_Info);
+   package Export_Member_Info_Vectors renames Export_Member_Info_Beans.Vectors;
+   subtype Export_Member_Info_List_Bean is Export_Member_Info_Beans.List_Bean;
+
+   type Export_Member_Info_List_Bean_Access is access all Export_Member_Info_List_Bean;
+
+   --  Run the query controlled by <b>Context</b> and append the list in <b>Object</b>.
+   procedure List (Object  : in out Export_Member_Info_List_Bean'Class;
+                   Session : in out ADO.Sessions.Session'Class;
+                   Context : in out ADO.Queries.Context'Class);
+
+   subtype Export_Member_Info_Vector is Export_Member_Info_Vectors.Vector;
+
+   --  Run the query controlled by <b>Context</b> and append the list in <b>Object</b>.
+   procedure List (Object  : in out Export_Member_Info_Vector;
+                   Session : in out ADO.Sessions.Session'Class;
+                   Context : in out ADO.Queries.Context'Class);
+
+   Query_Adafr_Export_Member_List : constant ADO.Queries.Query_Definition_Access;
+
+   --  --------------------
+   --    Describes the information about an Ada-France member.
+   --  --------------------
    type Member_Info is
      new Util.Beans.Basic.Bean with  record
 
@@ -859,18 +950,28 @@ private
    := Def_Auditinfo_Adafr_Member_History.Query'Access;
 
    package File_2 is
+      new ADO.Queries.Loaders.File (Path => "adafr-members-export.xml",
+                                    Sha1 => "50EA1E34DC5A163A59D89631B1F5BF45A16DFB8D");
+
+   package Def_Exportmemberinfo_Adafr_Export_Member_List is
+      new ADO.Queries.Loaders.Query (Name => "adafr-export-member-list",
+                                     File => File_2.File'Access);
+   Query_Adafr_Export_Member_List : constant ADO.Queries.Query_Definition_Access
+   := Def_Exportmemberinfo_Adafr_Export_Member_List.Query'Access;
+
+   package File_3 is
       new ADO.Queries.Loaders.File (Path => "adafr-members.xml",
                                     Sha1 => "4AC5A1DCF0193D455D6866C6E9450788C890CA04");
 
    package Def_Memberinfo_Adafr_User_List is
       new ADO.Queries.Loaders.Query (Name => "adafr-user-list",
-                                     File => File_2.File'Access);
+                                     File => File_3.File'Access);
    Query_Adafr_User_List : constant ADO.Queries.Query_Definition_Access
    := Def_Memberinfo_Adafr_User_List.Query'Access;
 
    package Def_Memberinfo_Adafr_Member_List is
       new ADO.Queries.Loaders.Query (Name => "adafr-member-list",
-                                     File => File_2.File'Access);
+                                     File => File_3.File'Access);
    Query_Adafr_Member_List : constant ADO.Queries.Query_Definition_Access
    := Def_Memberinfo_Adafr_Member_List.Query'Access;
 end Adafr.Members.Models;
