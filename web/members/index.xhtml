@@ -32,7 +32,9 @@
             <f:viewAction action='#{adafrMemberList.load}'/>
         </f:metadata>
         <div id='awa-content' class="adafr-members">
-            <ui:include src="/workspaces/views/workspace-nav.xhtml"/>
+            <ui:decorate template="/members/views/member-nav.xhtml">
+              <ui:param name="page_link" value=""/>
+            </ui:decorate>
             <div class='member-list awa-list-header' id="adafr-member-list-header">
                 <div class="awa-list-item-header">
                     <div class='awa-header-col member-title'>
@@ -72,5 +74,8 @@
                 });
             </util:script>
         </div>
+    </ui:define>
+    <ui:define name="pageScript">
+        <script type="text/javascript" src="#{jquery.chosenPath}"></script>
     </ui:define>
 </ui:composition>

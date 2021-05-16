@@ -252,6 +252,9 @@ dl.adafr-version dd {
 #member-list-action {
     width: 300px;
 }
+#member-nav-filter {
+    width: 20%;
+}
 .member-list .ui-list-item {
     line-height: 32px;
     height: 32px;
