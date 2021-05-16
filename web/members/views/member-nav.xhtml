@@ -48,6 +48,14 @@
     </li>
     <ui:insert name="page-nav"/>
         <li class="awa-nav-right" id="member-nav-filter">
+          <a href="#{contextPath}/members/export" class="awa-nav-icon"
+             title="Exporter la liste des membres">
+            <img src="#{contextPath}/images/icon-excel-export-64.png"
+                 alt="Export"/>
+            <span>Export</span>
+          </a>
+        </li>
+        <li class="awa-nav-right" id="member-nav-filter">
             <label for="filter">Filtrer:</label>
             <w:chosen id="filter" value="#{adafrMemberList.filter}">
                 <f:selectItem itemValue="LIST_ALL" itemLabel="Tous"/>
