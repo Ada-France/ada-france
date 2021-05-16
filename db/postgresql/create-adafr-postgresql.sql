@@ -947,3 +947,6 @@ INSERT INTO awa_audit_field (entity_type, name)
 INSERT INTO awa_audit_field (entity_type, name)
   VALUES ((SELECT id FROM entity_type WHERE name = 'adafr_member'), 'ada_europe')
   ON CONFLICT DO NOTHING;
+INSERT INTO awa_audit_field (entity_type, name)
+  VALUES ((SELECT id FROM entity_type WHERE name = 'adafr_member'), 'amount')
+  ON CONFLICT DO NOTHING;
