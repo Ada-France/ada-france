@@ -1,5 +1,6 @@
 <f:view contentType="text/html; charset=UTF-8"
         xmlns:f="http://java.sun.com/jsf/core"
+        xmlns:w="http://code.google.com/p/ada-asf/widget"
         xmlns:util="http://code.google.com/p/ada-asf/util"
         xmlns:h="http://java.sun.com/jsf/html">
   <f:metadata>
@@ -17,14 +18,18 @@
             <h:selectOneRadio styleClass="awa-radio" id="mode" value="#{adafrMember.ada_europe}">
                 <f:selectItem id="ada-europe-no" name="mode"
                               itemValue="FALSE"
-                              itemLabel="Ada-France (30 euros)" />
+                              itemLabel="Ada-France" />
                 <f:selectItem id="ada-europe-yes" name="mode"
                               itemValue="TRUE"
-                              itemLabel="Ada-France + Ada-Europe (#{(empty adafrMember.payment_date and adafrMember.expired) or not adafrMember.ada_europe ? '30' : 65} euros)" />
+                              itemLabel="Ada-France + Ada-Europe" />
             </h:selectOneRadio>
+            <w:inputText styleClass="awa-required ui-corner-all"
+                         id='amount' size='10' required='true'
+                         value='#{adafrMember.amount}'
+                         title='Montant de la cotisation'/>
             <dl class="awa-required#{util:hasMessage('payment-date') ? ' awa-error' : ''}">
                 <dt>
-                    <label for='email'>Cotisation aquitté le</label>
+                    <label for='email'>Cotisation aquittée le</label>
                     <h:message for='payment-date'/>
                 </dt>
                 <dd>
@@ -38,7 +43,7 @@
             </dl>
             <div class="adafr-member-contribution-note">
                 Un e-mail sera envoyé à #{adafrMember.email} ainsi qu'à #{initParam['bureau_email']}
-                pour reception de cette cotisation.
+                pour réception de cette cotisation.
             </div>
             <ul class='awa-buttons'>
                 <li>
