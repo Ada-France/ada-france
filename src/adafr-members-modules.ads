@@ -23,6 +23,7 @@ with Security.Permissions;
 with AWA.Modules;
 with AWA.Events;
 with Adafr.Members.Models;
+private with Adafr.Members.Servlets;
 private with Security.Random;
 package Adafr.Members.Modules is
 
@@ -125,6 +126,7 @@ private
       Receipt_Sign_Key  : Ada.Strings.Unbounded.Unbounded_String;
       Receipt_Template  : Ada.Strings.Unbounded.Unbounded_String;
       Receipt_Directory : Ada.Strings.Unbounded.Unbounded_String;
+      Excel_Servlet     : aliased Adafr.Members.Servlets.Excel_Servlet;
    end record;
 
    function Get_Secure_Key (Model : in Member_Module;
