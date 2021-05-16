@@ -399,6 +399,7 @@ package body Adafr.Members.Modules is
       else
          Current_Entity.Set_Status (Models.MEMBER_ADA_FRANCE);
       end if;
+      Current_Entity.Set_Amount (Member.Get_Amount);
       Current_Entity.Set_Payment_Date (Member.Get_Payment_Date);
 
       --  Id is now validated, update member.
