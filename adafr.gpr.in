@@ -19,6 +19,7 @@ with "@AWA_DIR@awa_counters";
 with "@AWA_DIR@awa_images";
 with "@AWA_DIR@awa_wikis";
 with "@AWA_DIR@awa_setup";
+with "excel-writer/excel_out_gnat";
 
 project adafr is
 
