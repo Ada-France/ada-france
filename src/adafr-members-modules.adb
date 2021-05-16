@@ -72,6 +72,8 @@ package body Adafr.Members.Modules is
                               Name   => "Adafr.Members.Beans.Member_List_Bean",
                               Handler => Adafr.Members.Beans.Create_Member_List_Bean'Access);
 
+      App.Add_Servlet ("member-export", Plugin.Excel_Servlet'Unchecked_Access);
+
       AWA.Modules.Module (Plugin).Initialize (App, Props);
    end Initialize;
 
