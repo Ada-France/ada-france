@@ -304,6 +304,11 @@
     </managed-property>
   </managed-bean>
 
+  <servlet-mapping>
+    <servlet-name>member-export</servlet-name>
+    <url-pattern>/members/export</url-pattern>
+  </servlet-mapping>
+
   <filter-mapping>
     <filter-name>service</filter-name>
     <url-pattern>/index.html</url-pattern>
@@ -314,6 +319,7 @@
     <url-pattern>/formations.html</url-pattern>
     <url-pattern>/comptes-rendus.html</url-pattern>
     <url-pattern>/members/list/#{adafrMemberList.filter}</url-pattern>
+    <url-pattern>/members/export</url-pattern>
     <url-pattern>*.html</url-pattern>
   </filter-mapping>
 
@@ -327,6 +333,7 @@
     <url-pattern>/comptes-rendus.html</url-pattern>
     <url-pattern>/statuts.html</url-pattern>
     <url-pattern>/members/list/#{adafrMemberList.filter}</url-pattern>
+    <url-pattern>/members/export</url-pattern>
     <url-pattern>*.html</url-pattern>
   </filter-mapping>
 
@@ -344,7 +351,6 @@
     <url-pattern>/comptes-rendus.html</url-pattern>
     <url-pattern>/ressources.html</url-pattern>
     <url-pattern>/blogs/post.html</url-pattern>
-    <url-pattern>/members/list/.*</url-pattern>
   </url-policy>
 
   <url-mapping>
