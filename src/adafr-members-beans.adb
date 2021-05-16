@@ -223,6 +223,9 @@ package body Adafr.Members.Beans is
       elsif Name = "count" then
          return Util.Beans.Objects.To_Object (From.Count);
 
+      elsif Name = "filter" then
+         return Models.Filter_Type_Objects.To_Object (From.Filter);
+
       elsif Name = "expired" then
          Pos := From.Members.Get_Row_Index;
          if Pos = 0 then
@@ -251,8 +254,32 @@ package body Adafr.Members.Beans is
       Session : ADO.Sessions.Session := ASC.Get_Session (Ctx);
       Query   : ADO.Queries.Context;
    begin
-      Query.Set_Query (Adafr.Members.Models.Query_Adafr_Member_List);
-      Query.Bind_Param ("status", Integer (Models.Status_Type'Pos (List.Status)));
+      case List.Filter is
+         when Models.LIST_ALL =>
+            Query.Bind_Param ("status1", Integer (1));
+            Query.Bind_Param ("status2", Integer (2));
+            Query.Bind_Param ("status3", Integer (3));
+            Query.Set_Query (Adafr.Members.Models.Query_Adafr_User_List);
+
+         when Models.LIST_MEMBERS =>
+            Query.Bind_Param ("status1", Integer (2));
+            Query.Bind_Param ("status2", Integer (2));
+            Query.Bind_Param ("status3", Integer (3));
+            Query.Set_Query (Adafr.Members.Models.Query_Adafr_Member_List);
+
+         when Models.LIST_AE_MEMBERS =>
+            Query.Bind_Param ("status1", Integer (3));
+            Query.Bind_Param ("status2", Integer (3));
+            Query.Bind_Param ("status3", Integer (3));
+            Query.Set_Query (Adafr.Members.Models.Query_Adafr_Member_List);
+
+         when Models.List_Pending =>
+            Query.Bind_Param ("status1", Integer (1));
+            Query.Bind_Param ("status2", Integer (1));
+            Query.Bind_Param ("status3", Integer (1));
+            Query.Set_Query (Adafr.Members.Models.Query_Adafr_Member_List);
+
+      end case;
       Adafr.Members.Models.List (List.Members_Bean.all, Session, Query);
       Outcome := To_Unbounded_String ("success");
    end Load;
@@ -268,7 +295,7 @@ package body Adafr.Members.Beans is
       Object.Page_Size := 20;
       Object.Page := 1;
       Object.Count := 0;
-      Object.Status := Adafr.Members.Models.MEMBER_ADA_FRANCE;
+      Object.Filter := Adafr.Members.Models.List_ALL;
       Object.Members_Bean := Object.Members'Access;
       return Object.all'Access;
    end Create_Member_List_Bean;
