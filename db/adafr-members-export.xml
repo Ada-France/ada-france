@@ -1,0 +1,94 @@
+<query-mapping package='Adafr.Members.Models'>
+    <description>
+      Export information for Ada France members (useful to have the list of addresses to send the Ada User Journal).
+    </description>
+
+    <class name="Adafr.Members.Models.Export_Member_Info" bean="yes">
+        <comment>Describes the information about an Ada-France member.</comment>
+        <property type='Identifier' name="id">
+            <comment>the member identifier.</comment>
+        </property>
+        <property type='String' name="first_name" not-null="yes">
+            <comment>the member first name.</comment>
+        </property>
+        <property type='String' name="last_name" not-null="yes">
+            <comment>the member last name.</comment>
+        </property>
+        <property type='Adafr.Members.Models.Status_Type' name="status">
+            <comment>the member status.</comment>
+        </property>
+        <property type='Boolean' name="ada_europe" not-null="yes">
+            <comment>whether the member is member of Ada-Europe.</comment>
+        </property>
+        <property type='Date' name="create_date" not-null="yes">
+            <comment>the date when the member was created.</comment>
+        </property>
+        <property type='Nullable_Date' name="payment_date" not-null="no">
+            <comment>the date when the subscription was paied.</comment>
+        </property>
+        <property type='Nullable_Date' name="subscription_deadline" not-null="no">
+            <comment>the date when the subscription terminates.</comment>
+        </property>
+        <property type='Integer' name="amount" not-null="yes">
+            <comment>the subscription amount paid.</comment>
+        </property>
+        <property type='String' name="email">
+            <comment>the member email address.</comment>
+        </property>
+        <property type='String' name="company" not-null="yes">
+            <comment>the company.</comment>
+        </property>
+        <property type='String' name="address1" not-null="yes">
+            <comment>the first address line.</comment>
+        </property>
+        <property type='String' name="address2" not-null="yes">
+            <comment>the second address line.</comment>
+        </property>
+        <property type='String' name="address3" not-null="yes">
+            <comment>the third address line.</comment>
+        </property>
+        <property type='String' name="postal_code" not-null="yes">
+            <comment>the postal code.</comment>
+        </property>
+        <property type='String' name="city" not-null="yes">
+            <comment>the city.</comment>
+        </property>
+        <property type='String' name="country" not-null="yes">
+            <comment>the country.</comment>
+        </property>
+    </class>
+
+    <query name='adafr-export-member-list'>
+       <comment>List of Ada France users</comment>
+       <sql>
+    SELECT
+      m.id AS id,
+      m.first_name AS first_name,
+      m.last_name AS last_name,
+      COALESCE(m.status, 0) AS status,
+      COALESCE(m.ada_europe, 0) AS ada_europe,
+      m.create_date AS create_date,
+      m.payment_date AS payment_date,
+      m.subscription_deadline AS deadline,
+      m.amount AS amount,
+      email.email AS email,
+      m.company AS company,
+      m.address1 AS address1,
+      m.address2 AS address2,
+      m.address3 AS address3,
+      m.postal_code AS postal_code,
+      m.city AS city,
+      m.country AS country
+    FROM awa_email AS email
+    LEFT JOIN adafr_member AS m ON m.email_id = email.id
+    WHERE m.status >= 1
+    ORDER BY last_name, first_name, email, id
+       </sql>
+       <sql-count>
+    SELECT
+       count(m.id)
+    FROM adafr_member AS m
+       </sql-count>
+    </query>
+
+</query-mapping>
