@@ -44,6 +44,7 @@
           <include name="**/*.svg"/>
           <include name="**/*.png"/>
           <include name="WEB-INF/**"/>
+          <include name="static/**"/>
           <exclude name="preview/**"/>
           <exclude name="WEB-INF/layouts/**"/>
        </fileset>
