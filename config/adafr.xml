@@ -313,6 +313,7 @@
     <url-pattern>/statuts.html</url-pattern>
     <url-pattern>/formations.html</url-pattern>
     <url-pattern>/comptes-rendus.html</url-pattern>
+    <url-pattern>/members/list/#{adafrMemberList.filter}</url-pattern>
     <url-pattern>*.html</url-pattern>
   </filter-mapping>
 
@@ -325,6 +326,7 @@
     <url-pattern>/formations.html</url-pattern>
     <url-pattern>/comptes-rendus.html</url-pattern>
     <url-pattern>/statuts.html</url-pattern>
+    <url-pattern>/members/list/#{adafrMemberList.filter}</url-pattern>
     <url-pattern>*.html</url-pattern>
   </filter-mapping>
 
@@ -342,8 +344,14 @@
     <url-pattern>/comptes-rendus.html</url-pattern>
     <url-pattern>/ressources.html</url-pattern>
     <url-pattern>/blogs/post.html</url-pattern>
+    <url-pattern>/members/list/.*</url-pattern>
   </url-policy>
-                                                      
+
+  <url-mapping>
+    <pattern>/members/list/#{adafrMemberList.filter}</pattern>
+    <view-id>/members/index.html</view-id>
+  </url-mapping>
+
   <context-param>
     <param-name>no-cache.header.cache-control</param-name>
     <param-value>no-cache</param-value>
