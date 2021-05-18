@@ -42,8 +42,8 @@ package Adafr.Members.Models is
 
    pragma Style_Checks ("-mr");
 
-   type Filter_Type is (LIST_ALL, LIST_MEMBERS, LIST_AE_MEMBERS, LIST_PENDING);
-   for Filter_Type use (LIST_ALL => 0, LIST_MEMBERS => 1, LIST_AE_MEMBERS => 2, LIST_PENDING => 3);
+   type Filter_Type is (LIST_ALL, LIST_MEMBERS, LIST_AE_MEMBERS, LIST_PENDING, LIST_AF_MEMBERS, LIST_EXPIRED);
+   for Filter_Type use (LIST_ALL => 0, LIST_MEMBERS => 1, LIST_AE_MEMBERS => 2, LIST_PENDING => 3, LIST_AF_MEMBERS => 4, LIST_EXPIRED => 5);
    package Filter_Type_Objects is
       new Util.Beans.Objects.Enums (Filter_Type);
 
@@ -652,6 +652,10 @@ package Adafr.Members.Models is
 
    Query_Adafr_Member_List : constant ADO.Queries.Query_Definition_Access;
 
+   Query_Adafr_Member_List_By_Status : constant ADO.Queries.Query_Definition_Access;
+
+   Query_Adafr_Member_List_Expired : constant ADO.Queries.Query_Definition_Access;
+
 
    --  --------------------
    --    save the member in the database.
@@ -974,4 +978,16 @@ private
                                      File => File_3.File'Access);
    Query_Adafr_Member_List : constant ADO.Queries.Query_Definition_Access
    := Def_Memberinfo_Adafr_Member_List.Query'Access;
+
+   package Def_Memberinfo_Adafr_Member_List_By_Status is
+      new ADO.Queries.Loaders.Query (Name => "adafr-member-list-by-status",
+                                     File => File_3.File'Access);
+   Query_Adafr_Member_List_By_Status : constant ADO.Queries.Query_Definition_Access
+   := Def_Memberinfo_Adafr_Member_List_By_Status.Query'Access;
+
+   package Def_Memberinfo_Adafr_Member_List_Expired is
+      new ADO.Queries.Loaders.Query (Name => "adafr-member-list-expired",
+                                     File => File_3.File'Access);
+   Query_Adafr_Member_List_Expired : constant ADO.Queries.Query_Definition_Access
+   := Def_Memberinfo_Adafr_Member_List_Expired.Query'Access;
 end Adafr.Members.Models;
