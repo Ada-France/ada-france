@@ -251,6 +251,7 @@ package body Adafr.Members.Beans is
    procedure Load (List    : in out Member_List_Bean;
                    Outcome : in out Ada.Strings.Unbounded.Unbounded_String) is
       Ctx     : constant ASC.Service_Context_Access := ASC.Current;
+      Now     : constant Ada.Calendar.Time := Ada.Calendar.Clock;
       Session : ADO.Sessions.Session := ASC.Get_Session (Ctx);
       Query   : ADO.Queries.Context;
    begin
@@ -263,21 +264,31 @@ package body Adafr.Members.Beans is
 
          when Models.LIST_MEMBERS =>
             Query.Bind_Param ("status1", Integer (2));
-            Query.Bind_Param ("status2", Integer (2));
-            Query.Bind_Param ("status3", Integer (3));
+            Query.Bind_Param ("status2", Integer (3));
+            Query.Bind_Param ("date", Now);
             Query.Set_Query (Adafr.Members.Models.Query_Adafr_Member_List);
 
          when Models.LIST_AE_MEMBERS =>
             Query.Bind_Param ("status1", Integer (3));
             Query.Bind_Param ("status2", Integer (3));
-            Query.Bind_Param ("status3", Integer (3));
+            Query.Bind_Param ("date", Now);
+            Query.Set_Query (Adafr.Members.Models.Query_Adafr_Member_List);
+
+         when Models.LIST_AF_MEMBERS =>
+            Query.Bind_Param ("status1", Integer (2));
+            Query.Bind_Param ("status2", Integer (2));
+            Query.Bind_Param ("date", Now);
             Query.Set_Query (Adafr.Members.Models.Query_Adafr_Member_List);
 
          when Models.List_Pending =>
             Query.Bind_Param ("status1", Integer (1));
-            Query.Bind_Param ("status2", Integer (1));
-            Query.Bind_Param ("status3", Integer (1));
-            Query.Set_Query (Adafr.Members.Models.Query_Adafr_Member_List);
+            Query.Set_Query (Adafr.Members.Models.Query_Adafr_Member_List_By_Status);
+
+         when Models.List_Expired =>
+            Query.Bind_Param ("status1", Integer (2));
+            Query.Bind_Param ("status2", Integer (3));
+            Query.Bind_Param ("date", Now);
+            Query.Set_Query (Adafr.Members.Models.Query_Adafr_Member_List_Expired);
 
       end case;
       Adafr.Members.Models.List (List.Members_Bean.all, Session, Query);
