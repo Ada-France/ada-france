@@ -71,7 +71,7 @@
     </query>
 
     <query name='adafr-member-list'>
-       <comment>List of Ada France members</comment>
+       <comment>List of Ada France members (subscription is valid)</comment>
        <sql>
     SELECT
       m.id AS id,
@@ -85,18 +85,78 @@
       email.email AS email,
       user.name AS user_name,
       wm.role AS user_role
-    FROM awa_email AS email
-    LEFT JOIN adafr_member AS m ON m.email_id = email.id
+    FROM adafr_member AS m
+    INNER JOIN awa_email AS email ON m.email_id = email.id
     LEFT JOIN awa_user AS user ON user.email_id = email.id
     LEFT JOIN awa_workspace_member AS wm ON wm.member_id = user.id AND wm.workspace_id = 1
-    WHERE (m.status = :status1 OR m.status = :status2 OR m.status = :status3)
+    WHERE (m.status = :status1 OR m.status = :status2) AND m.subscription_deadline &gt; :date
     ORDER BY last_name, first_name, email, user_name
        </sql>
        <sql-count>
     SELECT
        count(m.id)
     FROM adafr_member AS m
-    WHERE m.status = :status   
+    WHERE (m.status = :status1 OR m.status = :status2) AND m.subscription_deadline &gt; :date
+       </sql-count>
+    </query>
+
+    <query name='adafr-member-list-by-status'>
+       <comment>List of Ada France members (with specific status)</comment>
+       <sql>
+    SELECT
+      m.id AS id,
+      m.first_name AS first_name,
+      m.last_name AS last_name,
+      COALESCE(m.status, 0) AS status,
+      COALESCE(m.ada_europe, 0) AS ada_europe,
+      m.create_date AS create_date,
+      m.payment_date AS payment_date,
+      m.subscription_deadline AS deadline,
+      email.email AS email,
+      user.name AS user_name,
+      wm.role AS user_role
+    FROM adafr_member AS m
+    INNER JOIN awa_email AS email ON m.email_id = email.id
+    LEFT JOIN awa_user AS user ON user.email_id = email.id
+    LEFT JOIN awa_workspace_member AS wm ON wm.member_id = user.id AND wm.workspace_id = 1
+    WHERE m.status = :status1
+    ORDER BY last_name, first_name, email, user_name
+       </sql>
+       <sql-count>
+    SELECT
+       count(m.id)
+    FROM adafr_member AS m
+    WHERE m.status = :status1
+       </sql-count>
+    </query>
+
+    <query name='adafr-member-list-expired'>
+       <comment>List of Ada France members (subscription has expired)</comment>
+       <sql>
+    SELECT
+      m.id AS id,
+      m.first_name AS first_name,
+      m.last_name AS last_name,
+      COALESCE(m.status, 0) AS status,
+      COALESCE(m.ada_europe, 0) AS ada_europe,
+      m.create_date AS create_date,
+      m.payment_date AS payment_date,
+      m.subscription_deadline AS deadline,
+      email.email AS email,
+      user.name AS user_name,
+      wm.role AS user_role
+    FROM adafr_member AS m
+    INNER JOIN awa_email AS email ON m.email_id = email.id
+    LEFT JOIN awa_user AS user ON user.email_id = email.id
+    LEFT JOIN awa_workspace_member AS wm ON wm.member_id = user.id AND wm.workspace_id = 1
+    WHERE (m.status = :status1 OR m.status = :status2) AND m.subscription_deadline &lt; :date
+    ORDER BY last_name, first_name, email, user_name
+       </sql>
+       <sql-count>
+    SELECT
+       count(m.id)
+    FROM adafr_member AS m
+    WHERE (m.status = :status1 OR m.status = :status2) AND m.subscription_deadline &lt; :date
        </sql-count>
     </query>
 
