@@ -62,8 +62,9 @@ package body Adafr.Members.Servlets is
       use type Excel_Out.Cell_Border;
       use type Ada.Calendar.Time;
 
-      procedure Report (Label  : in String;
-                        Status : in Models.Status_Type);
+      procedure Report (Label          : in String;
+                        Status         : in Models.Status_Type;
+                        Report_Expired : in Boolean);
 
       URI         : constant String := Request.Get_Request_URI;
       Content     : Excel_Out.Excel_Out_String;
@@ -81,8 +82,9 @@ package body Adafr.Members.Servlets is
       Fmt_Default : Excel_Out.Format_Type;
       Fmt_Expired : Excel_Out.Format_Type;
 
-      procedure Report (Label  : in String;
-                        Status : in Models.Status_Type) is
+      procedure Report (Label          : in String;
+                        Status         : in Models.Status_Type;
+                        Report_Expired : in Boolean) is
       begin
          --  Setup headers.
          Content.Use_Format (Fmt_Title);
@@ -110,12 +112,13 @@ package body Adafr.Members.Servlets is
          for Member of List loop
             declare
                Is_Expired : constant Boolean := not Member.Subscription_Deadline.Is_Null
-                 and then Member.Subscription_Deadline.Value < Now;
+                 and then Member.Subscription_Deadline.Value < Now
+                 and then Member.Status /= Models.WAITING_PAYMENT;
             begin
-               if (Status = Models.WAITING_PAYMENT and (Member.Status = Status or Is_Expired))
-                 or else (Status /= Models.Waiting_Payment and Member.Status = Status and not Is_Expired)
+               if (Status = Member.Status and not Report_Expired and not Is_Expired)
+                 or else (Report_Expired and Is_Expired)
                then
-                  if Status = Models.WAITING_PAYMENT and Member.Status /= Status then
+                  if Is_Expired then
                      Content.Use_Format (Fmt_Expired);
                   else
                      Content.Use_Format (Fmt_Default);
@@ -190,13 +193,16 @@ package body Adafr.Members.Servlets is
       Content.Write_Column_Width (12, 20);
 
       Row := 5;
-      Report ("Membres Ada France et Ada Europe", Models.Member_Ada_Europe);
+      Report ("Membres Ada France et Ada Europe", Models.Member_Ada_Europe, False);
 
       Row := Row + 3;
-      Report ("Membres Ada France", Models.Member_Ada_France);
+      Report ("Membres Ada France", Models.Member_Ada_France, False);
 
       Row := Row + 3;
-      Report ("En attente de la cotisation", Models.Waiting_Payment);
+      Report ("En attente de la cotisation", Models.Waiting_Payment, False);
+
+      Row := Row + 3;
+      Report (To_Latin1 ("Expirés"), Models.Waiting_Payment, True);
 
       Content.Close;
       declare
