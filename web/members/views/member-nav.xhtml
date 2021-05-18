@@ -47,7 +47,7 @@
         </a>
     </li>
     <ui:insert name="page-nav"/>
-        <li class="awa-nav-right" id="member-nav-filter">
+        <li class="awa-nav-right" id="member-nav-export">
           <a href="#{contextPath}/members/export" class="awa-nav-icon"
              title="Exporter la liste des membres">
             <img src="#{contextPath}/images/icon-excel-export-64.png"
@@ -60,9 +60,11 @@
             <w:chosen id="filter" value="#{adafrMemberList.filter}">
                 <f:selectItem itemValue="LIST_ALL" itemLabel="Tous"/>
                 <f:selectItem itemValue="LIST_AE_MEMBERS" itemLabel="Membres Ada-Europe"/>
-                <f:selectItem itemValue="LIST_MEMBERS" itemLabel="Membres Ada-France"/>
+                <f:selectItem itemValue="LIST_AF_MEMBERS" itemLabel="Membres Ada-France"/>
+                <f:selectItem itemValue="LIST_MEMBERS" itemLabel="Membres Ada-France et Ada-Europe"/>
                 <f:selectItem itemValue="LIST_PENDING" itemLabel="En attente"/>
-                <f:facet name="options">width: "60%",disable_search: true</f:facet>
+                <f:selectItem itemValue="LIST_EXPIRED" itemLabel="Non renouvelés"/>
+                <f:facet name="options">width: "80%",disable_search: true</f:facet>
                 <f:facet name="events">.bind("change", function() {
                       document.location = "#{contextPath}/members/list/" + $(this).val();
                 })</f:facet>

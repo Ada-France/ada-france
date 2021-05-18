@@ -253,7 +253,12 @@ dl.adafr-version dd {
     width: 300px;
 }
 #member-nav-filter {
-    width: 20%;
+    width: 25%;
+    padding-top: 20px;
+}
+#member-nav-export {
+    width: 100px;
+    margin-right: 3%;
 }
 .member-list .ui-list-item {
     line-height: 32px;
