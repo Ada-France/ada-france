@@ -7,11 +7,14 @@
     <ui:define name="mailTo">
         <mail:from address="#{initParam['bureau_email']}">#{initParam['bureau_email']}</mail:from>
         <mail:to address="#{event.name}">#{event.email}</mail:to>
+        <mail:attachment fileName="IBAN-Ada-France.pdf" value="../private-documents/IBAN-Ada-France.pdf" contentType="application/pdf"/>
     </ui:define>
     <ui:define name="mailTextBody">
 Vous avez souhaité devenir membre d'#{event.member.ada_europe ? 'Ada-France+Ada-Europe' : 'Ada-France'} et nous vous en remercions.
 
 Votre enregistrement est actuellement en attente du paiement de #{event.member.amount} euros.
+
+Vous pouvez régler votre cotisation par virement bancaire en utilisant le RIB joint en attachement.
 
 <ui:include src="/adhesion/views/payment-info-text.xhtml"/>
 
@@ -26,7 +29,9 @@ L'équipe Ada-France
 </p>
 <p>
   Votre enregistrement est actuellement en attente du paiement de #{event.member.amount} euros.
-  Vous pouvez payer par chèque ou par virement bancaire.
+</p>
+<p>
+  Vous pouvez régler votre cotisation par virement bancaire en utilisant le RIB joint en attachement.
 </p>
 <ui:include src="/adhesion/views/payment-info.xhtml"/>
 <p>
