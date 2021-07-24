@@ -16,6 +16,11 @@
                              title='Adresse e-mail'>
                     <f:validateRegex pattern="^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$"/>
                 </w:inputText>
+                <w:inputText styleClass="awa-required ui-corner-all"
+                             id='email-confirm' size='50' required='false' value='#{adafrMember.confirmEmail}'
+                             validatorMessage="Addresse e-mail non valide"
+                             title='Adresse e-mail'>
+                </w:inputText>
                 <ul class='awa-buttons'>
                     <li>
                         <h:commandButton id='send-mail'

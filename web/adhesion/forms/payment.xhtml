@@ -29,6 +29,10 @@
                 paiement de #{adafrMember.amount} euros
                 pour finaliser l'enregistrement.
             </p>
+            <p>
+              Vous pouvez régler votre cotisation par virement bancaire en utilisant le RIB
+              qui vous sera envoyé par mail.
+            </p>
             <ui:include src="/adhesion/views/payment-info.xhtml"/>
         </h:panelGroup>
         <h:panelGroup rendered="#{adafrMember.ada_europe or adafrMember.status eq 'MEMBER_ADA_EUROPE'}">
