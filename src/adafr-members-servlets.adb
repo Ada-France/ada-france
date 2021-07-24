@@ -24,11 +24,9 @@ with Unicode.Encodings;
 with Util.Log.Loggers;
 with Util.Dates.ISO8601;
 
-with ADO.Objects;
 with ADO.Sessions;
 with ADO.Queries;
 
-with Servlet.Routes;
 with ASF.Streams;
 
 with Adafr.Members.Modules;
@@ -213,16 +211,6 @@ package body Adafr.Members.Servlets is
       end;
 
    exception
-      when Servlet.Routes.No_Parameter =>
-         Log.Info ("GET: {0}: Invalid servlet-mapping, a path parameter is missing", URI);
-         Response.Send_Error (ASF.Responses.SC_NOT_FOUND);
-         return;
-
-      when ADO.Objects.NOT_FOUND | Constraint_Error =>
-         Log.Info ("GET: {0}: Storage file not found", URI);
-         Response.Send_Error (ASF.Responses.SC_NOT_FOUND);
-         return;
-
       when E : others =>
          Log.Error ("Internal error", E);
          Response.Send_Error (ASF.Responses.SC_INTERNAL_SERVER_ERROR);
