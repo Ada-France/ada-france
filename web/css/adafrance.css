@@ -249,6 +249,9 @@ dl.adafr-version dd {
 #address1, #address2 {
     margin-bottom: 0.5em;
 }
+#email-confirm {
+    display: none;
+}
 #member-list-action {
     width: 300px;
 }
@@ -410,6 +413,10 @@ div.blog-post div.post-title h2 a:hover {
 }
 div.blog-post div.post-title {
     border-color: #333;
+}
+div.post-text {
+    font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+    line-height: inherit;
 }
 div.post-text pre.moz-quote-pre {
     background: none;
