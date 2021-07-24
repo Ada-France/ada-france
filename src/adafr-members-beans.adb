@@ -59,6 +59,10 @@ package body Adafr.Members.Beans is
    begin
       if Name = "id" and not Util.Beans.Objects.Is_Empty (Value) then
          Item.Id := ADO.Utils.To_Identifier (Value);
+      elsif Name = "confirmEmail" then
+         if not Util.Beans.Objects.Is_Empty (Value) then
+            raise Constraint_Error;
+         end if;
       else
          Models.Member_Bean (Item).Set_Value (Name, Value);
       end if;
