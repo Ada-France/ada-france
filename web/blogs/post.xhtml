@@ -76,7 +76,7 @@
                               format="#{post.format}"/>
                     <!-- Increment the post read counter but do not display anything -->
                     <awa:counter value="#{post.counter}" hidden="true"/>
-                    <div id="disqus_thread"></div>
+                    <div class='adafr-disqus'><div id="disqus_thread"></div></div>
                     <script>
                     var disqus_config = function () {
                         this.page.url = "https://www.ada-france.org#{contextPath}/blogs/post.html?post=#{post.uri}"; // Replace PAGE_URL with your page's canonical URL variable
