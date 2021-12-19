@@ -63,7 +63,7 @@
        <include name="bin/*-server"/>
      </install>
      <install mode='exec' dir='web'>
-       <command>closure --charset UTF-8 #{src} --js_output_file #{dst}</command>
+       <command slow='true'>closure --warning_level QUIET --charset UTF-8 #{src} --js_output_file #{dst}</command>
        <fileset dir="web">
          <include name="**/*.js"/>
          <exclude name="js/highlight.pack.js"/>
