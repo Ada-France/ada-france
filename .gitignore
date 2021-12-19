@@ -4,7 +4,7 @@
 *.db
 config.status
 adafr.properties
-adafr.gpr
 Makefile.conf
 autom4te.cache
-
+bin/
+obj/
