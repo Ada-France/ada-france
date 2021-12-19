@@ -10,7 +10,7 @@ aggregate project adafr is
                          "awa/ada-keystore/.alire",
                          "awa/ada-keystore",
                          "awa/ada-ado/.alire",
-                         "awa/ada-ado/.alire/sqlite",
+                         "awa/ada-ado/.alire/mysql",
                          "awa/ada-ado",
                          "awa/ada-security/.alire",
                          "awa/ada-security",

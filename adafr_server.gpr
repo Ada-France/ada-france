@@ -1,4 +1,4 @@
-with "config";
+with "adafr_config";
 with "utilada_sys";
 with "utilada_aws";
 with "elada";
@@ -26,12 +26,12 @@ project adafr_server is
    Mains := ("adafr-server.adb", "import_archives.adb", "receipt.adb");
    for Main use Mains;
    for Source_Dirs use ("src", "src/model", "tools");
-   for Object_Dir use "./" & Config'Object_Dir & "/obj";
-   for Exec_Dir use "./" & Config'Exec_Dir & "/bin";
+   for Object_Dir use "./" & Adafr_Config'Object_Dir & "/obj";
+   for Exec_Dir use "./" & Adafr_Config'Exec_Dir & "/bin";
 
-   package Binder renames Config.Binder;
-   package Builder renames Config.Builder;
-   package Compiler renames Config.Compiler;
-   package Linker renames Config.Linker;
+   package Binder renames Adafr_Config.Binder;
+   package Builder renames Adafr_Config.Builder;
+   package Compiler renames Adafr_Config.Compiler;
+   package Linker renames Adafr_Config.Linker;
 
 end adafr_server;
