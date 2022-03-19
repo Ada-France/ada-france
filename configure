@@ -584,6 +584,17 @@ PACKAGE_URL=
 ac_unique_file="src/adafr.ads"
 ac_subst_vars='LTLIBOBJS
 LIBOBJS
+DYNAMO_SEARCH_DIR
+BUNDLE_DIR
+GNAT_PROJECT_PATHS
+HAVE_ARE
+HAVE_DYNAMO
+HAVE_PANDOC
+UTIL_AWS_VERSION
+AWS_VERSION
+UTIL_OS_VERSION
+UTIL_ASM_TYPE
+HARDWARE_PLATFORM
 ADAFR_LIBDIR
 ADAFR_MICRO_VERSION
 ADAFR_MINOR_VERSION
@@ -601,6 +612,7 @@ INSTALL_DATA
 INSTALL_SCRIPT
 INSTALL_PROGRAM
 SET_MAKE
+GNAT
 GPRINSTALL
 GNATCLEAN
 GPRCLEAN
@@ -618,7 +630,6 @@ build_os
 build_vendor
 build_cpu
 build
-awa_has_msys
 target_alias
 host_alias
 build_alias
@@ -666,6 +677,8 @@ enable_shared
 enable_default_shared
 enable_distrib
 enable_coverage
+enable_aws
+with_aws
 '
       ac_precious_vars='build_alias
 host_alias
@@ -1297,11 +1310,14 @@ Optional Features:
   --enable-default-shared Use shared libraries by default (disabled)
   --enable-distrib        build for distribution, optimized and strip symbols (enabled)
   --enable-coverage       build with coverage support -fprofile-arcs -ftest-coverage (disabled)
+  --enable-aws            Enable the AWS support (enabled)
 
 Optional Packages:
   --with-PACKAGE[=ARG]    use PACKAGE [ARG=yes]
   --without-PACKAGE       do not use PACKAGE (same as --with-PACKAGE=no)
   --with-build-root=PATH  Path to find the Ada libraries
+  --with-aws=x            Path for the Ada Web Server library
+                          (http://libre.adacore.com/libre/tools/aws/)
 
 Report bugs to the package provider.
 _ACEOF
@@ -1981,53 +1997,20 @@ fi
   if test x${awa_build_root} != x; then
 
   if test x${awa_host_pwd_check} != xyes; then
-    # Extract the first word of "msysinfo", so it can be a program name with args.
-set dummy msysinfo; ac_word=$2
-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for $ac_word" >&5
-$as_echo_n "checking for $ac_word... " >&6; }
-if ${ac_cv_prog_awa_has_msys+:} false; then :
-  $as_echo_n "(cached) " >&6
-else
-  if test -n "$awa_has_msys"; then
-  ac_cv_prog_awa_has_msys="$awa_has_msys" # Let the user override the test.
-else
-as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
-for as_dir in $PATH
-do
-  IFS=$as_save_IFS
-  test -z "$as_dir" && as_dir=.
-    for ac_exec_ext in '' $ac_executable_extensions; do
-  if as_fn_executable_p "$as_dir/$ac_word$ac_exec_ext"; then
-    ac_cv_prog_awa_has_msys="yes"
-    $as_echo "$as_me:${as_lineno-$LINENO}: found $as_dir/$ac_word$ac_exec_ext" >&5
-    break 2
-  fi
-done
-  done
-IFS=$as_save_IFS
+    case "${target_os}" in
+       mingw32*|cygwin*|mingw64*|msys)
+       awa_pwd_option="-W"
+       ;;
 
-  test -z "$ac_cv_prog_awa_has_msys" && ac_cv_prog_awa_has_msys="no"
-fi
-fi
-awa_has_msys=$ac_cv_prog_awa_has_msys
-if test -n "$awa_has_msys"; then
-  { $as_echo "$as_me:${as_lineno-$LINENO}: result: $awa_has_msys" >&5
-$as_echo "$awa_has_msys" >&6; }
-else
-  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
-$as_echo "no" >&6; }
-fi
-
-
-    if test x${awa_has_msys} = xyes; then
-      awa_pwd_option="-W"
-    else
+     *)
       awa_pwd_option=""
-    fi
+      ;;
+
+    esac
     awa_host_pwd_check=yes
   fi
 
-    awa_build_pwd=`cd ${awa_build_root} && pwd $pwd_option`
+    awa_build_pwd=`cd ${awa_build_root} && pwd $awa_pwd_option`
     if test x${awa_build_pwd} != x${awa_build_root}; then
       awa_build_root=${awa_build_pwd}/
     fi
@@ -2266,6 +2249,56 @@ done
 test -n "$GPRINSTALL" || GPRINSTALL=""""
 
 
+  for ac_prog in gnat
+do
+  # Extract the first word of "$ac_prog", so it can be a program name with args.
+set dummy $ac_prog; ac_word=$2
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for $ac_word" >&5
+$as_echo_n "checking for $ac_word... " >&6; }
+if ${ac_cv_prog_GNAT+:} false; then :
+  $as_echo_n "(cached) " >&6
+else
+  if test -n "$GNAT"; then
+  ac_cv_prog_GNAT="$GNAT" # Let the user override the test.
+else
+as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
+for as_dir in $PATH
+do
+  IFS=$as_save_IFS
+  test -z "$as_dir" && as_dir=.
+    for ac_exec_ext in '' $ac_executable_extensions; do
+  if as_fn_executable_p "$as_dir/$ac_word$ac_exec_ext"; then
+    ac_cv_prog_GNAT="$ac_prog"
+    $as_echo "$as_me:${as_lineno-$LINENO}: found $as_dir/$ac_word$ac_exec_ext" >&5
+    break 2
+  fi
+done
+  done
+IFS=$as_save_IFS
+
+fi
+fi
+GNAT=$ac_cv_prog_GNAT
+if test -n "$GNAT"; then
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: $GNAT" >&5
+$as_echo "$GNAT" >&6; }
+else
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+fi
+
+
+  test -n "$GNAT" && break
+done
+test -n "$GNAT" || GNAT=""""
+
+  if test -n "$GNAT"; then
+    GNATCHECK="$GNAT ls"
+    GNATCHECK_ARG=" system.ads"
+  else
+    GNATCHECK="$GNATMAKE"
+    GNATCHECK_ARG=""
+  fi
 
   { $as_echo "$as_me:${as_lineno-$LINENO}: checking whether ${MAKE-make} sets \$(MAKE)" >&5
 $as_echo_n "checking whether ${MAKE-make} sets \$(MAKE)... " >&6; }
@@ -2436,7 +2469,473 @@ ADAFR_VERSION=$ADAFR_MAJOR_VERSION.$ADAFR_MINOR_VERSION.$ADAFR_MICRO_VERSION
 ADAFR_LIBDIR="lib"
 
 
-ac_config_files="$ac_config_files Makefile.conf"
+
+
+
+  os_base='unix'
+  os_version='none'
+  { $as_echo "$as_me:${as_lineno-$LINENO}: checking operating system" >&5
+$as_echo_n "checking operating system... " >&6; }
+  case "${target_os}" in
+     linux|linux-*|solaris*|sysv-*)
+        os_version='linux'
+        ;;
+
+     netbsd*|dragonfly*)
+        os_version='netbsd'
+        ;;
+
+     openbsd*|freebsd*)
+        # Let OpenBSD people cry
+        os_version='freebsd'
+        ;;
+
+     macos*|darwin*)
+        os_version='macos'
+        ;;
+
+     mingw32*|cygwin*|mingw64*|msys)
+        os_version='win'
+        os_base='windows'
+        ;;
+
+     mingw32*|cygwin*|mingw64*|msys)
+        os_version='win'
+        os_base='windows'
+        ;;
+
+     *)
+        # Be authoritative
+        os_version='linux'
+        ;;
+  esac
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: $os_version" >&5
+$as_echo "$os_version" >&6; }
+
+  { $as_echo "$as_me:${as_lineno-$LINENO}: checking hardware platform" >&5
+$as_echo_n "checking hardware platform... " >&6; }
+  case "${target_cpu}" in
+     x86_64)
+        os_version="${os_version}64"
+        HARDWARE_PLATFORM=${target_cpu}
+        ;;
+
+     i386|i486|i586|i686)
+        os_version="${os_version}32"
+        HARDWARE_PLATFORM='x86'
+        ;;
+
+     armv8*|aarch64*|mips64*|mipsisa64*|sh64*|riscv64*|sparc64*)
+        os_version="${os_version}64"
+        HARDWARE_PLATFORM=${target_cpu}
+        ;;
+
+     armv7*|mips*|mipsisa*|sh*|riscv32*|sparc*)
+        os_version="${os_version}32"
+        HARDWARE_PLATFORM=${target_cpu}
+        ;;
+
+     *)
+        os_version="${os_version}64"
+        HARDWARE_PLATFORM=${target_cpu}
+        ;;
+  esac
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: $HARDWARE_PLATFORM" >&5
+$as_echo "$HARDWARE_PLATFORM" >&6; }
+
+
+  # Check for gcc intrinsics
+
+  { $as_echo "$as_me:${as_lineno-$LINENO}: checking whether platform supports atomic inc/dec" >&5
+$as_echo_n "checking whether platform supports atomic inc/dec... " >&6; }
+
+   cat > conftest.ada <<EOF
+
+with Interfaces; use Interfaces;
+procedure Check is
+   function Sync_Add_And_Fetch
+     (Ptr   : access Interfaces.Integer_32;
+      Value : Interfaces.Integer_32) return Interfaces.Integer_32;
+   pragma Import (Intrinsic, Sync_Add_And_Fetch, "__sync_add_and_fetch_4");
+   X : aliased Interfaces.Integer_32;
+   Y : Interfaces.Integer_32 := 0;
+   pragma Volatile (Y);
+   --  On some platforms (e.g. i386), GCC has limited support for
+   --  __sync_add_and_fetch_4 for the case where the result is not used.
+   --  Here we want to test for general availability, so make Y volatile to
+   --  prevent the store operation from being discarded.
+begin
+   Y := Sync_Add_And_Fetch (X'Access, 1);
+end Check;
+
+EOF
+   if { ac_try='gnatchop -q conftest.ada && gnatmake check.adb >/dev/null 2>conftest.out'
+  { { eval echo "\"\$as_me\":${as_lineno-$LINENO}: \"$ac_try\""; } >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
+  test $ac_status = 0; }; }
+   then
+      : Success
+
+   { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+$as_echo "yes" >&6; }
+   src_asm='intrinsic'
+
+   else
+      : Failure
+
+   { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+   src_asm=''
+
+   fi
+   rm -rf conftest.ada
+
+
+   rm -f check.adb check check.o check.ali
+
+  { $as_echo "$as_me:${as_lineno-$LINENO}: checking specific processor support" >&5
+$as_echo_n "checking specific processor support... " >&6; }
+  if test T$src_asm = T; then
+   case "${target}" in
+   ## Intel 386 machines where we don't care about the manufacturer
+     i[34567]86-*-* | x86_* | x86-*)
+       src_asm='x86'
+       ;;
+
+     *)
+       src_asm='none'
+       ;;
+
+   esac
+  fi
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: using $src_asm" >&5
+$as_echo "using $src_asm" >&6; }
+  UTIL_ASM_TYPE="$src_asm"
+
+
+  UTIL_OS_VERSION=$os_version
+
+
+
+
+
+    gnat_enable_aws=yes
+  gnat_project_aws=no
+  gnat_project_name_aws=
+  # Check whether --enable-aws was given.
+if test "${enable_aws+set}" = set; then :
+  enableval=$enable_aws; case "${enableval}" in
+      no|none)  gnat_enable_aws=no ;;
+      *)        gnat_enable_aws=yes ;;
+    esac
+fi
+
+  { $as_echo "$as_me:${as_lineno-$LINENO}: checking AWS support is enabled" >&5
+$as_echo_n "checking AWS support is enabled... " >&6; }
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: ${gnat_enable_aws}" >&5
+$as_echo "${gnat_enable_aws}" >&6; }
+
+  if test T$gnat_enable_aws = Tyes; then
+
+# Check whether --with-aws was given.
+if test "${with_aws+set}" = set; then :
+  withval=$with_aws;
+      gnat_project_name=${withval}
+
+else
+
+      gnat_project_name=aws
+
+fi
+
+
+  { $as_echo "$as_me:${as_lineno-$LINENO}: checking whether aws project exists" >&5
+$as_echo_n "checking whether aws project exists... " >&6; }
+if ${ac_cv_gnat_project_aws+:} false; then :
+  $as_echo_n "(cached) " >&6
+else
+
+    echo "with \"${gnat_project_name}\"; project conftest is for Source_Dirs use (); end conftest;" > conftest.gpr
+    if { ac_try='$GNATCHECK -Pconftest.gpr $GNATCHECK_ARG > /dev/null 2>conftest.out'
+  { { eval echo "\"\$as_me\":${as_lineno-$LINENO}: \"$ac_try\""; } >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
+  test $ac_status = 0; }; }
+    then
+      ac_cv_gnat_project_aws=yes
+      ac_cv_gnat_project_with_aws="with \"${gnat_project_name}\";";
+    else
+      ac_cv_gnat_project_aws=no
+    fi
+    rm -f conftest.gpr
+fi
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_cv_gnat_project_aws" >&5
+$as_echo "$ac_cv_gnat_project_aws" >&6; }
+
+    if test x$ac_cv_gnat_project_aws = xno; then
+      gnat_enable_aws=no
+    else
+      gnat_project_aws=aws
+    fi
+  fi
+  if test T$gnat_enable_aws = Tno; then
+
+    UTIL_HAVE_AWS=no
+    WITH_SERVER="";
+    WITH_UTIL_AWS="";
+    UTIL_AWS_VERSION="none"
+
+  else
+
+    UTIL_HAVE_AWS=yes
+    WITH_UTIL_AWS="with \"utilada_aws\";";
+    WITH_SERVER=$ac_cv_gnat_project_with_aws
+
+  { $as_echo "$as_me:${as_lineno-$LINENO}: checking preparing for GNAT project utilada_aws" >&5
+$as_echo_n "checking preparing for GNAT project utilada_aws... " >&6; }
+  mkdir -p obj/utilada_aws/static obj/utilada_aws/relocatable lib/utilada_aws/static lib/utilada_aws/relocatable
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: done" >&5
+$as_echo "done" >&6; }
+
+
+
+  { $as_echo "$as_me:${as_lineno-$LINENO}: checking checking AWS version" >&5
+$as_echo_n "checking checking AWS version... " >&6; }
+if ${ac_cv_gnat_aws_version+:} false; then :
+  $as_echo_n "(cached) " >&6
+else
+
+
+    cat > conftest.adb <<EOF
+with AWS;
+with Ada.Text_IO;
+procedure Conftest is
+begin
+  Ada.Text_IO.Put_Line (AWS.Version);
+end Conftest;
+EOF
+
+    cat > conftest.gpr <<EOF
+with "aws";
+project t is
+  for Main use ("conftest.adb");
+end t;
+EOF
+
+    if { ac_try='gnatmake -Pconftest.gpr >/dev/null 2>conftest.out'
+  { { eval echo "\"\$as_me\":${as_lineno-$LINENO}: \"$ac_try\""; } >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
+  test $ac_status = 0; }; }
+    then
+       ac_cv_gnat_aws_version=`./conftest`
+    else
+       ac_cv_gnat_aws_version='none'
+    fi
+
+    if test "$ac_cv_gnat_aws_version" = "20.0"; then
+                        cat > conftest.adb <<EOF
+with AWS;
+with Ada.Text_IO;
+procedure Conftest is
+begin
+  Ada.Text_IO.Put_Line (AWS.HTTP_2);
+end Conftest;
+EOF
+      if { ac_try='gnatmake -Pconftest.gpr >/dev/null 2>conftest.out'
+  { { eval echo "\"\$as_me\":${as_lineno-$LINENO}: \"$ac_try\""; } >&5
+  (eval $ac_try) 2>&5
+  ac_status=$?
+  $as_echo "$as_me:${as_lineno-$LINENO}: \$? = $ac_status" >&5
+  test $ac_status = 0; }; }
+      then
+         ac_cv_gnat_aws_version="22.0"
+      fi
+
+    fi
+
+    rm -f conftest.gpr conftest.adb conftest.o conftest.ali
+    rm -f b__conftest.ads b__conftest.adb b__conftest.o b__conftest.ali
+
+fi
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_cv_gnat_aws_version" >&5
+$as_echo "$ac_cv_gnat_aws_version" >&6; }
+
+  AWS_VERSION=$ac_cv_gnat_aws_version
+
+
+
+    { $as_echo "$as_me:${as_lineno-$LINENO}: checking using Ada Util AWS http client" >&5
+$as_echo_n "checking using Ada Util AWS http client... " >&6; }
+    UTIL_AWS_VERSION=1
+case $AWS_VERSION in
+  22.0)
+     UTIL_AWS_VERSION=3
+     ;;
+
+  *2017*|*2018*|*2019*|*202*|20.0)
+     UTIL_AWS_VERSION=2
+     ;;
+
+  3.3.2)
+     UTIL_AWS_VERSION=2
+     ;;
+
+  3.*|2.*)
+     UTIL_AWS_VERSION=1
+     ;;
+
+  *)
+     UTIL_AWS_VERSION=3
+     ;;
+esac
+    { $as_echo "$as_me:${as_lineno-$LINENO}: result: ${UTIL_AWS_VERSION}" >&5
+$as_echo "${UTIL_AWS_VERSION}" >&6; }
+
+
+  fi
+
+
+
+
+
+
+# Extract the first word of "pandoc", so it can be a program name with args.
+set dummy pandoc; ac_word=$2
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for $ac_word" >&5
+$as_echo_n "checking for $ac_word... " >&6; }
+if ${ac_cv_prog_HAVE_PANDOC+:} false; then :
+  $as_echo_n "(cached) " >&6
+else
+  if test -n "$HAVE_PANDOC"; then
+  ac_cv_prog_HAVE_PANDOC="$HAVE_PANDOC" # Let the user override the test.
+else
+as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
+for as_dir in $PATH
+do
+  IFS=$as_save_IFS
+  test -z "$as_dir" && as_dir=.
+    for ac_exec_ext in '' $ac_executable_extensions; do
+  if as_fn_executable_p "$as_dir/$ac_word$ac_exec_ext"; then
+    ac_cv_prog_HAVE_PANDOC="yes"
+    $as_echo "$as_me:${as_lineno-$LINENO}: found $as_dir/$ac_word$ac_exec_ext" >&5
+    break 2
+  fi
+done
+  done
+IFS=$as_save_IFS
+
+fi
+fi
+HAVE_PANDOC=$ac_cv_prog_HAVE_PANDOC
+if test -n "$HAVE_PANDOC"; then
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: $HAVE_PANDOC" >&5
+$as_echo "$HAVE_PANDOC" >&6; }
+else
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+fi
+
+
+# Extract the first word of "dynamo", so it can be a program name with args.
+set dummy dynamo; ac_word=$2
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for $ac_word" >&5
+$as_echo_n "checking for $ac_word... " >&6; }
+if ${ac_cv_prog_HAVE_DYNAMO+:} false; then :
+  $as_echo_n "(cached) " >&6
+else
+  if test -n "$HAVE_DYNAMO"; then
+  ac_cv_prog_HAVE_DYNAMO="$HAVE_DYNAMO" # Let the user override the test.
+else
+as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
+for as_dir in $PATH
+do
+  IFS=$as_save_IFS
+  test -z "$as_dir" && as_dir=.
+    for ac_exec_ext in '' $ac_executable_extensions; do
+  if as_fn_executable_p "$as_dir/$ac_word$ac_exec_ext"; then
+    ac_cv_prog_HAVE_DYNAMO="yes"
+    $as_echo "$as_me:${as_lineno-$LINENO}: found $as_dir/$ac_word$ac_exec_ext" >&5
+    break 2
+  fi
+done
+  done
+IFS=$as_save_IFS
+
+fi
+fi
+HAVE_DYNAMO=$ac_cv_prog_HAVE_DYNAMO
+if test -n "$HAVE_DYNAMO"; then
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: $HAVE_DYNAMO" >&5
+$as_echo "$HAVE_DYNAMO" >&6; }
+else
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+fi
+
+
+# Extract the first word of "are", so it can be a program name with args.
+set dummy are; ac_word=$2
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for $ac_word" >&5
+$as_echo_n "checking for $ac_word... " >&6; }
+if ${ac_cv_prog_HAVE_ARE+:} false; then :
+  $as_echo_n "(cached) " >&6
+else
+  if test -n "$HAVE_ARE"; then
+  ac_cv_prog_HAVE_ARE="$HAVE_ARE" # Let the user override the test.
+else
+as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
+for as_dir in $PATH
+do
+  IFS=$as_save_IFS
+  test -z "$as_dir" && as_dir=.
+    for ac_exec_ext in '' $ac_executable_extensions; do
+  if as_fn_executable_p "$as_dir/$ac_word$ac_exec_ext"; then
+    ac_cv_prog_HAVE_ARE="yes"
+    $as_echo "$as_me:${as_lineno-$LINENO}: found $as_dir/$ac_word$ac_exec_ext" >&5
+    break 2
+  fi
+done
+  done
+IFS=$as_save_IFS
+
+fi
+fi
+HAVE_ARE=$ac_cv_prog_HAVE_ARE
+if test -n "$HAVE_ARE"; then
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: $HAVE_ARE" >&5
+$as_echo "$HAVE_ARE" >&6; }
+else
+  { $as_echo "$as_me:${as_lineno-$LINENO}: result: no" >&5
+$as_echo "no" >&6; }
+fi
+
+
+
+ROOT_DIR=`pwd`
+GNAT_PROJECT_PATHS="$ROOT_DIR/awa/ada-util/.alire:$ROOT_DIR/awa/ada-util/.alire/xml:$ROOT_DIR/awa/ada-util/.alire/aws:$ROOT_DIR/awa/ada-util/.alire/unit"
+GNAT_PROJECT_PATHS="$GNAT_PROJECT_PATHS:$ROOT_DIR/awa/ada-util:$ROOT_DIR/awa/ada-el/.alire:$ROOT_DIR/awa/ada-el:$ROOT_DIR/awa/ada-keystore/.alire"
+GNAT_PROJECT_PATHS="$GNAT_PROJECT_PATHS:$ROOT_DIR/awa/ada-keystore:$ROOT_DIR/awa/ada-ado/.alire/sqlite:$ROOT_DIR/awa/ada-ado/.alire/mysql"
+GNAT_PROJECT_PATHS="$GNAT_PROJECT_PATHS:$ROOT_DIR/awa/ada-ado/.alire/postgresql:$ROOT_DIR/awa/ada-ado/.alire/all:$ROOT_DIR/awa/ada-ado/.alire"
+GNAT_PROJECT_PATHS="$GNAT_PROJECT_PATHS:$ROOT_DIR/awa/ada-ado:$ROOT_DIR/awa/ada-security/.alire:$ROOT_DIR/awa/ada-security:$ROOT_DIR/awa/ada-servlet/.alire"
+GNAT_PROJECT_PATHS="$GNAT_PROJECT_PATHS:$ROOT_DIR/awa/ada-servlet/.alire/aws:$ROOT_DIR/awa/ada-servlet:$ROOT_DIR/awa/ada-asf/.alire:$ROOT_DIR/awa/ada-asf"
+GNAT_PROJECT_PATHS="$GNAT_PROJECT_PATHS:$ROOT_DIR/awa/ada-wiki/.alire:$ROOT_DIR/awa/ada-wiki:$ROOT_DIR/awa/ada-wiki/.alire:$ROOT_DIR/awa/openapi-ada/.alire"
+GNAT_PROJECT_PATHS="$GNAT_PROJECT_PATHS:$ROOT_DIR/awa/dynamo/.alire:$ROOT_DIR/awa/.alire:$ROOT_DIR/awa/awa"
+GNAT_PROJECT_PATHS="$GNAT_PROJECT_PATHS:/usr/share/gpr"
+
+
+
+BUNDLE_DIR="$ROOT_DIR/awa/ada-asf/bundles"
+
+
+DYNAMO_SEARCH_DIR="$ROOT_DIR/awa/awa/plugins"
+
+
+ac_config_files="$ac_config_files Makefile.conf awa/dynamo/config/generator.properties"
 
 cat >confcache <<\_ACEOF
 # This file is a shell script that caches the results of configure
@@ -3145,6 +3644,7 @@ for ac_config_target in $ac_config_targets
 do
   case $ac_config_target in
     "Makefile.conf") CONFIG_FILES="$CONFIG_FILES Makefile.conf" ;;
+    "awa/dynamo/config/generator.properties") CONFIG_FILES="$CONFIG_FILES awa/dynamo/config/generator.properties" ;;
 
   *) as_fn_error $? "invalid argument: \`$ac_config_target'" "$LINENO" 5;;
   esac
