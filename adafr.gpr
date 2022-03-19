@@ -1,3 +1,4 @@
+with "adafr_config";
 aggregate project adafr is
 
    for Project_Path use ("awa/ada-util/.alire",
@@ -9,8 +10,8 @@ aggregate project adafr is
                          "awa/ada-el",
                          "awa/ada-keystore/.alire",
                          "awa/ada-keystore",
-                         "awa/ada-ado/.alire",
                          "awa/ada-ado/.alire/mysql",
+                         "awa/ada-ado/.alire",
                          "awa/ada-ado",
                          "awa/ada-security/.alire",
                          "awa/ada-security",
@@ -21,11 +22,23 @@ aggregate project adafr is
                          "awa/ada-asf",
                          "awa/ada-wiki/.alire",
                          "awa/ada-wiki",
+                         "awa/dynamo",
                          "awa/.alire",
                          "awa/awa");
 
    for Create_Missing_Dirs use "True";
 
+   Build_Dynamo : Adafr_Config.Yes_No := external ("BUILD_DYNAMO", "yes");
+
    for Project_Files use ("adafr_server.gpr");
+
+   case Build_Dynamo is
+      when "yes" =>
+         for Project_Files use Project'Project_Files & ("awa/dynamo/dynamo_tool.gpr");
+
+      when others =>
+         null;
+
+   end case;
 
 end adafr;
