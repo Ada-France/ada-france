@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  adafr-members-modules -- Module members
---  Copyright (C) 2020, 2021 Stephane Carrez
+--  Copyright (C) 2020, 2021, 2022 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -312,12 +312,8 @@ package body Adafr.Members.Modules is
       Current_Entity.Set_Ada_Europe (Member.Get_Ada_Europe);
       if not Member.Get_Ada_Europe then
          Current_Entity.Set_Amount (30);
-      elsif Current_Entity.Get_Receipt.Is_Null
-        or else Current_Entity.Get_Status = Models.MEMBER_ADA_FRANCE
-      then
-         Current_Entity.Set_Amount (65);
       else
-         Current_Entity.Set_Amount (30);
+         Current_Entity.Set_Amount (65);
       end if;
       if Current_Entity.Get_Status = Models.PENDING or else Is_Expired (Member) then
          Current_Entity.Set_Status (Models.WAITING_PAYMENT);
