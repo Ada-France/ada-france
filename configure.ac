@@ -47,7 +47,22 @@ AC_SUBST(BUNDLE_DIR)
 DYNAMO_SEARCH_DIR="$ROOT_DIR/awa/awa/plugins"
 AC_SUBST(DYNAMO_SEARCH_DIR)
 
+# Check that Magick or convert are available but do not abort if they are not available
+USE_CONVERT="-unused"
+USE_MAGICK="-unused"
+AC_CHECK_PROG(MAGICK_CHECK,magick,yes)
+if test x"$MAGICK_CHECK" != x"yes" ; then
+    AC_CHECK_PROG(CONVERT_CHECK,convert,yes)
+    if test x"$CONVERT_CHECK" = x"yes" ; then
+       USE_CONVERT=""
+    fi
+else
+   USE_MAGICK=""
+fi
+AC_SUBST(USE_MAGICK)
+AC_SUBST(USE_CONVERT)
+
 AC_OUTPUT(
 Makefile.conf
 awa/dynamo/config/generator.properties
-)
+awa/awa/plugins/awa-images/config/images.xml)
