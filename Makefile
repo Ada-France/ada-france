@@ -27,10 +27,10 @@ ROOTDIR=.
 
 $(foreach PLUGIN,$(PLUGINS),$(eval include plugins/$(PLUGIN)/Makefile))
 
-build::
+build:: setup
 	$(GNATMAKE) $(GPRFLAGS) -p -P "$(GPRPATH)" $(MAKE_ARGS)
 
-generate::
+generate:: build-dynamo
 	mkdir -p db
 	$(DYNAMO) generate $(DYNAMO_ARGS)
 
@@ -38,3 +38,27 @@ package:
 	rm -rf $(DIST_DIR)
 	$(DYNAMO) dist $(DIST_DIR) package.xml
 	tar czf $(DIST_FILE) $(DIST_DIR)
+
+ifneq (${HAVE_DYNAMO},yes)
+setup:: awa/dynamo/src/gen-configs.ads
+awa/dynamo/src/gen-configs.ads:   Makefile.conf awa/dynamo/src/gen-configs.gpb
+	gnatprep -DCONFIG_DIR='"$(ROOT_DIR)/awa/dynamo/config"' -DVERSION='"1.2.3"' \
+		  awa/dynamo/src/gen-configs.gpb awa/dynamo/src/gen-configs.ads
+
+setup:: awa/ada-ado/src/drivers/ado-drivers-initialize.adb
+awa/ada-ado/src/drivers/ado-drivers-initialize.adb: awa/ada-ado/src/drivers/ado-drivers-initialize.gpb Makefile.conf
+	gnatprep -DHAVE_MYSQL=False \
+	          -DHAVE_SQLITE=True \
+	          -DHAVE_POSTGRESQL=False \
+		  awa/ada-ado/src/drivers/ado-drivers-initialize.gpb $@
+
+build-dynamo: bin/dynamo
+
+bin/dynamo: setup
+	$(GNATMAKE) $(GPRFLAGS) -p -P "$(GPRPATH)" $(MAKE_ARGS)
+
+else
+
+build-dynamo:
+
+endif
