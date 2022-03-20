@@ -52,8 +52,8 @@ awa/ada-ado/src/drivers/ado-drivers-initialize.adb: awa/ada-ado/src/drivers/ado-
 	          -DHAVE_POSTGRESQL=False \
 		  awa/ada-ado/src/drivers/ado-drivers-initialize.gpb $@
 
+# Install the AWA UML model in Dynamo UML search path
 awa/dynamo/config/uml/AWA.xmi: awa/awa/uml/awa.zargo
-	# Install the AWA UML model in Dynamo UML search path
 	unzip -cq awa/awa/uml/awa.zargo awa.xmi > awa/dynamo/config/uml/AWA.xmi
 
 build-dynamo: bin/dynamo awa/dynamo/config/uml/AWA.xmi
