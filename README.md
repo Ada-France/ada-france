@@ -20,8 +20,31 @@ Ensuite lancer la compilation avec:
 
 # Lancement
 
+## Setup
+
+Pour configurer le serveur la première fois, lancer la commande:
+
+```
+  bin/adafr-server -v setup adafr
+```
+
+Faire le setup dans le navigateur en allant sur la page: http://localhost:8080/adafr/index.html
+Le setup permet de:
+
+* définir l'accès à la base de données,
+* configurer les secrets pour OAuth2 (Google, Facebook),
+* configurer les paramètres SMTP pour envoyer les mails
+
+Une fois le setup terminée, l'application Ada France est lancée.
+
+Pour re-faire une setup, supprimer le fichier `.initialized` et relancer la commande.
+
+## Lancement normal:
+
 Pour lancer l'application, utilisez:
 ```
-   bin/adafr-server start
+   bin/adafr-server start --upload=./upload
 ```
-      
+
+Par défault, la base de donnée SQLite est créee avec l'utilisateur `admin` at `ada-france.org` et mot de passe `admin`.
+Cet utilisateur n'existe pas en prod, inutile d'essayer!
