@@ -10,7 +10,10 @@ aggregate project adafr is
                          "awa/ada-el",
                          "awa/ada-keystore/.alire",
                          "awa/ada-keystore",
+                         "awa/ada-ado/.alire/sqlite",
+                         "awa/ada-ado/.alire/postgresql",
                          "awa/ada-ado/.alire/mysql",
+                         "awa/ada-ado/.alire/all",
                          "awa/ada-ado/.alire",
                          "awa/ada-ado",
                          "awa/ada-security/.alire",
@@ -26,7 +29,7 @@ aggregate project adafr is
                          "awa/.alire",
                          "awa/awa");
 
-   for Create_Missing_Dirs use "True";
+--   for Create_Missing_Dirs use "True";
 
    Build_Dynamo : Adafr_Config.Yes_No := external ("BUILD_DYNAMO", "yes");
 
