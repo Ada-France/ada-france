@@ -302,6 +302,104 @@ INSERT OR IGNORE INTO awa_audit_field (entity_type, name)
   VALUES ((SELECT id FROM entity_type WHERE name = "awa_user"), "country");
 INSERT OR IGNORE INTO awa_audit_field (entity_type, name)
   VALUES ((SELECT id FROM entity_type WHERE name = "awa_user"), "name");
+/* Copied from adafr-sqlite.sql*/
+/* File generated automatically by dynamo */
+/* The Member table holds the list of Ada France members with the necessary
+information so that we can send them the Ada User Journal if they are
+member of Ada Europe. The member is first in the PENDING state
+until we receive the validation of the email address. Then, it enters
+int the WAITNG_PAYMENT state until the payment is acknowledged.
+The payment process is manual (wire transfer or by check) and
+switch to MEMBER once it is received.the member identifier */
+CREATE TABLE IF NOT EXISTS adafr_member (
+  /*  */
+  `id` BIGINT NOT NULL,
+  /* optimistic locking version */
+  `version` INTEGER NOT NULL,
+  /* the member's first name. */
+  `first_name` VARCHAR(255) NOT NULL,
+  /* the member's last name. */
+  `last_name` VARCHAR(255) NOT NULL,
+  /* the optional member's company name. */
+  `company` VARCHAR(255) NOT NULL,
+  /* first adress field. */
+  `address1` VARCHAR(255) NOT NULL,
+  /* second address field. */
+  `address2` VARCHAR(255) NOT NULL,
+  /* third address field. */
+  `address3` VARCHAR(255) NOT NULL,
+  /* address postal code. */
+  `postal_code` VARCHAR(255) NOT NULL,
+  /* address tiown. */
+  `city` VARCHAR(255) NOT NULL,
+  /* the country. */
+  `country` VARCHAR(255) NOT NULL,
+  /* the date when the member record was created. */
+  `create_date` DATETIME NOT NULL,
+  /* the date when the member's email was validated. */
+  `mail_verify_date` DATETIME ,
+  /* the date when the payment was received. */
+  `payment_date` DATETIME ,
+  /*  */
+  `status` TINYINT NOT NULL,
+  /* whether the member is also member of Ada Europe. */
+  `ada_europe` TINYINT NOT NULL,
+  /* secure key salt. */
+  `salt` VARCHAR(255) NOT NULL,
+  /* date when the information was updated. */
+  `update_date` DATETIME NOT NULL,
+  /* the subscription deadline */
+  `subscription_deadline` DATE ,
+  /* amount in euros */
+  `amount` INTEGER NOT NULL,
+  /*  */
+  `receipt_id` BIGINT ,
+  /* the member's email address. */
+  `email_id` BIGINT NOT NULL,
+  PRIMARY KEY (`id`)
+);
+/*  */
+CREATE TABLE IF NOT EXISTS adafr_receipt (
+  /* the receipt id */
+  `id` BIGINT NOT NULL,
+  /* the receipt creation date */
+  `create_date` DATE NOT NULL,
+  /* the amount in euros */
+  `amount` INTEGER NOT NULL,
+  /*  */
+  `member` BIGINT NOT NULL,
+  PRIMARY KEY (`id`)
+);
+INSERT OR IGNORE INTO entity_type (name) VALUES ("adafr_member");
+INSERT OR IGNORE INTO entity_type (name) VALUES ("adafr_receipt");
+INSERT OR IGNORE INTO awa_audit_field (entity_type, name)
+  VALUES ((SELECT id FROM entity_type WHERE name = "adafr_member"), "first_name");
+INSERT OR IGNORE INTO awa_audit_field (entity_type, name)
+  VALUES ((SELECT id FROM entity_type WHERE name = "adafr_member"), "last_name");
+INSERT OR IGNORE INTO awa_audit_field (entity_type, name)
+  VALUES ((SELECT id FROM entity_type WHERE name = "adafr_member"), "company");
+INSERT OR IGNORE INTO awa_audit_field (entity_type, name)
+  VALUES ((SELECT id FROM entity_type WHERE name = "adafr_member"), "address1");
+INSERT OR IGNORE INTO awa_audit_field (entity_type, name)
+  VALUES ((SELECT id FROM entity_type WHERE name = "adafr_member"), "address2");
+INSERT OR IGNORE INTO awa_audit_field (entity_type, name)
+  VALUES ((SELECT id FROM entity_type WHERE name = "adafr_member"), "address3");
+INSERT OR IGNORE INTO awa_audit_field (entity_type, name)
+  VALUES ((SELECT id FROM entity_type WHERE name = "adafr_member"), "postal_code");
+INSERT OR IGNORE INTO awa_audit_field (entity_type, name)
+  VALUES ((SELECT id FROM entity_type WHERE name = "adafr_member"), "city");
+INSERT OR IGNORE INTO awa_audit_field (entity_type, name)
+  VALUES ((SELECT id FROM entity_type WHERE name = "adafr_member"), "country");
+INSERT OR IGNORE INTO awa_audit_field (entity_type, name)
+  VALUES ((SELECT id FROM entity_type WHERE name = "adafr_member"), "mail_verify_date");
+INSERT OR IGNORE INTO awa_audit_field (entity_type, name)
+  VALUES ((SELECT id FROM entity_type WHERE name = "adafr_member"), "payment_date");
+INSERT OR IGNORE INTO awa_audit_field (entity_type, name)
+  VALUES ((SELECT id FROM entity_type WHERE name = "adafr_member"), "status");
+INSERT OR IGNORE INTO awa_audit_field (entity_type, name)
+  VALUES ((SELECT id FROM entity_type WHERE name = "adafr_member"), "ada_europe");
+INSERT OR IGNORE INTO awa_audit_field (entity_type, name)
+  VALUES ((SELECT id FROM entity_type WHERE name = "adafr_member"), "amount");
 /* Copied from awa-workspaces-sqlite.sql*/
 /* File generated automatically by dynamo */
 /*  */
@@ -432,6 +530,135 @@ Date: 2013-02-23the database entity to which the tag is associated */
 );
 INSERT OR IGNORE INTO entity_type (name) VALUES ("awa_tag");
 INSERT OR IGNORE INTO entity_type (name) VALUES ("awa_tagged_entity");
+/* Copied from awa-counters-sqlite.sql*/
+/* File generated automatically by dynamo */
+/*  */
+CREATE TABLE IF NOT EXISTS awa_counter (
+  /* the object associated with the counter. */
+  `object_id` BIGINT NOT NULL,
+  /* the day associated with the counter. */
+  `date` DATE NOT NULL,
+  /* the counter value. */
+  `counter` INTEGER NOT NULL,
+  /* the counter definition identifier. */
+  `definition_id` BIGINT NOT NULL,
+  PRIMARY KEY (`object_id`, `date`, `definition_id`)
+);
+/* A counter definition defines what the counter represents. It uniquely identifies
+the counter for the Counter table. A counter may be associated with a database
+table. In that case, the counter definition has a relation to the corresponding Entity_Type. */
+CREATE TABLE IF NOT EXISTS awa_counter_definition (
+  /* the counter name. */
+  `name` VARCHAR(255) NOT NULL,
+  /* the counter unique id. */
+  `id` INTEGER NOT NULL,
+  /* the optional entity type that identifies the database table. */
+  `entity_type` INTEGER ,
+  PRIMARY KEY (`id`)
+);
+/*  */
+CREATE TABLE IF NOT EXISTS awa_visit (
+  /* the entity identifier. */
+  `object_id` BIGINT NOT NULL,
+  /* the number of times the entity was visited by the user. */
+  `counter` INTEGER NOT NULL,
+  /* the date and time when the entity was last visited. */
+  `date` DATETIME NOT NULL,
+  /* the user who visited the entity. */
+  `user` BIGINT NOT NULL,
+  /* the counter definition identifier. */
+  `definition_id` BIGINT NOT NULL,
+  PRIMARY KEY (`object_id`, `user`, `definition_id`)
+);
+INSERT OR IGNORE INTO entity_type (name) VALUES ("awa_counter");
+INSERT OR IGNORE INTO entity_type (name) VALUES ("awa_counter_definition");
+INSERT OR IGNORE INTO entity_type (name) VALUES ("awa_visit");
+/* Copied from awa-blogs-sqlite.sql*/
+/* File generated automatically by dynamo */
+/*  */
+CREATE TABLE IF NOT EXISTS awa_blog (
+  /* the blog identifier */
+  `id` BIGINT NOT NULL,
+  /* the blog name */
+  `name` VARCHAR(255) NOT NULL,
+  /* the version */
+  `version` INTEGER NOT NULL,
+  /* the blog uuid */
+  `uid` VARCHAR(255) NOT NULL,
+  /* the blog creation date */
+  `create_date` DATETIME NOT NULL,
+  /* the date when the blog was updated */
+  `update_date` DATETIME NOT NULL,
+  /* The blog base URL. */
+  `url` VARCHAR(255) NOT NULL,
+  /* the default post format. */
+  `format` TINYINT NOT NULL,
+  /* the default image URL to be used */
+  `default_image_url` VARCHAR(255) NOT NULL,
+  /* the workspace that this blog belongs to */
+  `workspace_id` BIGINT NOT NULL,
+  PRIMARY KEY (`id`)
+);
+/*  */
+CREATE TABLE IF NOT EXISTS awa_post (
+  /* the post identifier */
+  `id` BIGINT NOT NULL,
+  /* the post title */
+  `title` VARCHAR(255) NOT NULL,
+  /* the post text content */
+  `text` TEXT NOT NULL,
+  /* the post creation date */
+  `create_date` DATETIME NOT NULL,
+  /* the post URI */
+  `uri` VARCHAR(255) NOT NULL,
+  /*  */
+  `version` INTEGER NOT NULL,
+  /* the post publication date */
+  `publish_date` DATETIME ,
+  /* the post status */
+  `status` TINYINT NOT NULL,
+  /*  */
+  `allow_comments` TINYINT NOT NULL,
+  /* the number of times the post was read. */
+  `read_count` INTEGER NOT NULL,
+  /* the post summary. */
+  `summary` VARCHAR(4096) NOT NULL,
+  /* the blog post format. */
+  `format` TINYINT NOT NULL,
+  /*  */
+  `author_id` BIGINT NOT NULL,
+  /*  */
+  `blog_id` BIGINT NOT NULL,
+  /*  */
+  `image_id` BIGINT ,
+  PRIMARY KEY (`id`)
+);
+INSERT OR IGNORE INTO entity_type (name) VALUES ("awa_blog");
+INSERT OR IGNORE INTO entity_type (name) VALUES ("awa_post");
+INSERT OR IGNORE INTO awa_audit_field (entity_type, name)
+  VALUES ((SELECT id FROM entity_type WHERE name = "awa_blog"), "name");
+INSERT OR IGNORE INTO awa_audit_field (entity_type, name)
+  VALUES ((SELECT id FROM entity_type WHERE name = "awa_blog"), "uid");
+INSERT OR IGNORE INTO awa_audit_field (entity_type, name)
+  VALUES ((SELECT id FROM entity_type WHERE name = "awa_blog"), "url");
+INSERT OR IGNORE INTO awa_audit_field (entity_type, name)
+  VALUES ((SELECT id FROM entity_type WHERE name = "awa_blog"), "format");
+INSERT OR IGNORE INTO awa_audit_field (entity_type, name)
+  VALUES ((SELECT id FROM entity_type WHERE name = "awa_blog"), "default_image_url");
+INSERT OR IGNORE INTO awa_audit_field (entity_type, name)
+  VALUES ((SELECT id FROM entity_type WHERE name = "awa_post"), "title");
+INSERT OR IGNORE INTO awa_audit_field (entity_type, name)
+  VALUES ((SELECT id FROM entity_type WHERE name = "awa_post"), "uri");
+INSERT OR IGNORE INTO awa_audit_field (entity_type, name)
+  VALUES ((SELECT id FROM entity_type WHERE name = "awa_post"), "publish_date");
+INSERT OR IGNORE INTO awa_audit_field (entity_type, name)
+  VALUES ((SELECT id FROM entity_type WHERE name = "awa_post"), "status");
+INSERT OR IGNORE INTO awa_audit_field (entity_type, name)
+  VALUES ((SELECT id FROM entity_type WHERE name = "awa_post"), "allow_comments");
+INSERT OR IGNORE INTO awa_audit_field (entity_type, name)
+  VALUES ((SELECT id FROM entity_type WHERE name = "awa_post"), "summary");
+INSERT OR IGNORE INTO awa_audit_field (entity_type, name)
+  VALUES ((SELECT id FROM entity_type WHERE name = "awa_post"), "format");
 /* Copied from awa-storages-sqlite.sql*/
 /* File generated automatically by dynamo */
 /* The uri member holds the URI if the storage type is URL.
@@ -592,135 +819,6 @@ CREATE TABLE IF NOT EXISTS awa_image (
   PRIMARY KEY (`id`)
 );
 INSERT OR IGNORE INTO entity_type (name) VALUES ("awa_image");
-/* Copied from awa_counters-sqlite.sql*/
-/* File generated automatically by dynamo */
-/*  */
-CREATE TABLE IF NOT EXISTS awa_counter (
-  /* the object associated with the counter. */
-  `object_id` BIGINT NOT NULL,
-  /* the day associated with the counter. */
-  `date` DATE NOT NULL,
-  /* the counter value. */
-  `counter` INTEGER NOT NULL,
-  /* the counter definition identifier. */
-  `definition_id` BIGINT NOT NULL,
-  PRIMARY KEY (`object_id`, `date`, `definition_id`)
-);
-/* A counter definition defines what the counter represents. It uniquely identifies
-the counter for the Counter table. A counter may be associated with a database
-table. In that case, the counter definition has a relation to the corresponding Entity_Type. */
-CREATE TABLE IF NOT EXISTS awa_counter_definition (
-  /* the counter name. */
-  `name` VARCHAR(255) NOT NULL,
-  /* the counter unique id. */
-  `id` INTEGER NOT NULL,
-  /* the optional entity type that identifies the database table. */
-  `entity_type` INTEGER ,
-  PRIMARY KEY (`id`)
-);
-/*  */
-CREATE TABLE IF NOT EXISTS awa_visit (
-  /* the entity identifier. */
-  `object_id` BIGINT NOT NULL,
-  /* the number of times the entity was visited by the user. */
-  `counter` INTEGER NOT NULL,
-  /* the date and time when the entity was last visited. */
-  `date` DATETIME NOT NULL,
-  /* the user who visited the entity. */
-  `user` BIGINT NOT NULL,
-  /* the counter definition identifier. */
-  `definition_id` BIGINT NOT NULL,
-  PRIMARY KEY (`object_id`, `user`, `definition_id`)
-);
-INSERT OR IGNORE INTO entity_type (name) VALUES ("awa_counter");
-INSERT OR IGNORE INTO entity_type (name) VALUES ("awa_counter_definition");
-INSERT OR IGNORE INTO entity_type (name) VALUES ("awa_visit");
-/* Copied from awa-blogs-sqlite.sql*/
-/* File generated automatically by dynamo */
-/*  */
-CREATE TABLE IF NOT EXISTS awa_blog (
-  /* the blog identifier */
-  `id` BIGINT NOT NULL,
-  /* the blog name */
-  `name` VARCHAR(255) NOT NULL,
-  /* the version */
-  `version` INTEGER NOT NULL,
-  /* the blog uuid */
-  `uid` VARCHAR(255) NOT NULL,
-  /* the blog creation date */
-  `create_date` DATETIME NOT NULL,
-  /* the date when the blog was updated */
-  `update_date` DATETIME NOT NULL,
-  /* The blog base URL. */
-  `url` VARCHAR(255) NOT NULL,
-  /* the default post format. */
-  `format` TINYINT NOT NULL,
-  /* the default image URL to be used */
-  `default_image_url` VARCHAR(255) NOT NULL,
-  /* the workspace that this blog belongs to */
-  `workspace_id` BIGINT NOT NULL,
-  PRIMARY KEY (`id`)
-);
-/*  */
-CREATE TABLE IF NOT EXISTS awa_post (
-  /* the post identifier */
-  `id` BIGINT NOT NULL,
-  /* the post title */
-  `title` VARCHAR(255) NOT NULL,
-  /* the post text content */
-  `text` TEXT NOT NULL,
-  /* the post creation date */
-  `create_date` DATETIME NOT NULL,
-  /* the post URI */
-  `uri` VARCHAR(255) NOT NULL,
-  /*  */
-  `version` INTEGER NOT NULL,
-  /* the post publication date */
-  `publish_date` DATETIME ,
-  /* the post status */
-  `status` TINYINT NOT NULL,
-  /*  */
-  `allow_comments` TINYINT NOT NULL,
-  /* the number of times the post was read. */
-  `read_count` INTEGER NOT NULL,
-  /* the post summary. */
-  `summary` VARCHAR(4096) NOT NULL,
-  /* the blog post format. */
-  `format` TINYINT NOT NULL,
-  /*  */
-  `author_id` BIGINT NOT NULL,
-  /*  */
-  `blog_id` BIGINT NOT NULL,
-  /*  */
-  `image_id` BIGINT ,
-  PRIMARY KEY (`id`)
-);
-INSERT OR IGNORE INTO entity_type (name) VALUES ("awa_blog");
-INSERT OR IGNORE INTO entity_type (name) VALUES ("awa_post");
-INSERT OR IGNORE INTO awa_audit_field (entity_type, name)
-  VALUES ((SELECT id FROM entity_type WHERE name = "awa_blog"), "name");
-INSERT OR IGNORE INTO awa_audit_field (entity_type, name)
-  VALUES ((SELECT id FROM entity_type WHERE name = "awa_blog"), "uid");
-INSERT OR IGNORE INTO awa_audit_field (entity_type, name)
-  VALUES ((SELECT id FROM entity_type WHERE name = "awa_blog"), "url");
-INSERT OR IGNORE INTO awa_audit_field (entity_type, name)
-  VALUES ((SELECT id FROM entity_type WHERE name = "awa_blog"), "format");
-INSERT OR IGNORE INTO awa_audit_field (entity_type, name)
-  VALUES ((SELECT id FROM entity_type WHERE name = "awa_blog"), "default_image_url");
-INSERT OR IGNORE INTO awa_audit_field (entity_type, name)
-  VALUES ((SELECT id FROM entity_type WHERE name = "awa_post"), "title");
-INSERT OR IGNORE INTO awa_audit_field (entity_type, name)
-  VALUES ((SELECT id FROM entity_type WHERE name = "awa_post"), "uri");
-INSERT OR IGNORE INTO awa_audit_field (entity_type, name)
-  VALUES ((SELECT id FROM entity_type WHERE name = "awa_post"), "publish_date");
-INSERT OR IGNORE INTO awa_audit_field (entity_type, name)
-  VALUES ((SELECT id FROM entity_type WHERE name = "awa_post"), "status");
-INSERT OR IGNORE INTO awa_audit_field (entity_type, name)
-  VALUES ((SELECT id FROM entity_type WHERE name = "awa_post"), "allow_comments");
-INSERT OR IGNORE INTO awa_audit_field (entity_type, name)
-  VALUES ((SELECT id FROM entity_type WHERE name = "awa_post"), "summary");
-INSERT OR IGNORE INTO awa_audit_field (entity_type, name)
-  VALUES ((SELECT id FROM entity_type WHERE name = "awa_post"), "format");
 /* Copied from awa-wikis-sqlite.sql*/
 /* File generated automatically by dynamo */
 /*  */
@@ -812,101 +910,73 @@ INSERT OR IGNORE INTO awa_audit_field (entity_type, name)
   VALUES ((SELECT id FROM entity_type WHERE name = "awa_wiki_space"), "is_public");
 INSERT OR IGNORE INTO awa_audit_field (entity_type, name)
   VALUES ((SELECT id FROM entity_type WHERE name = "awa_wiki_space"), "format");
-/* Copied from adafr-sqlite.sql*/
-/* File generated automatically by dynamo */
-/* The Member table holds the list of Ada France members with the necessary
-information so that we can send them the Ada User Journal if they are
-member of Ada Europe. The member is first in the PENDING state
-until we receive the validation of the email address. Then, it enters
-int the WAITNG_PAYMENT state until the payment is acknowledged.
-The payment process is manual (wire transfer or by check) and
-switch to MEMBER once it is received.the member identifier */
-CREATE TABLE IF NOT EXISTS adafr_member (
-  /*  */
-  `id` BIGINT NOT NULL,
-  /* optimistic locking version */
-  `version` INTEGER NOT NULL,
-  /* the member's first name. */
-  `first_name` VARCHAR(255) NOT NULL,
-  /* the member's last name. */
-  `last_name` VARCHAR(255) NOT NULL,
-  /* the optional member's company name. */
-  `company` VARCHAR(255) NOT NULL,
-  /* first adress field. */
-  `address1` VARCHAR(255) NOT NULL,
-  /* second address field. */
-  `address2` VARCHAR(255) NOT NULL,
-  /* third address field. */
-  `address3` VARCHAR(255) NOT NULL,
-  /* address postal code. */
-  `postal_code` VARCHAR(255) NOT NULL,
-  /* address tiown. */
-  `city` VARCHAR(255) NOT NULL,
-  /* the country. */
-  `country` VARCHAR(255) NOT NULL,
-  /* the date when the member record was created. */
-  `create_date` DATETIME NOT NULL,
-  /* the date when the member's email was validated. */
-  `mail_verify_date` DATETIME ,
-  /* the date when the payment was received. */
-  `payment_date` DATETIME ,
-  /*  */
-  `status` TINYINT NOT NULL,
-  /* whether the member is also member of Ada Europe. */
-  `ada_europe` TINYINT NOT NULL,
-  /* secure key salt. */
-  `salt` VARCHAR(255) NOT NULL,
-  /* date when the information was updated. */
-  `update_date` DATETIME NOT NULL,
-  /* the subscription deadline */
-  `subscription_deadline` DATE ,
-  /* amount in euros */
-  `amount` INTEGER NOT NULL,
-  /*  */
-  `receipt_id` BIGINT ,
-  /* the member's email address. */
-  `email_id` BIGINT NOT NULL,
-  PRIMARY KEY (`id`)
-);
-/*  */
-CREATE TABLE IF NOT EXISTS adafr_receipt (
-  /* the receipt id */
-  `id` BIGINT NOT NULL,
-  /* the receipt creation date */
-  `create_date` DATE NOT NULL,
-  /* the amount in euros */
-  `amount` INTEGER NOT NULL,
-  /*  */
-  `member` BIGINT NOT NULL,
-  PRIMARY KEY (`id`)
-);
-INSERT OR IGNORE INTO entity_type (name) VALUES ("adafr_member");
-INSERT OR IGNORE INTO entity_type (name) VALUES ("adafr_receipt");
-INSERT OR IGNORE INTO awa_audit_field (entity_type, name)
-  VALUES ((SELECT id FROM entity_type WHERE name = "adafr_member"), "first_name");
-INSERT OR IGNORE INTO awa_audit_field (entity_type, name)
-  VALUES ((SELECT id FROM entity_type WHERE name = "adafr_member"), "last_name");
-INSERT OR IGNORE INTO awa_audit_field (entity_type, name)
-  VALUES ((SELECT id FROM entity_type WHERE name = "adafr_member"), "company");
-INSERT OR IGNORE INTO awa_audit_field (entity_type, name)
-  VALUES ((SELECT id FROM entity_type WHERE name = "adafr_member"), "address1");
-INSERT OR IGNORE INTO awa_audit_field (entity_type, name)
-  VALUES ((SELECT id FROM entity_type WHERE name = "adafr_member"), "address2");
-INSERT OR IGNORE INTO awa_audit_field (entity_type, name)
-  VALUES ((SELECT id FROM entity_type WHERE name = "adafr_member"), "address3");
-INSERT OR IGNORE INTO awa_audit_field (entity_type, name)
-  VALUES ((SELECT id FROM entity_type WHERE name = "adafr_member"), "postal_code");
-INSERT OR IGNORE INTO awa_audit_field (entity_type, name)
-  VALUES ((SELECT id FROM entity_type WHERE name = "adafr_member"), "city");
-INSERT OR IGNORE INTO awa_audit_field (entity_type, name)
-  VALUES ((SELECT id FROM entity_type WHERE name = "adafr_member"), "country");
-INSERT OR IGNORE INTO awa_audit_field (entity_type, name)
-  VALUES ((SELECT id FROM entity_type WHERE name = "adafr_member"), "mail_verify_date");
-INSERT OR IGNORE INTO awa_audit_field (entity_type, name)
-  VALUES ((SELECT id FROM entity_type WHERE name = "adafr_member"), "payment_date");
-INSERT OR IGNORE INTO awa_audit_field (entity_type, name)
-  VALUES ((SELECT id FROM entity_type WHERE name = "adafr_member"), "status");
-INSERT OR IGNORE INTO awa_audit_field (entity_type, name)
-  VALUES ((SELECT id FROM entity_type WHERE name = "adafr_member"), "ada_europe");
-INSERT OR IGNORE INTO awa_audit_field (entity_type, name)
-  VALUES ((SELECT id FROM entity_type WHERE name = "adafr_member"), "amount");
+/* Copied from adafr-init-sqlite.sql*/
+/* Setup permission */
+INSERT INTO `awa_permission` VALUES (1,'url');
+INSERT INTO `awa_permission` VALUES (2,'blog-create');
+INSERT INTO `awa_permission` VALUES (3,'blog-delete');
+INSERT INTO `awa_permission` VALUES (4,'blog-create-post');
+INSERT INTO `awa_permission` VALUES (5,'blog-delete-post');
+INSERT INTO `awa_permission` VALUES (6,'blog-update-post');
+INSERT INTO `awa_permission` VALUES (7,'storage-create');
+INSERT INTO `awa_permission` VALUES (8,'storage-delete');
+INSERT INTO `awa_permission` VALUES (9,'folder-create');
+INSERT INTO `awa_permission` VALUES (10,'workspace-create');
+INSERT INTO `awa_permission` VALUES (11,'wiki-page-create');
+INSERT INTO `awa_permission` VALUES (12,'wiki-page-delete');
+INSERT INTO `awa_permission` VALUES (13,'wiki-page-update');
+INSERT INTO `awa_permission` VALUES (14,'wiki-page-view');
+INSERT INTO `awa_permission` VALUES (15,'wiki-space-create');
+INSERT INTO `awa_permission` VALUES (16,'wiki-space-delete');
+INSERT INTO `awa_permission` VALUES (17,'wiki-space-update');
+INSERT INTO `awa_permission` VALUES (18,'anonymous');
+INSERT INTO `awa_permission` VALUES (19,'logged-user');
+INSERT INTO `awa_permission` VALUES (20,'workspaces-create');
+INSERT INTO `awa_permission` VALUES (21,'blog-add-comment');
+INSERT INTO `awa_permission` VALUES (22,'blog-publish-comment');
+INSERT INTO `awa_permission` VALUES (23,'blog-delete-comment');
+INSERT INTO `awa_permission` VALUES (24,'workspace-invite-user');
+INSERT INTO `awa_permission` VALUES (25,'workspace-delete-user');
+INSERT INTO `awa_permission` VALUES (26,'member-view');
+INSERT INTO `awa_permission` VALUES (27,'member-update');
+INSERT INTO `awa_permission` VALUES (28,'member-create');
+
+/* Setup ACL for super admin */
+INSERT INTO `awa_acl` VALUES (1,1,0,1,1,(SELECT id from entity_type where name = 'awa_workspace'),2);
+INSERT INTO `awa_acl` VALUES (2,1,0,1,1,(SELECT id from entity_type where name = 'awa_workspace'),7);
+INSERT INTO `awa_acl` VALUES (3,1,0,1,1,(SELECT id from entity_type where name = 'awa_workspace'),8);
+INSERT INTO `awa_acl` VALUES (4,1,0,1,1,(SELECT id from entity_type where name = 'awa_workspace'),9);
+INSERT INTO `awa_acl` VALUES (5,1,0,1,1,(SELECT id from entity_type where name = 'awa_workspace'),15);
+INSERT INTO `awa_acl` VALUES (8,1,0,1,1,(SELECT id from entity_type where name = 'awa_blog'),3);
+INSERT INTO `awa_acl` VALUES (9,1,0,1,1,(SELECT id from entity_type where name = 'awa_blog'),4);
+INSERT INTO `awa_acl` VALUES (10,1,0,1,1,(SELECT id from entity_type where name = 'awa_blog'),5);
+INSERT INTO `awa_acl` VALUES (11,1,0,1,1,(SELECT id from entity_type where name = 'awa_blog'),6);
+INSERT INTO `awa_acl` VALUES (12,1,0,1,1,(SELECT id from entity_type where name = 'awa_blog'),21);
+INSERT INTO `awa_acl` VALUES (13,1,0,1,1,(SELECT id from entity_type where name = 'awa_blog'),22);
+INSERT INTO `awa_acl` VALUES (14,1,0,1,1,(SELECT id from entity_type where name = 'awa_blog'),23);
+INSERT INTO `awa_acl` VALUES (15,1,0,1,1,(SELECT id from entity_type where name = 'awa_wiki_space'),11);
+INSERT INTO `awa_acl` VALUES (16,1,0,1,1,(SELECT id from entity_type where name = 'awa_wiki_space'),12);
+INSERT INTO `awa_acl` VALUES (17,1,0,1,1,(SELECT id from entity_type where name = 'awa_wiki_space'),13);
+INSERT INTO `awa_acl` VALUES (18,1,0,1,1,(SELECT id from entity_type where name = 'awa_wiki_space'),14);
+INSERT INTO `awa_acl` VALUES (19,1,0,1,1,(SELECT id from entity_type where name = 'awa_wiki_space'),16);
+INSERT INTO `awa_acl` VALUES (20,1,0,1,1,(SELECT id from entity_type where name = 'awa_wiki_space'),17);
+INSERT INTO `awa_acl` VALUES (21,1,0,1,1,(SELECT id from entity_type where name = 'awa_workspace'),24);
+INSERT INTO `awa_acl` VALUES (22,1,0,1,1,(SELECT id from entity_type where name = 'awa_workspace'),25);
+INSERT INTO `awa_acl` VALUES (23,1,0,1,1,(SELECT id from entity_type where name = 'awa_workspace'),26);
+INSERT INTO `awa_acl` VALUES (23,1,0,1,1,(SELECT id from entity_type where name = 'awa_workspace'),27);
+INSERT INTO `awa_acl` VALUES (23,1,0,1,1,(SELECT id from entity_type where name = 'awa_workspace'),28);
+
+INSERT INTO `sequence` VALUES ('awa_acl',1,101,100);
+INSERT INTO `sequence` VALUES ('awa_blog',1,101,100);
+INSERT INTO `sequence` VALUES ('awa_email',1,101,100);
+INSERT INTO `sequence` VALUES ('awa_user',1,101,100);
+INSERT INTO `sequence` VALUES ('awa_wiki_space',1,101,100);
+INSERT INTO `sequence` VALUES ('awa_workspace',1,601,100);
+INSERT INTO `sequence` VALUES ('awa_workspace_member',1,601,100);
+
+INSERT INTO `awa_blog` VALUES (1,'Ada France',1,'8628f625c0602f47396ea8013da3411674243a11','2017-05-17 16:16:10','1901-01-01 23:00:00','https://www.ada-france.org',1,'/adafr/images/AdaFrance-small.png',1);
+INSERT INTO `awa_wiki_space` VALUES (1,'Ada France',0,3,'2017-05-17 16:12:13','','',4,1);
+INSERT INTO `awa_workspace` VALUES (1,1,'2017-05-17 16:12:04',1);
+INSERT INTO `awa_workspace_member` VALUES (1,'2017-05-17 16:12:04','Admin',1,1);
+INSERT INTO `awa_email` VALUES ('admin@ada-france.org', 0, '1901-01-01 23:00:00.00', 1, 1, 1);
+INSERT INTO `awa_user` VALUES('Admin','', '3CJkIMsK/TSSTpVnnwUf1irOQH4=', '', '', 'Admin', 1, 1, 'qPnDIWMGFg2IVCZAL8dRvvYbcuM=', 1);
