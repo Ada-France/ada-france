@@ -30,7 +30,24 @@
       field.name,
       audit.old_value,
       audit.new_value,
-      IF(user.id IS NULL, CONCAT(member.first_name, ' ', member.last_name), user.name) AS author
+      CASE
+        WHEN user.id IS NULL THEN CONCAT(member.first_name, ' ', member.last_name) ELSE user.name END AS author
+    FROM awa_audit AS audit
+    INNER JOIN awa_audit_field AS field ON audit.field = field.id AND audit.entity_type = $entity_type[adafr_member]
+    INNER JOIN adafr_member AS member ON member.id = :member_id
+    LEFT JOIN awa_session AS session ON audit.session_id = session.id
+    LEFT JOIN awa_user AS user ON session.user_id = user.id
+    WHERE audit.entity_id = :member_id
+    ORDER BY audit.date DESC
+       </sql>
+       <sql driver='sqlite'>
+    SELECT
+      audit.date,
+      field.name,
+      audit.old_value,
+      audit.new_value,
+      CASE
+        WHEN user.id IS NULL THEN member.first_name || ' ' || member.last_name ELSE user.name END AS author
     FROM awa_audit AS audit
     INNER JOIN awa_audit_field AS field ON audit.field = field.id AND audit.entity_type = $entity_type[adafr_member]
     INNER JOIN adafr_member AS member ON member.id = :member_id
