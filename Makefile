@@ -63,6 +63,8 @@ bin/dynamo: setup
 
 else
 
+setup::
+
 build-dynamo:
 
 endif
