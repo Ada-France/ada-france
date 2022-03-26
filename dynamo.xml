@@ -4,7 +4,7 @@
     <property name="is_ado">FALSE</property>
     <property name="license">apache</property>
     <property name="is_gtk">FALSE</property>
-    <property name="build">16</property>
+    <property name="build">19</property>
     <property name="author">Stephane Carrez</property>
     <property name="is_web">TRUE</property>
     <property name="is_tool">FALSE</property>
@@ -15,13 +15,17 @@
     <depend name="awa-mail"></depend>
     <depend name="awa-comments"></depend>
     <depend name="awa-tags"></depend>
-    <depend name="awa_counters"></depend>
+    <depend name="awa-counters"></depend>
     <depend name="awa-blogs"></depend>
     <depend name="awa-storages"></depend>
     <depend name="awa-jobs"></depend>
     <depend name="awa-images"></depend>
     <depend name="awa-wikis"></depend>
-    <depend name="awa_markedit"></depend>
+    <depend name="awa-markedit"></depend>
+    <depend name="awa-trumbowyg"></depend>
+    <depend name="awa-flotcharts"></depend>
     <depend name="setup"></depend>
     <depend name="awa-setup"></depend>
+    <depend name="util"></depend>
+    <depend name="dynamo"></depend>
 </project>
