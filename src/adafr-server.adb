@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  Adafr-server -- Application server
---  Copyright (C) 2020, 2021 Stephane Carrez
+--  Copyright (C) 2020, 2021, 2022 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -28,6 +28,7 @@ with AWA.Commands.List;
 with AWA.Commands.Info;
 
 with ADO.Mysql;
+with ADO.Sqlite;
 
 with Adafr.Applications;
 with Adafr.Globals;
@@ -50,6 +51,7 @@ procedure Adafr.Server is
 begin
    --  Initialize the database drivers (all of them or specific ones).
    ADO.Mysql.Initialize;
+   ADO.Sqlite.Initialize;
    WS.Register_Application (Adafr.Applications.CONTEXT_PATH, Adafr.Globals.App'Access);
 
    Server_Commands.Run (Context, Arguments);
