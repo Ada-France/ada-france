@@ -7,15 +7,6 @@ DROP TABLE IF EXISTS adafr_member;
 DROP TABLE IF EXISTS awa_wiki_space;
 DROP TABLE IF EXISTS awa_wiki_page;
 DROP TABLE IF EXISTS awa_wiki_content;
-/* Copied from awa-blogs-drop-postgresql.sql*/
-/* File generated automatically by dynamo */
-DROP TABLE IF EXISTS awa_post;
-DROP TABLE IF EXISTS awa_blog;
-/* Copied from awa_counters-drop-postgresql.sql*/
-/* File generated automatically by dynamo */
-DROP TABLE IF EXISTS awa_visit;
-DROP TABLE IF EXISTS awa_counter_definition;
-DROP TABLE IF EXISTS awa_counter;
 /* Copied from awa-images-drop-postgresql.sql*/
 /* File generated automatically by dynamo */
 DROP TABLE IF EXISTS awa_image;
@@ -28,6 +19,15 @@ DROP TABLE IF EXISTS awa_store_local;
 DROP TABLE IF EXISTS awa_storage_folder;
 DROP TABLE IF EXISTS awa_storage_data;
 DROP TABLE IF EXISTS awa_storage;
+/* Copied from awa-blogs-drop-postgresql.sql*/
+/* File generated automatically by dynamo */
+DROP TABLE IF EXISTS awa_post;
+DROP TABLE IF EXISTS awa_blog;
+/* Copied from awa-counters-drop-postgresql.sql*/
+/* File generated automatically by dynamo */
+DROP TABLE IF EXISTS awa_visit;
+DROP TABLE IF EXISTS awa_counter_definition;
+DROP TABLE IF EXISTS awa_counter;
 /* Copied from awa-tags-drop-postgresql.sql*/
 /* File generated automatically by dynamo */
 DROP TABLE IF EXISTS awa_tagged_entity;
