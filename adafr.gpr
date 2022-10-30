@@ -22,7 +22,7 @@ with "awa_wikis";
 with "awa_setup";
 with "excel_out_gnat";
 
-project adafr_server is
+project adafr is
 
    Mains := ("adafr-server.adb", "import_archives.adb", "receipt.adb");
    for Main use Mains;
@@ -35,4 +35,4 @@ project adafr_server is
    package Compiler renames Adafr_Config.Compiler;
    package Linker renames Adafr_Config.Linker;
 
-end adafr_server;
+end adafr;

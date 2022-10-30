@@ -1,7 +1,7 @@
 NAME=adafr
 GPRPATH=${NAME}.gpr
-BUILD_COMMAND=alr build
-DYNAMO=alr exec -- dynamo
+BUILD_COMMAND=alr -n build
+DYNAMO=alr -n exec -- dynamo
 
 -include Makefile.conf
 
