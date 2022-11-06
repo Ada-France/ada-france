@@ -27,7 +27,7 @@
             <f:viewParam id='id' value='#{adafrMember.id}' required="true"/>
             <f:viewAction action='#{adafrMember.load}'/>
         </f:metadata>
-        <div id='awa-content' class="adafr-members">
+        <div class="adafr-members">
             <ui:include src="/workspaces/views/workspace-nav.xhtml"/>
             <h3 class="adafr-member-title">
                 Mise à jour de #{adafrMember.first_name} #{adafrMember.last_name}

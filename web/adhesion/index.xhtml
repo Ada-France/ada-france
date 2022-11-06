@@ -11,38 +11,36 @@
         <f:metadata>
             <f:viewAction action="#{wikiSubscribe.load}"/>
         </f:metadata>
-        <div id='awa-content'>
-            <div id="wrap">
-                <div class="main">
-                    <div class="container">
-                        <h1>Adhésion Ada-France et Ada-Europe</h1>
-                    </div>
-                    <div class="container">
-                        <div class="row">
-                            <div class="col-md-12">
-                                <div class="wiki-text">
-                                    <awa:wiki styleClass='wiki-text'
-                                              value="#{wikiSubscribe.content}"
-                                              toc="true"
-                                              links="#{wikiSubscribe.links}"
-                                              plugins="#{wikiSubscribe.plugins}"
-                                              format="#{wikiSubscribe.format}"/>
-                                </div>
-                            </div>
-                            <div class='ui-widget awa-form col-md-8'>
-                                <ui:include src="/WEB-INF/layouts/subscribe-steps.xhtml">
-                                    <ui:param name="step" value="email"/>
-                                </ui:include>
-                            </div>
-                            <div class="col-md-12">
-                                <h:messages id='error' styleClass='awa-error' globalOnly="true"/>
-                                <ajax:include id='mail' async="true"
-                                              src="/adhesion/forms/mail.xhtml"/>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+        <div id="wrap">
+          <div class="main">
+            <div class="container">
+              <h1>Adhésion Ada-France et Ada-Europe</h1>
             </div>
+            <div class="container">
+              <div class="row">
+                <div class="col-md-12">
+                  <div class="wiki-text">
+                    <awa:wiki styleClass='wiki-text'
+                              value="#{wikiSubscribe.content}"
+                              toc="true"
+                              links="#{wikiSubscribe.links}"
+                              plugins="#{wikiSubscribe.plugins}"
+                              format="#{wikiSubscribe.format}"/>
+                  </div>
+                </div>
+                <div class='ui-widget awa-form col-md-8'>
+                  <ui:include src="/WEB-INF/layouts/subscribe-steps.xhtml">
+                    <ui:param name="step" value="email"/>
+                  </ui:include>
+                </div>
+                <div class="col-md-12">
+                  <h:messages id='error' styleClass='awa-error' globalOnly="true"/>
+                  <ajax:include id='mail' async="true"
+                                src="/adhesion/forms/mail.xhtml"/>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
     </ui:define>
 </ui:composition>

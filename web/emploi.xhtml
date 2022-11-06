@@ -31,26 +31,24 @@
             <f:viewAction action="#{jobList.load}"/>
             <f:viewAction action="#{wikiEmploi.load}"/>
         </f:metadata>
-        <div id='awa-content'>
 
-            <div class='grid_9'>
-                <div class="wiki-text">
-                    <awa:wiki styleClass='wiki-text'
-                              value="#{wikiEmploi.content}"
-                              toc="false"
-                              links="#{wikiEmploi.links}"
-                              plugins="#{wikiEmploi.plugins}"
-                              format="#{wikiEmploi.format}"/>
-                </div>
-                <ui:include src="blogs/lists/post-list.xhtml">
-                    <ui:param name="postList" value="#{jobList}"/>
-                    <ui:param name="pageUrl" value="blogs/view.html"/>
-                </ui:include>
-            </div>
+        <div class='grid_9'>
+          <div class="wiki-text">
+            <awa:wiki styleClass='wiki-text'
+                      value="#{wikiEmploi.content}"
+                      toc="false"
+                      links="#{wikiEmploi.links}"
+                      plugins="#{wikiEmploi.plugins}"
+                      format="#{wikiEmploi.format}"/>
+          </div>
+          <ui:include src="blogs/lists/post-list.xhtml">
+            <ui:param name="postList" value="#{jobList}"/>
+            <ui:param name="pageUrl" value="blogs/view.html"/>
+          </ui:include>
+        </div>
 
-            <div class='grid_3 blog-post-info'>
-                <ui:include src="blogs/lists/post-info.xhtml"/>
-            </div>
+        <div class='grid_3 blog-post-info'>
+          <ui:include src="blogs/lists/post-info.xhtml"/>
         </div>
     </ui:define>
 </ui:composition>

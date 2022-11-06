@@ -3,14 +3,13 @@ body {
     font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
     line-height: 1.42857143;
     background-color: #fff;
-    display: flex;
-    flex-direction: column;
 }
 footer {
     background: #e7e7e7;
     margin-top: 0;
     padding-top: 1em;
     border-top: 1px solid #979797;
+    height: auto;
 }
 .navbar {
     margin-bottom: 0px;
@@ -107,6 +106,10 @@ address span {
 .spip {
 }
 
+.workspace-main, .page-news main, .page-jobs main, .page-contact main, .page-wiki main {
+    padding-top: 2em;
+}
+
 /* Page version.html */
 dl.adafr-version {
     float: left;
@@ -159,7 +162,7 @@ dl.adafr-version dd {
 .adafr-bureau dt {
     float: left;
     clear: both;
-    width: 240px;
+    width: 200px;
     height: 24px;
 }
 .adafr-bureau dd {
@@ -178,6 +181,7 @@ dl.adafr-version dd {
 
 .adafr-subscribe {
     margin-top: 1em;
+    margin-bottom: 1em;
     float: left;
 }
 .adafr-subscribe a {
@@ -361,15 +365,18 @@ dl.adafr-version dd {
 
 /* Adaptations from AWA */
 #awa-page {
-    min-height: inherit;
-    flex-grow: 1;
     margin-bottom: 0;
+    margin-left: 0;
+    margin-right: 0;
+    width: 100%;
 }
-.adafr-index #awa-content {
+.adafr-index main {
     padding-top: 0;
 }
-#awa-content {
-    padding-top: 2em;
+main {
+    padding-top: 0;
+    height: auto;
+    position: inherit;
 }
 .awa-error dt label, .asf-error dt label {
     color: #555;
