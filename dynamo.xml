@@ -7,9 +7,12 @@
     <property name="build">19</property>
     <property name="author">Stephane Carrez</property>
     <property name="is_web">TRUE</property>
+    <property name="database">sqlite:///adafr.db?synchronous=OFF&amp;encoding=UTF-8</property>
     <property name="is_tool">FALSE</property>
+    <depend name="util"></depend>
     <depend name="asf"></depend>
     <depend name="ado"></depend>
+    <depend name="dynamo"></depend>
     <depend name="awa"></depend>
     <depend name="awa-workspaces"></depend>
     <depend name="awa-mail"></depend>

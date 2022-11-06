@@ -24,9 +24,7 @@
                 </h:panelGroup>
                 <h:panelGroup rendered="#{adafrMember.status eq 'MEMBER_ADA_EUROPE' and adafrMember.expired}">
                   <p>
-                    Votre adhésion à Ada-France et Ada-Europe a expiré.
-                    Ada-Europe ayant prolongé l'adhésion 2020 d'une année,
-                    vous pouvez renouveler votre adhésion pour 30 euros.
+                    Votre adhésion à Ada-France et Ada-Europe a expiré, vous pouvez la renouveler.
                   </p>
                 </h:panelGroup>
                 <h:messages styleClass='awa-error'/>
@@ -36,7 +34,7 @@
                                   itemLabel="Ada-France (30 euros)" />
                     <f:selectItem id="ada-europe-yes" name="mode"
                                   itemValue="TRUE"
-                                  itemLabel="Ada-France + Ada-Europe (#{adafrMember.expired and adafrMember.status eq 'MEMBER_ADA_EUROPE' ? '30' : 65} euros)" />
+                                  itemLabel="Ada-France + Ada-Europe (65 euros)" />
                 </h:selectOneRadio>
                 <ul class='awa-buttons'>
                     <li>

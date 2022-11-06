@@ -3,19 +3,18 @@
 Ce projet contient les sources de l'application Ada France qui permet
 au site [Ada France](https://www.ada-france.org) de diffuser des informations.
 
+Cette version est basee sur SQLite et utilise Alire pour la construction
+et gestion des dependances.
+
 # Version 1.13 - Mar 2022
 
 - Mise à jour pour le renouvellement des cotisations
 
 # Compilation
 
-Lancer la commande configure:
+Lancer la compilation avec:
 ```
-   ./configure
-```
-Ensuite lancer la compilation avec:
-```
-   make generate build
+make generate build
 ```
 
 # Lancement
