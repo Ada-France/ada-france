@@ -1,7 +1,7 @@
 /* Copied from ado-postgresql.sql*/
 /* File generated automatically by dynamo */
 /* Entity table that enumerates all known database tables */
-CREATE TABLE IF NOT EXISTS entity_type (
+CREATE TABLE IF NOT EXISTS ado_entity_type (
   /* the database table unique entity index */
   "id" SERIAL,
   /* the database entity name */
@@ -9,7 +9,7 @@ CREATE TABLE IF NOT EXISTS entity_type (
   PRIMARY KEY ("id")
 );
 /* Sequence generator */
-CREATE TABLE IF NOT EXISTS sequence (
+CREATE TABLE IF NOT EXISTS ado_sequence (
   /* the sequence name */
   "name" VARCHAR(127) UNIQUE NOT NULL,
   /* the sequence record version */
@@ -20,8 +20,16 @@ CREATE TABLE IF NOT EXISTS sequence (
   "block_size" BIGINT NOT NULL,
   PRIMARY KEY ("name")
 );
-INSERT INTO entity_type (name) VALUES
-('entity_type'), ('sequence')
+/* Database schema version (per module) */
+CREATE TABLE IF NOT EXISTS ado_version (
+  /* the module name */
+  "name" VARCHAR(127) UNIQUE NOT NULL,
+  /* the database version schema for this module */
+  "version" INTEGER NOT NULL,
+  PRIMARY KEY ("name")
+);
+INSERT INTO ado_entity_type (name) VALUES
+('ado_entity_type'), ('ado_sequence'), ('ado_version')
   ON CONFLICT DO NOTHING;
 /* Copied from awa-postgresql.sql*/
 /* File generated automatically by dynamo */
@@ -280,562 +288,32 @@ CREATE TABLE IF NOT EXISTS awa_user (
   "id" BIGINT NOT NULL,
   /* the password salt. */
   "salt" VARCHAR(255) NOT NULL,
+  /* the status of this user. */
+  "status" SMALLINT NOT NULL,
   /*  */
   "email_id" BIGINT NOT NULL,
   PRIMARY KEY ("id")
 );
-INSERT INTO entity_type (name) VALUES
+INSERT INTO ado_entity_type (name) VALUES
 ('awa_audit'), ('awa_audit_field'), ('awa_message'), ('awa_message_type'), ('awa_queue'), ('awa_application'), ('awa_callback'), ('awa_oauth_session'), ('awa_acl'), ('awa_permission'), ('awa_access_key'), ('awa_email'), ('awa_session'), ('awa_user')
   ON CONFLICT DO NOTHING;
 INSERT INTO awa_audit_field (entity_type, name)
-  VALUES ((SELECT id FROM entity_type WHERE name = 'awa_user'), 'first_name')
+  VALUES ((SELECT id FROM ado_entity_type WHERE name = 'awa_user'), 'first_name')
   ON CONFLICT DO NOTHING;
 INSERT INTO awa_audit_field (entity_type, name)
-  VALUES ((SELECT id FROM entity_type WHERE name = 'awa_user'), 'last_name')
+  VALUES ((SELECT id FROM ado_entity_type WHERE name = 'awa_user'), 'last_name')
   ON CONFLICT DO NOTHING;
 INSERT INTO awa_audit_field (entity_type, name)
-  VALUES ((SELECT id FROM entity_type WHERE name = 'awa_user'), 'country')
+  VALUES ((SELECT id FROM ado_entity_type WHERE name = 'awa_user'), 'country')
   ON CONFLICT DO NOTHING;
 INSERT INTO awa_audit_field (entity_type, name)
-  VALUES ((SELECT id FROM entity_type WHERE name = 'awa_user'), 'name')
-  ON CONFLICT DO NOTHING;
-/* Copied from awa-workspaces-postgresql.sql*/
-/* File generated automatically by dynamo */
-/*  */
-CREATE TABLE IF NOT EXISTS awa_invitation (
-  /* the invitation identifier. */
-  "id" BIGINT NOT NULL,
-  /* version optimistic lock. */
-  "version" INTEGER NOT NULL,
-  /* date when the invitation was created and sent. */
-  "create_date" TIMESTAMP NOT NULL,
-  /* the email address to which the invitation was sent. */
-  "email" VARCHAR(255) NOT NULL,
-  /* the invitation message. */
-  "message" text NOT NULL,
-  /* the date when the invitation was accepted. */
-  "acceptance_date" TIMESTAMP ,
-  /* the workspace where the user is invited. */
-  "workspace_id" BIGINT NOT NULL,
-  /*  */
-  "access_key_id" BIGINT ,
-  /* the user being invited. */
-  "invitee_id" BIGINT ,
-  /*  */
-  "inviter_id" BIGINT NOT NULL,
-  /*  */
-  "member_id" BIGINT NOT NULL,
-  PRIMARY KEY ("id")
-);
-/* The workspace controls the features available in the application
-for a set of users: the workspace members.  A user could create
-several workspaces and be part of several workspaces that other
-users have created. */
-CREATE TABLE IF NOT EXISTS awa_workspace (
-  /* the workspace identifier */
-  "id" BIGINT NOT NULL,
-  /*  */
-  "version" INTEGER NOT NULL,
-  /*  */
-  "create_date" TIMESTAMP NOT NULL,
-  /*  */
-  "owner_id" BIGINT NOT NULL,
-  PRIMARY KEY ("id")
-);
-/*  */
-CREATE TABLE IF NOT EXISTS awa_workspace_feature (
-  /*  */
-  "id" BIGINT NOT NULL,
-  /*  */
-  "limit" INTEGER NOT NULL,
-  /*  */
-  "workspace_id" BIGINT NOT NULL,
-  PRIMARY KEY ("id")
-);
-/* The workspace member indicates the users who
-are part of the workspace. The join_date is NULL when
-a user was invited but has not accepted the invitation. */
-CREATE TABLE IF NOT EXISTS awa_workspace_member (
-  /*  */
-  "id" BIGINT NOT NULL,
-  /* the date when the user has joined the workspace. */
-  "join_date" TIMESTAMP ,
-  /* the member role. */
-  "role" VARCHAR(255) NOT NULL,
-  /*  */
-  "member_id" BIGINT NOT NULL,
-  /*  */
-  "workspace_id" BIGINT NOT NULL,
-  PRIMARY KEY ("id")
-);
-INSERT INTO entity_type (name) VALUES
-('awa_invitation'), ('awa_workspace'), ('awa_workspace_feature'), ('awa_workspace_member')
-  ON CONFLICT DO NOTHING;
-/* Copied from awa-comments-postgresql.sql*/
-/* File generated automatically by dynamo */
-/* The Comment table records a user comment associated with a database entity.
-The comment can be associated with any other database record. */
-CREATE TABLE IF NOT EXISTS awa_comment (
-  /* the comment publication date */
-  "create_date" TIMESTAMP NOT NULL,
-  /* the comment message. */
-  "message" TEXT NOT NULL,
-  /* the entity identifier to which this comment is associated */
-  "entity_id" BIGINT NOT NULL,
-  /* the comment identifier */
-  "id" BIGINT NOT NULL,
-  /* the optimistic lock version. */
-  "version" INTEGER NOT NULL,
-  /* the entity type that identifies the table to which the comment is associated. */
-  "entity_type" INTEGER NOT NULL,
-  /* the comment status to decide whether the comment is visible (published) or not. */
-  "status" INTEGER NOT NULL,
-  /* the comment format type. */
-  "format" INTEGER NOT NULL,
-  /*  */
-  "author_id" BIGINT NOT NULL,
-  PRIMARY KEY ("id")
-);
-INSERT INTO entity_type (name) VALUES
-('awa_comment')
+  VALUES ((SELECT id FROM ado_entity_type WHERE name = 'awa_user'), 'name')
   ON CONFLICT DO NOTHING;
 INSERT INTO awa_audit_field (entity_type, name)
-  VALUES ((SELECT id FROM entity_type WHERE name = 'awa_comment'), 'message')
+  VALUES ((SELECT id FROM ado_entity_type WHERE name = 'awa_user'), 'status')
   ON CONFLICT DO NOTHING;
-INSERT INTO awa_audit_field (entity_type, name)
-  VALUES ((SELECT id FROM entity_type WHERE name = 'awa_comment'), 'status')
-  ON CONFLICT DO NOTHING;
-INSERT INTO awa_audit_field (entity_type, name)
-  VALUES ((SELECT id FROM entity_type WHERE name = 'awa_comment'), 'format')
-  ON CONFLICT DO NOTHING;
-/* Copied from awa-tags-postgresql.sql*/
-/* File generated automatically by dynamo */
-/* The tag definition. */
-CREATE TABLE IF NOT EXISTS awa_tag (
-  /* the tag identifier */
-  "id" BIGINT NOT NULL,
-  /* the tag name */
-  "name" VARCHAR(255) NOT NULL,
-  PRIMARY KEY ("id")
-);
-/*  */
-CREATE TABLE IF NOT EXISTS awa_tagged_entity (
-  /* the tag entity identifier */
-  "id" BIGINT NOT NULL,
-  /* Title: Tag model
-Date: 2013-02-23the database entity to which the tag is associated */
-  "for_entity_id" BIGINT NOT NULL,
-  /* the entity type */
-  "entity_type" INTEGER NOT NULL,
-  /*  */
-  "tag_id" BIGINT NOT NULL,
-  PRIMARY KEY ("id")
-);
-INSERT INTO entity_type (name) VALUES
-('awa_tag'), ('awa_tagged_entity')
-  ON CONFLICT DO NOTHING;
-/* Copied from awa-counters-postgresql.sql*/
-/* File generated automatically by dynamo */
-/*  */
-CREATE TABLE IF NOT EXISTS awa_counter (
-  /* the object associated with the counter. */
-  "object_id" BIGINT NOT NULL,
-  /* the day associated with the counter. */
-  "date" DATE NOT NULL,
-  /* the counter value. */
-  "counter" INTEGER NOT NULL,
-  /* the counter definition identifier. */
-  "definition_id" BIGINT NOT NULL,
-  PRIMARY KEY ("object_id", "date", "definition_id")
-);
-/* A counter definition defines what the counter represents. It uniquely identifies
-the counter for the Counter table. A counter may be associated with a database
-table. In that case, the counter definition has a relation to the corresponding Entity_Type. */
-CREATE TABLE IF NOT EXISTS awa_counter_definition (
-  /* the counter name. */
-  "name" VARCHAR(255) NOT NULL,
-  /* the counter unique id. */
-  "id" INTEGER NOT NULL,
-  /* the optional entity type that identifies the database table. */
-  "entity_type" INTEGER ,
-  PRIMARY KEY ("id")
-);
-/*  */
-CREATE TABLE IF NOT EXISTS awa_visit (
-  /* the entity identifier. */
-  "object_id" BIGINT NOT NULL,
-  /* the number of times the entity was visited by the user. */
-  "counter" INTEGER NOT NULL,
-  /* the date and time when the entity was last visited. */
-  "date" TIMESTAMP NOT NULL,
-  /* the user who visited the entity. */
-  "user" BIGINT NOT NULL,
-  /* the counter definition identifier. */
-  "definition_id" BIGINT NOT NULL,
-  PRIMARY KEY ("object_id", "user", "definition_id")
-);
-INSERT INTO entity_type (name) VALUES
-('awa_counter'), ('awa_counter_definition'), ('awa_visit')
-  ON CONFLICT DO NOTHING;
-/* Copied from awa-blogs-postgresql.sql*/
-/* File generated automatically by dynamo */
-/*  */
-CREATE TABLE IF NOT EXISTS awa_blog (
-  /* the blog identifier */
-  "id" BIGINT NOT NULL,
-  /* the blog name */
-  "name" VARCHAR(255) NOT NULL,
-  /* the version */
-  "version" INTEGER NOT NULL,
-  /* the blog uuid */
-  "uid" VARCHAR(255) NOT NULL,
-  /* the blog creation date */
-  "create_date" TIMESTAMP NOT NULL,
-  /* the date when the blog was updated */
-  "update_date" TIMESTAMP NOT NULL,
-  /* The blog base URL. */
-  "url" VARCHAR(255) NOT NULL,
-  /* the default post format. */
-  "format" SMALLINT NOT NULL,
-  /* the default image URL to be used */
-  "default_image_url" VARCHAR(255) NOT NULL,
-  /* the workspace that this blog belongs to */
-  "workspace_id" BIGINT NOT NULL,
-  PRIMARY KEY ("id")
-);
-/*  */
-CREATE TABLE IF NOT EXISTS awa_post (
-  /* the post identifier */
-  "id" BIGINT NOT NULL,
-  /* the post title */
-  "title" VARCHAR(255) NOT NULL,
-  /* the post text content */
-  "text" TEXT NOT NULL,
-  /* the post creation date */
-  "create_date" TIMESTAMP NOT NULL,
-  /* the post URI */
-  "uri" VARCHAR(255) NOT NULL,
-  /*  */
-  "version" INTEGER NOT NULL,
-  /* the post publication date */
-  "publish_date" TIMESTAMP ,
-  /* the post status */
-  "status" SMALLINT NOT NULL,
-  /*  */
-  "allow_comments" BOOLEAN NOT NULL,
-  /* the number of times the post was read. */
-  "read_count" INTEGER NOT NULL,
-  /* the post summary. */
-  "summary" VARCHAR(4096) NOT NULL,
-  /* the blog post format. */
-  "format" SMALLINT NOT NULL,
-  /*  */
-  "author_id" BIGINT NOT NULL,
-  /*  */
-  "blog_id" BIGINT NOT NULL,
-  /*  */
-  "image_id" BIGINT ,
-  PRIMARY KEY ("id")
-);
-INSERT INTO entity_type (name) VALUES
-('awa_blog'), ('awa_post')
-  ON CONFLICT DO NOTHING;
-INSERT INTO awa_audit_field (entity_type, name)
-  VALUES ((SELECT id FROM entity_type WHERE name = 'awa_blog'), 'name')
-  ON CONFLICT DO NOTHING;
-INSERT INTO awa_audit_field (entity_type, name)
-  VALUES ((SELECT id FROM entity_type WHERE name = 'awa_blog'), 'uid')
-  ON CONFLICT DO NOTHING;
-INSERT INTO awa_audit_field (entity_type, name)
-  VALUES ((SELECT id FROM entity_type WHERE name = 'awa_blog'), 'url')
-  ON CONFLICT DO NOTHING;
-INSERT INTO awa_audit_field (entity_type, name)
-  VALUES ((SELECT id FROM entity_type WHERE name = 'awa_blog'), 'format')
-  ON CONFLICT DO NOTHING;
-INSERT INTO awa_audit_field (entity_type, name)
-  VALUES ((SELECT id FROM entity_type WHERE name = 'awa_blog'), 'default_image_url')
-  ON CONFLICT DO NOTHING;
-INSERT INTO awa_audit_field (entity_type, name)
-  VALUES ((SELECT id FROM entity_type WHERE name = 'awa_post'), 'title')
-  ON CONFLICT DO NOTHING;
-INSERT INTO awa_audit_field (entity_type, name)
-  VALUES ((SELECT id FROM entity_type WHERE name = 'awa_post'), 'uri')
-  ON CONFLICT DO NOTHING;
-INSERT INTO awa_audit_field (entity_type, name)
-  VALUES ((SELECT id FROM entity_type WHERE name = 'awa_post'), 'publish_date')
-  ON CONFLICT DO NOTHING;
-INSERT INTO awa_audit_field (entity_type, name)
-  VALUES ((SELECT id FROM entity_type WHERE name = 'awa_post'), 'status')
-  ON CONFLICT DO NOTHING;
-INSERT INTO awa_audit_field (entity_type, name)
-  VALUES ((SELECT id FROM entity_type WHERE name = 'awa_post'), 'allow_comments')
-  ON CONFLICT DO NOTHING;
-INSERT INTO awa_audit_field (entity_type, name)
-  VALUES ((SELECT id FROM entity_type WHERE name = 'awa_post'), 'summary')
-  ON CONFLICT DO NOTHING;
-INSERT INTO awa_audit_field (entity_type, name)
-  VALUES ((SELECT id FROM entity_type WHERE name = 'awa_post'), 'format')
-  ON CONFLICT DO NOTHING;
-/* Copied from awa-storages-postgresql.sql*/
-/* File generated automatically by dynamo */
-/* The uri member holds the URI if the storage type is URL.
-
-When storage is FILE, the local file path is built by using
-the workspace identifier and the storage identifier. */
-CREATE TABLE IF NOT EXISTS awa_storage (
-  /* the storage type which defines where the content is stored */
-  "storage" SMALLINT NOT NULL,
-  /* the storage creation date */
-  "create_date" TIMESTAMP NOT NULL,
-  /* the file name */
-  "name" VARCHAR(255) NOT NULL,
-  /* the file size */
-  "file_size" INTEGER NOT NULL,
-  /* the mime type */
-  "mime_type" VARCHAR(255) NOT NULL,
-  /* the storage URI */
-  "uri" VARCHAR(255) NOT NULL,
-  /*  */
-  "version" INTEGER NOT NULL,
-  /* the storage identifier */
-  "id" BIGINT NOT NULL,
-  /* whether the document is public or not. */
-  "is_public" BOOLEAN NOT NULL,
-  /*  */
-  "original_id" BIGINT ,
-  /*  */
-  "store_data_id" BIGINT ,
-  /*  */
-  "owner_id" BIGINT NOT NULL,
-  /*  */
-  "workspace_id" BIGINT NOT NULL,
-  /*  */
-  "folder_id" BIGINT ,
-  PRIMARY KEY ("id")
-);
-/* The storage data is created only if the storage type
-is set to DATABASE.  It holds the file content in the blob. */
-CREATE TABLE IF NOT EXISTS awa_storage_data (
-  /* the storage data identifier */
-  "id" BIGINT NOT NULL,
-  /*  */
-  "version" INTEGER NOT NULL,
-  /* the storage content */
-  "data" BYTEA NOT NULL,
-  PRIMARY KEY ("id")
-);
-/*  */
-CREATE TABLE IF NOT EXISTS awa_storage_folder (
-  /* the storage folder identifier */
-  "id" BIGINT NOT NULL,
-  /*  */
-  "version" INTEGER NOT NULL,
-  /* the folder creation date */
-  "create_date" TIMESTAMP NOT NULL,
-  /*  */
-  "name" VARCHAR(255) NOT NULL,
-  /*  */
-  "workspace_id" BIGINT NOT NULL,
-  /*  */
-  "owner_id" BIGINT NOT NULL,
-  PRIMARY KEY ("id")
-);
-/* The local store record is created when a copy of the data is needed on the local file system.
-The creation date refers to the date when the data was copied to the local file system.
-The expiration date indicates a date after which the local file can be removed
-from the local file system. */
-CREATE TABLE IF NOT EXISTS awa_store_local (
-  /* the local store identifier */
-  "id" BIGINT NOT NULL,
-  /*  */
-  "version" INTEGER NOT NULL,
-  /*  */
-  "store_version" INTEGER NOT NULL,
-  /* the shared flag which indicates whether this local store can be shared by several clients. */
-  "shared" BOOLEAN NOT NULL,
-  /* the local store path */
-  "path" VARCHAR(255) NOT NULL,
-  /* the local store expiration date */
-  "expire_date" DATE NOT NULL,
-  /* the creation date */
-  "create_date" TIMESTAMP NOT NULL,
-  /*  */
-  "storage_id" BIGINT ,
-  PRIMARY KEY ("id")
-);
-INSERT INTO entity_type (name) VALUES
-('awa_storage'), ('awa_storage_data'), ('awa_storage_folder'), ('awa_store_local')
-  ON CONFLICT DO NOTHING;
-/* Copied from awa-jobs-postgresql.sql*/
-/* File generated automatically by dynamo */
-/* The job is associated with a dispatching queue. */
-CREATE TABLE IF NOT EXISTS awa_job (
-  /* the job identifier */
-  "id" BIGINT NOT NULL,
-  /* the job status */
-  "status" SMALLINT NOT NULL,
-  /* the job name */
-  "name" VARCHAR(255) NOT NULL,
-  /* the job start date */
-  "start_date" TIMESTAMP ,
-  /* the job creation date */
-  "create_date" TIMESTAMP NOT NULL,
-  /* the job finish date */
-  "finish_date" TIMESTAMP ,
-  /* the job progress indicator */
-  "progress" INTEGER NOT NULL,
-  /* the job parameters */
-  "parameters" TEXT NOT NULL,
-  /* the job result */
-  "results" TEXT NOT NULL,
-  /*  */
-  "version" INTEGER NOT NULL,
-  /* the job priority */
-  "priority" INTEGER NOT NULL,
-  /*  */
-  "user_id" BIGINT ,
-  /*  */
-  "event_id" BIGINT ,
-  /*  */
-  "session_id" BIGINT ,
-  PRIMARY KEY ("id")
-);
-INSERT INTO entity_type (name) VALUES
-('awa_job')
-  ON CONFLICT DO NOTHING;
-/* Copied from awa-images-postgresql.sql*/
-/* File generated automatically by dynamo */
-/* - The workspace contains one or several folders.
-- Each image folder contains a set of images that have been uploaded by the user.
-- An image can be visible if a user has an ACL permission to read the associated folder.
-- An image marked as 'public=True' can be visible by anybody */
-CREATE TABLE IF NOT EXISTS awa_image (
-  /* the image identifier */
-  "id" BIGINT NOT NULL,
-  /* the image width */
-  "width" INTEGER NOT NULL,
-  /* the image height */
-  "height" INTEGER NOT NULL,
-  /* the thumbnail width */
-  "thumb_width" INTEGER NOT NULL,
-  /* the thumbnail height */
-  "thumb_height" INTEGER NOT NULL,
-  /*  */
-  "path" VARCHAR(255) NOT NULL,
-  /*  */
-  "public" BOOLEAN NOT NULL,
-  /*  */
-  "version" INTEGER NOT NULL,
-  /*  */
-  "thumbnail_id" BIGINT ,
-  /*  */
-  "folder_id" BIGINT NOT NULL,
-  /*  */
-  "owner_id" BIGINT NOT NULL,
-  /*  */
-  "storage_id" BIGINT NOT NULL,
-  PRIMARY KEY ("id")
-);
-INSERT INTO entity_type (name) VALUES
-('awa_image')
-  ON CONFLICT DO NOTHING;
-/* Copied from awa-wikis-postgresql.sql*/
-/* File generated automatically by dynamo */
-/*  */
-CREATE TABLE IF NOT EXISTS awa_wiki_content (
-  /* the wiki page content identifier */
-  "id" BIGINT NOT NULL,
-  /* the wiki content creation date */
-  "create_date" TIMESTAMP NOT NULL,
-  /* the wiki text content */
-  "content" TEXT NOT NULL,
-  /* the format type used used by the wiki content */
-  "format" SMALLINT NOT NULL,
-  /* the content comment string */
-  "save_comment" VARCHAR(255) NOT NULL,
-  /*  */
-  "version" INTEGER NOT NULL,
-  /* the wiki page version */
-  "page_version" INTEGER NOT NULL,
-  /* the wiki page that this Wiki_Content belongs to */
-  "page_id" BIGINT NOT NULL,
-  /* the page version author */
-  "author_id" BIGINT NOT NULL,
-  PRIMARY KEY ("id")
-);
-/* The wiki page represents a page with its versions.
-It refers to the last version which is currently visible.
-It has an optional preview image which defines
-the thumbnail preview of the last/current wiki content. */
-CREATE TABLE IF NOT EXISTS awa_wiki_page (
-  /* the wiki page identifier */
-  "id" BIGINT NOT NULL,
-  /* the wiki page name */
-  "name" VARCHAR(255) NOT NULL,
-  /* the last page version number */
-  "last_version" INTEGER NOT NULL,
-  /* whether the wiki page is public */
-  "is_public" BOOLEAN NOT NULL,
-  /* the page title */
-  "title" VARCHAR(255) NOT NULL,
-  /*  */
-  "version" INTEGER NOT NULL,
-  /* a read counter which indicates how many times the page was read. */
-  "read_count" INTEGER NOT NULL,
-  /* the wiki page preview. */
-  "preview_id" BIGINT ,
-  /* the wiki space that this page belongs to */
-  "wiki_id" BIGINT NOT NULL,
-  /* the current content (or last version) */
-  "content_id" BIGINT ,
-  PRIMARY KEY ("id")
-);
-/* Permission is granted to display a wiki page if there is
-an ACL entry between the wiki space and the user. */
-CREATE TABLE IF NOT EXISTS awa_wiki_space (
-  /* the wiki space identifier */
-  "id" BIGINT NOT NULL,
-  /* the wiki name */
-  "name" VARCHAR(255) NOT NULL,
-  /* whether the wiki is public */
-  "is_public" BOOLEAN NOT NULL,
-  /*  */
-  "version" INTEGER NOT NULL,
-  /* the wiki creation date. */
-  "create_date" TIMESTAMP NOT NULL,
-  /* the left panel side wiki text for every page. */
-  "left_side" TEXT NOT NULL,
-  /* the right panel wiki text for every page. */
-  "right_side" TEXT NOT NULL,
-  /* the default wiki page format. */
-  "format" SMALLINT NOT NULL,
-  /*  */
-  "workspace_id" BIGINT NOT NULL,
-  PRIMARY KEY ("id")
-);
-INSERT INTO entity_type (name) VALUES
-('awa_wiki_content'), ('awa_wiki_page'), ('awa_wiki_space')
-  ON CONFLICT DO NOTHING;
-INSERT INTO awa_audit_field (entity_type, name)
-  VALUES ((SELECT id FROM entity_type WHERE name = 'awa_wiki_page'), 'name')
-  ON CONFLICT DO NOTHING;
-INSERT INTO awa_audit_field (entity_type, name)
-  VALUES ((SELECT id FROM entity_type WHERE name = 'awa_wiki_page'), 'last_version')
-  ON CONFLICT DO NOTHING;
-INSERT INTO awa_audit_field (entity_type, name)
-  VALUES ((SELECT id FROM entity_type WHERE name = 'awa_wiki_page'), 'is_public')
-  ON CONFLICT DO NOTHING;
-INSERT INTO awa_audit_field (entity_type, name)
-  VALUES ((SELECT id FROM entity_type WHERE name = 'awa_wiki_page'), 'title')
-  ON CONFLICT DO NOTHING;
-INSERT INTO awa_audit_field (entity_type, name)
-  VALUES ((SELECT id FROM entity_type WHERE name = 'awa_wiki_space'), 'name')
-  ON CONFLICT DO NOTHING;
-INSERT INTO awa_audit_field (entity_type, name)
-  VALUES ((SELECT id FROM entity_type WHERE name = 'awa_wiki_space'), 'is_public')
-  ON CONFLICT DO NOTHING;
-INSERT INTO awa_audit_field (entity_type, name)
-  VALUES ((SELECT id FROM entity_type WHERE name = 'awa_wiki_space'), 'format')
+INSERT INTO ado_version (name, version)
+  VALUES ("awa", 2)
   ON CONFLICT DO NOTHING;
 /* Copied from adafr-postgresql.sql*/
 /* File generated automatically by dynamo */
@@ -905,48 +383,51 @@ CREATE TABLE IF NOT EXISTS adafr_receipt (
   "member" BIGINT NOT NULL,
   PRIMARY KEY ("id")
 );
-INSERT INTO entity_type (name) VALUES
+INSERT INTO ado_entity_type (name) VALUES
 ('adafr_member'), ('adafr_receipt')
   ON CONFLICT DO NOTHING;
 INSERT INTO awa_audit_field (entity_type, name)
-  VALUES ((SELECT id FROM entity_type WHERE name = 'adafr_member'), 'first_name')
+  VALUES ((SELECT id FROM ado_entity_type WHERE name = 'adafr_member'), 'first_name')
   ON CONFLICT DO NOTHING;
 INSERT INTO awa_audit_field (entity_type, name)
-  VALUES ((SELECT id FROM entity_type WHERE name = 'adafr_member'), 'last_name')
+  VALUES ((SELECT id FROM ado_entity_type WHERE name = 'adafr_member'), 'last_name')
   ON CONFLICT DO NOTHING;
 INSERT INTO awa_audit_field (entity_type, name)
-  VALUES ((SELECT id FROM entity_type WHERE name = 'adafr_member'), 'company')
+  VALUES ((SELECT id FROM ado_entity_type WHERE name = 'adafr_member'), 'company')
   ON CONFLICT DO NOTHING;
 INSERT INTO awa_audit_field (entity_type, name)
-  VALUES ((SELECT id FROM entity_type WHERE name = 'adafr_member'), 'address1')
+  VALUES ((SELECT id FROM ado_entity_type WHERE name = 'adafr_member'), 'address1')
   ON CONFLICT DO NOTHING;
 INSERT INTO awa_audit_field (entity_type, name)
-  VALUES ((SELECT id FROM entity_type WHERE name = 'adafr_member'), 'address2')
+  VALUES ((SELECT id FROM ado_entity_type WHERE name = 'adafr_member'), 'address2')
   ON CONFLICT DO NOTHING;
 INSERT INTO awa_audit_field (entity_type, name)
-  VALUES ((SELECT id FROM entity_type WHERE name = 'adafr_member'), 'address3')
+  VALUES ((SELECT id FROM ado_entity_type WHERE name = 'adafr_member'), 'address3')
   ON CONFLICT DO NOTHING;
 INSERT INTO awa_audit_field (entity_type, name)
-  VALUES ((SELECT id FROM entity_type WHERE name = 'adafr_member'), 'postal_code')
+  VALUES ((SELECT id FROM ado_entity_type WHERE name = 'adafr_member'), 'postal_code')
   ON CONFLICT DO NOTHING;
 INSERT INTO awa_audit_field (entity_type, name)
-  VALUES ((SELECT id FROM entity_type WHERE name = 'adafr_member'), 'city')
+  VALUES ((SELECT id FROM ado_entity_type WHERE name = 'adafr_member'), 'city')
   ON CONFLICT DO NOTHING;
 INSERT INTO awa_audit_field (entity_type, name)
-  VALUES ((SELECT id FROM entity_type WHERE name = 'adafr_member'), 'country')
+  VALUES ((SELECT id FROM ado_entity_type WHERE name = 'adafr_member'), 'country')
   ON CONFLICT DO NOTHING;
 INSERT INTO awa_audit_field (entity_type, name)
-  VALUES ((SELECT id FROM entity_type WHERE name = 'adafr_member'), 'mail_verify_date')
+  VALUES ((SELECT id FROM ado_entity_type WHERE name = 'adafr_member'), 'mail_verify_date')
   ON CONFLICT DO NOTHING;
 INSERT INTO awa_audit_field (entity_type, name)
-  VALUES ((SELECT id FROM entity_type WHERE name = 'adafr_member'), 'payment_date')
+  VALUES ((SELECT id FROM ado_entity_type WHERE name = 'adafr_member'), 'payment_date')
   ON CONFLICT DO NOTHING;
 INSERT INTO awa_audit_field (entity_type, name)
-  VALUES ((SELECT id FROM entity_type WHERE name = 'adafr_member'), 'status')
+  VALUES ((SELECT id FROM ado_entity_type WHERE name = 'adafr_member'), 'status')
   ON CONFLICT DO NOTHING;
 INSERT INTO awa_audit_field (entity_type, name)
-  VALUES ((SELECT id FROM entity_type WHERE name = 'adafr_member'), 'ada_europe')
+  VALUES ((SELECT id FROM ado_entity_type WHERE name = 'adafr_member'), 'ada_europe')
   ON CONFLICT DO NOTHING;
 INSERT INTO awa_audit_field (entity_type, name)
-  VALUES ((SELECT id FROM entity_type WHERE name = 'adafr_member'), 'amount')
+  VALUES ((SELECT id FROM ado_entity_type WHERE name = 'adafr_member'), 'amount')
+  ON CONFLICT DO NOTHING;
+INSERT INTO ado_version (name, version)
+  VALUES ("adafr", 1)
   ON CONFLICT DO NOTHING;
