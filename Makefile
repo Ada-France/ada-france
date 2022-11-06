@@ -46,8 +46,8 @@ awa/dynamo/src/gen-configs.ads:   Makefile.conf awa/dynamo/src/gen-configs.gpb
 
 setup:: awa/ada-ado/src/drivers/ado-drivers-initialize.adb
 awa/ada-ado/src/drivers/ado-drivers-initialize.adb: awa/ada-ado/src/drivers/ado-drivers-initialize.gpb Makefile.conf
-	gnatprep -DHAVE_MYSQL=False \
-	          -DHAVE_SQLITE=True \
+	gnatprep -DHAVE_MYSQL=True \
+	          -DHAVE_SQLITE=False \
 	          -DHAVE_POSTGRESQL=False \
 		  awa/ada-ado/src/drivers/ado-drivers-initialize.gpb $@
 
