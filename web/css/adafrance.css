@@ -364,12 +364,6 @@ dl.adafr-version dd {
 }
 
 /* Adaptations from AWA */
-#awa-page {
-    margin-bottom: 0;
-    margin-left: 0;
-    margin-right: 0;
-    width: 100%;
-}
 .adafr-index main {
     padding-top: 0;
 }
@@ -475,6 +469,9 @@ ul.openid-invite {
 ul.openid-invite li {
     margin-top: 10px;
     margin-bottom: 10px;
+}
+.editor-toolbar .table {
+    width: auto;
 }
 .adafr-block {
     float: left;
