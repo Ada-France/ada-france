@@ -14,7 +14,7 @@ ifeq (${HAVE_DYNAMO},yes)
 GPRFLAGS += -XBUILD_DYNAMO=no
 else
 GPRFLAGS += -XBUILD_DYNAMO=yes
-DYNAMO=$(ROOT_DIR)/bin/dynamo
+DYNAMO=env DYNAMO_UML_PATH=awa/awa/uml DYNAMO_SEARCH_PATH=awa/awa/plugins $(ROOT_DIR)/bin/dynamo
 endif
 
 LIBNAME=lib${NAME}
