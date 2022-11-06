@@ -456,6 +456,11 @@ div.post-comments h3 {
     float: left;
     width: 100%;
 }
+/* Fix conflict with bootstrap */
+.post-text code {
+    color: inherit;
+    background: none;
+}
 div.awa-login .invite-message p {
     width: 98%;
     border: 1px solid #ccc;
