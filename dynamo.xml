@@ -1,5 +1,6 @@
 <project>
     <name>adafr</name>
+    <property name="model_version">1</property>
     <property name="author_email">Stephane.Carrez@gmail.com</property>
     <property name="is_ado">FALSE</property>
     <property name="license">apache</property>
@@ -24,4 +25,6 @@
     <depend name="awa_markedit"></depend>
     <depend name="setup"></depend>
     <depend name="awa-setup"></depend>
+    <depend name="util"></depend>
+    <depend name="dynamo"></depend>
 </project>
