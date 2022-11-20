@@ -21,7 +21,7 @@
 
 Pour accepter cette invitation, veuillez vous rendre à l'URL suivante:
 
-#{initParam['app_url_base']}/auth/invitation.html?key=#{event.key}
+#{initParam['app_url_base']}/auth/invitation/#{event.key}
 
 Merci d'utiliser #{initParam['app_name']}.
 
@@ -38,8 +38,7 @@ L'équipe #{initParam['app_name']}
 <p>
 Pour accepter cette invitation, veuillez vous rendre à l'URL suivante:
 </p>
-<a href="#{initParam['app_url_base']}/auth/invitation.html?key=#{event.key}">
-#{initParam['app_url_base']}/auth/invitation.html?key=#{event.key}</a>
+<a href="#{initParam['app_url_base']}/auth/invitation/#{event.key}">#{initParam['app_url_base']}/auth/invitation/#{event.key}</a>
 <p>Merci d'utiliser #{initParam['app_name']}.</p>
 <p>Cordialement,</p>
 <p>L'équipe #{initParam['app_name']}</p>
