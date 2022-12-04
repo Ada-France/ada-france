@@ -1,7 +1,13 @@
 # Ada France Web Site
 
 Ce projet contient les sources de l'application Ada France qui permet
-au site [Ada France](https://www.ada-france.org) de diffuser des informations.
+au site [Ada France](https://www.ada-france.org) de diffuser des informations
+et promouvoir le langage Ada.
+
+# Version 1.16 - Dec 2022
+
+- L'authentification par Github ou Gitlab est possible pour les membres enregistrés
+- Intégration de l'éditeur EasyMDE pour éditer des articles et wiki en Markdown
 
 # Version 1.13 - Mar 2022
 
