@@ -5,7 +5,7 @@
     <property name="is_ado">FALSE</property>
     <property name="license">apache</property>
     <property name="is_gtk">FALSE</property>
-    <property name="build">21</property>
+    <property name="build">24</property>
     <property name="author">Stephane Carrez</property>
     <property name="is_web">TRUE</property>
     <property name="is_tool">FALSE</property>
