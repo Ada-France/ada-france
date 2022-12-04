@@ -453,4 +453,10 @@
     <role>Owner</role>
   </role-permission>
 
+  <url-policy order='first'>
+    <permission>member-view</permission>
+    <url-pattern>/workspaces/invite.html</url-pattern>
+    <url-pattern>/workspaces/members.html</url-pattern>
+  </url-policy>
+
 </module>
