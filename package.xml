@@ -71,6 +71,7 @@
          <exclude name="js/jquery-ui-1.11.4/**"/>
          <exclude name="js/jquery-1.11.3.js"/>
          <exclude name="js/jquery-3.4.1.js"/>
+         <exclude name="js/easymde/easymde.min.js"/>
        </fileset>
      </install>
 
@@ -78,6 +79,7 @@
        <fileset dir="web">
          <include name="js/highlight.pack.js"/>
          <include name="js/trumbowyg/trumbowyg.js"/>
+         <include name="js/easymde/easymde.min.js"/>
        </fileset>
      </install>
 
