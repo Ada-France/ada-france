@@ -15,6 +15,7 @@
      <install mode='exec'>
        <command>chmod +x #{dst}</command>
        <include name="bin/*-server"/>
+       <include name="bin/*.sh"/>
      </install>
      <install mode='copy' dir="bundles">
        <fileset dir="bundles">
@@ -43,6 +44,9 @@
           <include name="**/*.pdf"/>
           <include name="**/*.svg"/>
           <include name="**/*.png"/>
+          <include name="**/*.ico"/>
+          <include name="**/*.ttf"/>
+          <include name="**/*.woff2"/>
           <include name="WEB-INF/**"/>
           <include name="static/**"/>
           <exclude name="preview/**"/>
