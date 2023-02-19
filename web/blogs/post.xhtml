@@ -35,15 +35,16 @@
         </h:panelGroup>
         <meta property="og:description" content="#{util:escapeJavaScript(fn:substring(fn:trim(post.description),1,128))}"/>
         <link media="screen" type="text/css" rel="stylesheet" href="#{contextPath}/css/highlight/idea.css"/>
-    </ui:define>
-
-    <!-- Main page body -->
-    <ui:define name="pageBody">
         <f:metadata>
             <f:viewParam id='post' value='#{post.uri}' required='false'/>
             <f:viewAction action='#{post.load}'/>
         </f:metadata>
-        <div class='grid_9'>
+    </ui:define>
+
+    <!-- Main page body -->
+    <ui:define name="pageBody">
+      <div class='awa-columns'>
+        <div class='awa-grid-9'>
           <div class='blog-post' id="p_#{post.id}">
             <div class='post-title'>
               <h2><a href="#{contextPath}/blogs/post.html?post=#{post.uri}">#{post.title}</a></h2>
@@ -117,9 +118,10 @@
             </div>
           </div>
         </div>
-        <div class='grid_3 blog-post-info'>
+        <div class='awa-grid-3 blog-post-info'>
           <ui:include src="lists/post-info.xhtml"/>
         </div>
+      </div>
     </ui:define>
 
     <ui:define name="pageScript">
