@@ -13,9 +13,20 @@ footer {
 }
 .navbar {
     margin-bottom: 0px;
-    padding-top: 5px;
     border-bottom: 1px solid #979797;
     min-height: auto;
+}
+.awa-hamb-line::before {
+    background: #00409A;
+    height: 2px;
+}
+.awa-hamb-line {
+    background: #00409A;
+}
+.awa-hamb-line::after{
+    background: #00409A;
+    height: 2px;
+    top: -6px;
 }
 #nav-member,
 .navbar .navbar-brand {
@@ -23,8 +34,36 @@ footer {
     font-weight: bold;
     font-size: 18px;
 }
+.navbar-right li a, #nav-contact-li, #awa-logout, #nav-member {
+    padding-top: 7px;
+}
+#nav-contact-li a, #awa-logout a, #nav-member a {
+    height: auto;
+}
 .navbar .navbar-header {
     padding-left: 0px;
+    list-style-type: none;
+}
+.navbar .navbar-header li {
+    float: left;
+}
+.awa-menu li {
+    background: transparent;
+}
+.awa-menu li a:hover {
+    border-color: transparent;
+}
+@media (max-width: 768px) {
+    .awa-menu li {
+        display: none;
+    background: #e7e7e7;
+    }
+}
+.awa-side-nav {
+    width: auto;
+}
+.awa-side-menu:checked ~ nav li {
+    display: block;
 }
 .adafr-index #nav-index,
 .page-wiki #nav-resources,
@@ -33,6 +72,7 @@ footer {
 .page-members #nav-member,
 .page-contact #nav-contact {
     color: #111;
+    display: block;
 }
 .jumbotron {
     padding: 0;
