@@ -55,6 +55,15 @@ package body Adafr.Members.Modules is
    function Get_Next_Receipt_Id (DB : in ADO.Sessions.Session'Class) return ADO.Identifier;
 
    --  ------------------------------
+   --  Job worker procedure to build the receipt and send it by e-mail.
+   --  ------------------------------
+   procedure Receipt_Worker (Job : in out AWA.Jobs.Services.Abstract_Job_Type'Class) is
+      Module : constant Member_Module_Access := Get_Member_Module;
+   begin
+      Module.Do_Receipt_Job (Job);
+   end Receipt_Worker;
+
+   --  ------------------------------
    --  Initialize the members module.
    --  ------------------------------
    overriding
@@ -84,11 +93,18 @@ package body Adafr.Members.Modules is
    overriding
    procedure Configure (Plugin : in out Member_Module;
                         Props  : in ASF.Applications.Config) is
+      use type AWA.Jobs.Modules.Job_Module_Access;
    begin
       Plugin.Sign_Key := Props.Get (PARAM_SIGN_KEY);
       Plugin.Receipt_Template := Props.Get (PARAM_RECEIPT_TEMPLATE);
       Plugin.Receipt_Directory := Props.Get (PARAM_RECEIPT_DIRECTORY);
       Plugin.Receipt_Sign_Key := Props.Get (PARAM_RECEIPT_KEY);
+      Plugin.Job_Module := AWA.Jobs.Modules.Get_Job_Module;
+      if Plugin.Job_Module = null then
+         Log.Error ("Cannot find the AWA Job module for the receipt generation");
+      else
+         Plugin.Job_Module.Register (Definition => Receipt_Job_Definition.Factory);
+      end if;
    end Configure;
 
    --  ------------------------------
@@ -477,27 +493,17 @@ package body Adafr.Members.Modules is
          return;
       end if;
 
-      --  Save the member information and send the event to trigger the email.
+      --  Save the member information.
       Current_Entity.Set_Update_Date (Value => Ada.Calendar.Clock);
       Current_Entity.Save (DB);
       Ctx.Commit;
 
+      --  Schedule a job to format the receipt and send the email.
       declare
-         Ptr   : constant Util.Beans.Basic.Readonly_Bean_Access
-           := Current_Entity'Unchecked_Access;
-         Bean  : constant Util.Beans.Objects.Object
-           := Util.Beans.Objects.To_Object (Ptr, Util.Beans.Objects.STATIC);
-         Email : constant AWA.Users.Models.Email_Ref'Class := Current_Entity.Get_Email;
-         Event : AWA.Events.Module_Event;
-         Receipt_Path : constant String := Model.Create_Receipt (Current_Entity, Receipt);
+         J : AWA.Jobs.Services.Job_Type;
       begin
-         Event.Set_Event_Kind (Send_Registered_Member_Event.Kind);
-         Event.Set_Parameter ("email", Email.Get_Email);
-         Event.Set_Parameter ("name", Email.Get_Email);
-         Event.Set_Parameter ("member", Bean);
-         Event.Set_Parameter ("receipt", Receipt_Path);
-         Event.Set_Parameter ("receipt_id", Util.Strings.Image (Integer (Receipt.Get_Id)));
-         Model.Send_Event (Event);
+         J.Set_Parameter ("receipt_id", Receipt);
+         J.Schedule (Receipt_Job_Definition.Factory.all);
       end;
    end Save_Payment;
 
@@ -599,5 +605,40 @@ package body Adafr.Members.Modules is
       Adafr.Receipt.Generate (Path & ".tex");
       return Path & ".pdf";
    end Create_Receipt;
+
+   --  ------------------------------
+   --  Receipt job to format the receipt with conscript and send it by e-mail.
+   --  ------------------------------
+   procedure Do_Receipt_Job (Model  : in Member_Module;
+                             Job    : in out AWA.Jobs.Services.Abstract_Job_Type'Class) is
+      Receipt_Id : constant ADO.Identifier := Job.Get_Parameter ("receipt_id");
+      Ctx        : constant ASC.Service_Context_Access := ASC.Current;
+      DB         : ADO.Sessions.Master_Session := ASC.Get_Master_Session (Ctx);
+      Member     : aliased Adafr.Members.Models.Member_Ref;
+      Receipt    : Adafr.Members.Models.Receipt_Ref;
+   begin
+      Log.Info ("Receipt job for{0}", ADO.Identifier'Image (Receipt_Id));
+
+      Receipt.Load (DB, Receipt_Id);
+      Member.Load (DB, Receipt.Get_Member);
+
+      declare
+         Ptr   : constant Util.Beans.Basic.Readonly_Bean_Access
+           := Member'Unchecked_Access;
+         Bean  : constant Util.Beans.Objects.Object
+           := Util.Beans.Objects.To_Object (Ptr, Util.Beans.Objects.STATIC);
+         Email : constant AWA.Users.Models.Email_Ref'Class := Member.Get_Email;
+         Receipt_Path : constant String := Model.Create_Receipt (Member, Receipt);
+         Event : AWA.Events.Module_Event;
+      begin
+         Event.Set_Event_Kind (Send_Registered_Member_Event.Kind);
+         Event.Set_Parameter ("email", Email.Get_Email);
+         Event.Set_Parameter ("name", Email.Get_Email);
+         Event.Set_Parameter ("member", Bean);
+         Event.Set_Parameter ("receipt", Receipt_Path);
+         Event.Set_Parameter ("receipt_id", Util.Strings.Image (Integer (Receipt.Get_Id)));
+         Model.Send_Event (Event);
+      end;
+   end Do_Receipt_Job;
 
 end Adafr.Members.Modules;

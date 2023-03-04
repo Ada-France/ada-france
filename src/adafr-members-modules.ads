@@ -23,6 +23,8 @@ with Security.Permissions;
 with AWA.Modules;
 with AWA.Events;
 with Adafr.Members.Models;
+private with AWA.Jobs.Services;
+private with AWA.Jobs.Modules;
 private with Adafr.Members.Servlets;
 private with Security.Random;
 package Adafr.Members.Modules is
@@ -120,7 +122,14 @@ package Adafr.Members.Modules is
 
 private
 
+   --  Job worker procedure to build the receipt and send it by e-mail.
+   procedure Receipt_Worker (Job : in out AWA.Jobs.Services.Abstract_Job_Type'Class);
+
+   package Receipt_Job_Definition is
+     new AWA.Jobs.Services.Work_Definition (Receipt_Worker'Access);
+
    type Member_Module is new AWA.Modules.Module with record
+      Job_Module        : AWA.Jobs.Modules.Job_Module_Access;
       Random            : Security.Random.Generator;
       Sign_Key          : Ada.Strings.Unbounded.Unbounded_String;
       Receipt_Sign_Key  : Ada.Strings.Unbounded.Unbounded_String;
@@ -144,5 +153,9 @@ private
    function Create_Receipt (Model   : in Member_Module;
                             Member  : in Adafr.Members.Models.Member_Ref;
                             Receipt : in Adafr.Members.Models.Receipt_Ref) return String;
+
+   --  Receipt job to format the receipt with conscript and send it by e-mail.
+   procedure Do_Receipt_Job (Model  : in Member_Module;
+                             Job    : in out AWA.Jobs.Services.Abstract_Job_Type'Class);
 
 end Adafr.Members.Modules;
