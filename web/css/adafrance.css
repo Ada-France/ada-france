@@ -56,7 +56,7 @@ footer {
 @media (max-width: 768px) {
     .awa-menu li {
         display: none;
-    background: #e7e7e7;
+        background: #e7e7e7;
     }
 }
 .awa-side-nav {
@@ -333,8 +333,8 @@ dl.adafr-version dd {
     width: 10%;
     height: 32px;
 }
-.adafr-MEMBER_NONE {
-}
+/* .adafr-MEMBER_NONE {
+}*/
 .adafr-MEMBER_WAIT_PAYMENT {
 }
 .adafr-MEMBER_ADA_FRANCE .member-status {
@@ -417,9 +417,6 @@ main {
 .awa-error dt label, .asf-error dt label {
     color: #555;
 }
-.awa-login-yahoo, .awa-login-orange {
-    display: none;
-}
 div.awa-error {
    margin-top: 1em;
 }
@@ -430,10 +427,7 @@ div.awa-error {
 .awa-tag-input {
     background: #fff;
 }
-#awa-post-editor {
-    border: none;
-}
-.blog-post-tag-info {
+#awa-post-editor, .blog-post-tag-info {
     border: none;
 }
 div.blog-post-tag-info h2 {
@@ -559,7 +553,7 @@ ul.openid-invite li {
         float: left;
     }
 }
-@media screen and (max-width: 768px) {
+@media (max-width: 768px) {
     @-ms-viewport { width: 320px; }
     .awa-side-nav {
         width: calc(100% - 50px);
@@ -575,8 +569,7 @@ ul.openid-invite li {
     .col-md-6 {
         float: left;
     }
-    .col-md-3,
-    .container_12 .grid_3 {
+    .col-md-3 {
         margin-top: 1em;
     }
     .tagedit-list li.tagedit-listelement {
