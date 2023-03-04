@@ -67,7 +67,9 @@ footer {
 }
 .adafr-index #nav-index,
 .page-wiki #nav-resources,
+.page-contact #nav-index,
 .page-news #nav-news,
+.page-blog #nav-index,
 .page-jobs #nav-jobs,
 .page-members #nav-member,
 .page-contact #nav-contact {
@@ -559,7 +561,9 @@ ul.openid-invite li {
 }
 @media screen and (max-width: 768px) {
     @-ms-viewport { width: 320px; }
-
+    .awa-side-nav {
+        width: calc(100% - 50px);
+    }
     .navbar-right {
         margin-right: 0;
         float: right;
@@ -567,6 +571,9 @@ ul.openid-invite li {
     }
     #nav-contact-li {
         display: none;
+    }
+    .col-md-6 {
+        float: left;
     }
     .col-md-3,
     .container_12 .grid_3 {
