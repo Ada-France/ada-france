@@ -15,10 +15,23 @@ et promouvoir le langage Ada.
 
 # Compilation
 
+## Setup
+
+Le serveur tourne sous Debian 10 at la configuration suivante est nécessaire avant de lancer
+le `configure`:
+
+```
+sudo apt-get install gnat gprbuild libxmlada-dom8-dev \
+   libaws18-dev libgpr2-dev imagemagick unzip xsltproc libmariadb-dev
+```
+
+## Build
+
 Lancer la commande configure:
 ```
    ./configure
 ```
+
 Ensuite lancer la compilation avec:
 ```
    make generate build
