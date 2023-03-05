@@ -4,6 +4,12 @@ Ce projet contient les sources de l'application Ada France qui permet
 au site [Ada France](https://www.ada-france.org) de diffuser des informations
 et promouvoir le langage Ada.
 
+# Version 1.18 - Mars 2023
+
+- Supression des liens externes morts et ajout de nouveaux sites,
+- Meilleure présentation sur les mobiles,
+- Génération des recus en asynchrone avec AWA.Jobs.
+
 # Version 1.16 - Dec 2022
 
 - L'authentification par Github ou Gitlab est possible pour les membres enregistrés
