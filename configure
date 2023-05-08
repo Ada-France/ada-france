@@ -2460,7 +2460,7 @@ $as_echo "done" >&6; }
 
 # Current release settings
 ADAFR_MAJOR_VERSION=1
-ADAFR_MINOR_VERSION=18
+ADAFR_MINOR_VERSION=19
 ADAFR_MICRO_VERSION=0
 ADAFR_VERSION=$ADAFR_MAJOR_VERSION.$ADAFR_MINOR_VERSION.$ADAFR_MICRO_VERSION
 
@@ -2741,6 +2741,7 @@ EOF
        ac_cv_gnat_aws_version='none'
     fi
 
+    rm -f conftest conftest.o conftest.ali
     if test "$ac_cv_gnat_aws_version" = "20.0"; then
                         cat > conftest.adb <<EOF
 with AWS;
