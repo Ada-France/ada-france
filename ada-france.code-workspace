@@ -1,0 +1,11 @@
+{
+	"folders": [
+		{
+			"path": "."
+		}
+	],
+	"settings": {
+		"ada.projectFile": "adafr.gpr",
+		"ada.defaultCharset": "utf-8"
+	}
+}
