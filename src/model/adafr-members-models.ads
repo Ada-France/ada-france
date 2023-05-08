@@ -5,7 +5,7 @@
 --  Template used: templates/model/package-spec.xhtml
 --  Ada Generator: https://github.com/stcarrez/dynamo Version 1.3.0
 -----------------------------------------------------------------------
---  Copyright (C) 2022 Stephane Carrez
+--  Copyright (C) 2023 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -42,8 +42,8 @@ package Adafr.Members.Models is
 
    pragma Style_Checks ("-mrIu");
 
-   type Filter_Type is (LIST_ALL, LIST_MEMBERS, LIST_AE_MEMBERS, LIST_PENDING, LIST_AF_MEMBERS, LIST_EXPIRED);
-   for Filter_Type use (LIST_ALL => 0, LIST_MEMBERS => 1, LIST_AE_MEMBERS => 2, LIST_PENDING => 3, LIST_AF_MEMBERS => 4, LIST_EXPIRED => 5);
+   type Filter_Type is (LIST_ALL, LIST_MEMBERS, LIST_AE_MEMBERS, LIST_PENDING, LIST_AF_MEMBERS, LIST_EXPIRED, LIST_INACTIVE);
+   for Filter_Type use (LIST_ALL => 0, LIST_MEMBERS => 1, LIST_AE_MEMBERS => 2, LIST_PENDING => 3, LIST_AF_MEMBERS => 4, LIST_EXPIRED => 5, LIST_INACTIVE => 6);
    package Filter_Type_Objects is
       new Util.Beans.Objects.Enums (Filter_Type);
 
@@ -52,8 +52,8 @@ package Adafr.Members.Models is
       Value   : Filter_Type;
    end record;
 
-   type Status_Type is (PENDING, WAITING_PAYMENT, MEMBER_ADA_FRANCE, MEMBER_ADA_EUROPE);
-   for Status_Type use (PENDING => 0, WAITING_PAYMENT => 1, MEMBER_ADA_FRANCE => 2, MEMBER_ADA_EUROPE => 3);
+   type Status_Type is (PENDING, WAITING_PAYMENT, MEMBER_ADA_FRANCE, MEMBER_ADA_EUROPE, INACTIVE);
+   for Status_Type use (PENDING => 0, WAITING_PAYMENT => 1, MEMBER_ADA_FRANCE => 2, MEMBER_ADA_EUROPE => 3, INACTIVE => 4);
    package Status_Type_Objects is
       new Util.Beans.Objects.Enums (Status_Type);
 
