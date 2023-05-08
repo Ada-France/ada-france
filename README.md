@@ -4,6 +4,11 @@ Ce projet contient les sources de l'application Ada France qui permet
 au site [Ada France](https://www.ada-france.org) de diffuser des informations
 et promouvoir le langage Ada.
 
+# Version 1.19 - Mai 2023
+- Ajout du status `INACTIVE` pour marquer un membre qui n'est plus actif
+  ou qui utilise une autre adresse mail
+- Correction du mail pour changer son mot de passe
+
 # Version 1.18 - Mars 2023
 
 - Supression des liens externes morts et ajout de nouveaux sites,
