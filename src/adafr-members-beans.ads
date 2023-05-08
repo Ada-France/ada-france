@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  adafr-members-beans -- Beans for module members
---  Copyright (C) 2020 Stephane Carrez
+--  Copyright (C) 2020, 2023 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -20,6 +20,7 @@ with Ada.Strings.Unbounded;
 
 with Util.Beans.Objects;
 with Util.Beans.Basic;
+with Util.Nullables;
 with ADO;
 with Adafr.Members.Modules;
 with Adafr.Members.Models;
@@ -30,6 +31,7 @@ package Adafr.Members.Beans is
       Id           : ADO.Identifier := ADO.NO_IDENTIFIER;
       History      : aliased Adafr.Members.Models.Audit_Info_List_Bean;
       History_Bean : Adafr.Members.Models.Audit_Info_List_Bean_Access;
+      Inactive     : Util.Nullables.Nullable_Boolean;
    end record;
    type Member_Bean_Access is access all Member_Bean'Class;
 

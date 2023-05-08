@@ -345,6 +345,12 @@ dl.adafr-version dd {
     background: url(../images/ada-europe-icon.png) no-repeat;
     height: 32px;
 }
+dl.adafr-member-inactive dd {
+    padding-top: 0.5em;
+}
+dl.adafr-member-inactive input {
+    width: auto;
+}
 .adafr-expired {
     margin-left: 100px;
     background: url(../images/icon-expired-32.png) no-repeat;

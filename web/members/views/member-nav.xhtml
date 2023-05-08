@@ -64,6 +64,7 @@
                 <f:selectItem itemValue="LIST_MEMBERS" itemLabel="Membres Ada-France et Ada-Europe"/>
                 <f:selectItem itemValue="LIST_PENDING" itemLabel="En attente"/>
                 <f:selectItem itemValue="LIST_EXPIRED" itemLabel="Non renouvelés"/>
+                <f:selectItem itemValue="LIST_INACTIVE" itemLabel="Inactif"/>
                 <f:facet name="options">width: "80%",disable_search: true</f:facet>
                 <f:facet name="events">.bind("change", function() {
                       document.location = "#{contextPath}/members/list/" + $(this).val();

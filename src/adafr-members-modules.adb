@@ -270,10 +270,11 @@ package body Adafr.Members.Modules is
    --  ------------------------------
    --  Save the member information after validating the secure key
    --  ------------------------------
-   procedure Save (Model  : in out Member_Module;
-                   Id     : in ADO.Identifier;
-                   Key    : in String;
-                   Member : in out Adafr.Members.Models.Member_Bean'Class) is
+   procedure Save (Model    : in out Member_Module;
+                   Id       : in ADO.Identifier;
+                   Key      : in String;
+                   Inactive : in Util.Nullables.Nullable_Boolean;
+                   Member   : in out Adafr.Members.Models.Member_Bean'Class) is
       Ctx   : constant ASC.Service_Context_Access := ASC.Current;
       DB    : ADO.Sessions.Master_Session := ASC.Get_Master_Session (Ctx);
       Current_Entity : Adafr.Members.Models.Member_Ref;
@@ -296,6 +297,13 @@ package body Adafr.Members.Modules is
       Current_Entity.Set_Country (Unbounded_String '(Member.Get_Country));
       Current_Entity.Set_City (Unbounded_String '(Member.Get_City));
       Current_Entity.Set_Postal_Code (Unbounded_String '(Member.Get_Postal_Code));
+      if not Inactive.Is_Null then
+         if Inactive.Value then
+            Current_Entity.Set_Status (Models.INACTIVE);
+         else
+            Current_Entity.Set_Status (Models.WAITING_PAYMENT);
+         end if;
+      end if;
       if not Current_Entity.Is_Modified then
          return;
       end if;

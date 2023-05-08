@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  Adafr-server -- Application server
---  Copyright (C) 2020, 2021, 2022 Ada France
+--  Copyright (C) 2020, 2021, 2022, 2023 Ada France
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -19,7 +19,6 @@ with Util.Commands;
 
 with Servlet.Server.Web;
 
-with AWA.Setup.Applications;
 with AWA.Commands.Drivers;
 with AWA.Commands.Start;
 with AWA.Commands.Setup;

@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  adafr-members-modules -- Module members
---  Copyright (C) 2020, 2021 Stephane Carrez
+--  Copyright (C) 2020, 2021, 2023 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -18,6 +18,7 @@
 with Ada.Strings.Unbounded;
 with ASF.Applications;
 
+with Util.Nullables;
 with ADO;
 with Security.Permissions;
 with AWA.Modules;
@@ -100,10 +101,11 @@ package Adafr.Members.Modules is
                    History : in out Adafr.Members.Models.Audit_Info_List_Bean);
 
    --  Save the member information after validating the secure key
-   procedure Save (Model  : in out Member_Module;
-                   Id     : in ADO.Identifier;
-                   Key    : in String;
-                   Member : in out Adafr.Members.Models.Member_Bean'Class);
+   procedure Save (Model    : in out Member_Module;
+                   Id       : in ADO.Identifier;
+                   Key      : in String;
+                   Inactive : in Util.Nullables.Nullable_Boolean;
+                   Member   : in out Adafr.Members.Models.Member_Bean'Class);
 
    --  Register the member for the Ada-France or Ada-France+Ada-Europe
    --  after validating the secure key

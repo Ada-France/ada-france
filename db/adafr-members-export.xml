@@ -81,13 +81,14 @@
       m.country AS country
     FROM awa_email AS email
     LEFT JOIN adafr_member AS m ON m.email_id = email.id
-    WHERE m.status >= 1
+    WHERE m.status &gt;= 1 AND m.status &lt;= 3
     ORDER BY last_name, first_name, email, id
        </sql>
        <sql-count>
     SELECT
        count(m.id)
     FROM adafr_member AS m
+    WHERE m.status &gt;= 1 AND m.status &lt;= 3
        </sql-count>
     </query>
 
