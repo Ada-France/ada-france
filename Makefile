@@ -6,15 +6,24 @@ GPRPATH=${NAME}.gpr
 include Makefile.defaults
 
 ROOT_DIR=$(shell pwd)
-PLUGINS=
 
+ifeq (${HAVE_ALIRE},yes)
+DYNAMO=alr exec -- dynamo
+BUILD_COMMAND=alr build
+HAVE_SETUP=no
+else
 GPRFLAGS += -j$(PROCESSORS) -XROOT_DIR=$(ROOT_DIR) -XUTIL_OS=$(UTIL_OS) -XUTIL_AWS_IMPL=$(UTIL_AWS_VERSION)
 
 ifeq (${HAVE_DYNAMO},yes)
+HAVE_SETUP=no
 GPRFLAGS += -XBUILD_DYNAMO=no
 else
+HAVE_SETUP=yes
 GPRFLAGS += -XBUILD_DYNAMO=yes
 DYNAMO=env DYNAMO_UML_PATH=awa/awa/uml DYNAMO_SEARCH_PATH=awa/awa/plugins $(ROOT_DIR)/bin/dynamo
+BUILD_COMMAND=$(GNATMAKE) $(GPRFLAGS) -p -P "$(GPRPATH)" $(MAKE_ARGS)
+endif
+
 endif
 
 LIBNAME=lib${NAME}
@@ -25,10 +34,8 @@ DYNAMO_ARGS=--package Adafr.Members.Models db uml/ada-france.zargo
 
 ROOTDIR=.
 
-$(foreach PLUGIN,$(PLUGINS),$(eval include plugins/$(PLUGIN)/Makefile))
-
 build:: setup
-	$(GNATMAKE) $(GPRFLAGS) -p -P "$(GPRPATH)" $(MAKE_ARGS)
+	$(BUILD_COMMAND)
 
 generate:: build-dynamo
 	mkdir -p db
@@ -39,7 +46,7 @@ package:
 	$(DYNAMO) dist $(DIST_DIR) package.xml
 	tar czf $(DIST_FILE) $(DIST_DIR)
 
-ifneq (${HAVE_DYNAMO},yes)
+ifeq (${HAVE_SETUP},yes)
 setup:: awa/dynamo/src/gen-configs.ads
 awa/dynamo/src/gen-configs.ads:   Makefile.conf awa/dynamo/src/gen-configs.gpb
 	cd awa/dynamo && sh ./alire-setup.sh
@@ -58,7 +65,7 @@ awa/dynamo/config/uml/AWA.xmi: awa/awa/uml/awa.zargo
 build-dynamo: bin/dynamo awa/dynamo/config/uml/AWA.xmi
 
 bin/dynamo: setup
-	$(GNATMAKE) $(GPRFLAGS) -p -P "$(GPRPATH)" $(MAKE_ARGS)
+	$(BUILD_COMMAND)
 
 else
 
