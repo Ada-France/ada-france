@@ -1,5 +1,6 @@
 /* Copied from ado-postgresql.sql*/
 /* File generated automatically by dynamo */
+SET client_min_messages = warning;
 /* Entity table that enumerates all known database tables */
 CREATE TABLE IF NOT EXISTS ado_entity_type (
   /* the database table unique entity index */
@@ -32,7 +33,7 @@ INSERT INTO ado_entity_type (name) VALUES
 ('ado_entity_type'), ('ado_sequence'), ('ado_version')
   ON CONFLICT DO NOTHING;
 INSERT INTO ado_version (name, version)
-  VALUES ("ado", 2)
+  VALUES ('ado', 2)
   ON CONFLICT DO NOTHING;
 /* Copied from awa-postgresql.sql*/
 /* File generated automatically by dynamo */
@@ -901,6 +902,7 @@ INSERT INTO ado_version (name, version)
   ON CONFLICT DO NOTHING;
 /* Copied from adafr-postgresql.sql*/
 /* File generated automatically by dynamo */
+SET client_min_messages = warning;
 /* The Member table holds the list of Ada France members with the necessary
 information so that we can send them the Ada User Journal if they are
 member of Ada Europe. The member is first in the PENDING state
@@ -1013,5 +1015,5 @@ INSERT INTO awa_audit_field (entity_type, name)
   VALUES ((SELECT id FROM ado_entity_type WHERE name = 'adafr_member'), 'amount')
   ON CONFLICT DO NOTHING;
 INSERT INTO ado_version (name, version)
-  VALUES ("adafr", 1)
+  VALUES ('adafr', 1)
   ON CONFLICT DO NOTHING;

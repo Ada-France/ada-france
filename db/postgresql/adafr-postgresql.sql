@@ -1,4 +1,5 @@
 /* File generated automatically by dynamo */
+SET client_min_messages = warning;
 /* The Member table holds the list of Ada France members with the necessary
 information so that we can send them the Ada User Journal if they are
 member of Ada Europe. The member is first in the PENDING state
@@ -111,5 +112,5 @@ INSERT INTO awa_audit_field (entity_type, name)
   VALUES ((SELECT id FROM ado_entity_type WHERE name = 'adafr_member'), 'amount')
   ON CONFLICT DO NOTHING;
 INSERT INTO ado_version (name, version)
-  VALUES ("adafr", 1)
+  VALUES ('adafr', 1)
   ON CONFLICT DO NOTHING;
