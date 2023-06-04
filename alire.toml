@@ -28,13 +28,13 @@ libgpr = "any"
 
 [[actions]]
 type = "post-fetch"
-command = ["sh", "./configure", "--enable-alire"]
+command = ["sh", "./alire-setup.sh"]
 
 [configuration]
 disabled = true
 
 [environment]
-PATH.prepend = "${CRATE_ROOT}/bin"
+PATH.prepend = "${CRATE_ROOT}/bin:${CRATE_ROOT}/awa/dynamo/bin"
 MANPATH.prepend = "${CRATE_ROOT}/man"
 
 DYNAMO_SEARCH_PATH.prepend = "${CRATE_ROOT}/awa/awa/plugins"

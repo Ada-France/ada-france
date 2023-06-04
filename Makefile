@@ -1,7 +1,5 @@
 NAME=adafr
 GPRPATH=${NAME}.gpr
-BUILD_COMMAND=alr -n build
-DYNAMO=alr -n exec -- dynamo
 
 -include Makefile.conf
 
@@ -12,7 +10,7 @@ ROOT_DIR=$(shell pwd)
 ifeq (${HAVE_ALIRE},yes)
 DYNAMO=alr exec -- dynamo
 BUILD_COMMAND=alr build
-HAVE_SETUP=no
+HAVE_SETUP=yes
 else
 GPRFLAGS += -j$(PROCESSORS) -XROOT_DIR=$(ROOT_DIR) -XUTIL_OS=$(UTIL_OS) -XUTIL_AWS_IMPL=$(UTIL_AWS_VERSION)
 
