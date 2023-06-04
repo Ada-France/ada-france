@@ -629,6 +629,31 @@ AWS_VERSION
 UTIL_OS_VERSION
 UTIL_ASM_TYPE
 HARDWARE_PLATFORM
+ADAFR_LIBDIR
+HAVE_ALIRE
+ALIRE
+ADAFR_MICRO_VERSION
+ADAFR_MINOR_VERSION
+ADAFR_MAJOR_VERSION
+ADAFR_VERSION
+NR_CPUS
+BUILD
+BUILDS_COVERAGE
+BUILDS_QUIET
+BUILDS_DISTRIB
+DEFAULT_LIBRARY_TYPE
+BUILDS_SHARED
+LN_S
+INSTALL_DATA
+INSTALL_SCRIPT
+INSTALL_PROGRAM
+SET_MAKE
+GNAT
+GPRINSTALL
+GNATCLEAN
+GPRCLEAN
+GNATMAKE
+GPRBUILD
 target_os
 target_vendor
 target_cpu
@@ -641,13 +666,6 @@ build_os
 build_vendor
 build_cpu
 build
-ADAFR_LIBDIR
-HAVE_ALIRE
-ALIRE
-ADAFR_MICRO_VERSION
-ADAFR_MINOR_VERSION
-ADAFR_MAJOR_VERSION
-ADAFR_VERSION
 target_alias
 host_alias
 build_alias
@@ -690,6 +708,11 @@ SHELL'
 ac_subst_files=''
 ac_user_opts='
 enable_option_checking
+with_build_root
+enable_shared
+enable_default_shared
+enable_distrib
+enable_coverage
 enable_alire
 enable_aws
 with_aws
@@ -1318,12 +1341,17 @@ Optional Features:
   --disable-option-checking  ignore unrecognized --enable/--with options
   --disable-FEATURE       do not include FEATURE (same as --enable-FEATURE=no)
   --enable-FEATURE[=ARG]  include FEATURE [ARG=yes]
+  --enable-shared         Enable the shared libraries (disabled)
+  --enable-default-shared Use shared libraries by default (disabled)
+  --enable-distrib        build for distribution, optimized and strip symbols (enabled)
+  --enable-coverage       build with coverage support -fprofile-arcs -ftest-coverage (disabled)
   --enable-alire          Enable the use of Alire to build the project (disabled)
   --enable-aws            Enable the AWS support (enabled)
 
 Optional Packages:
   --with-PACKAGE[=ARG]    use PACKAGE [ARG=yes]
   --without-PACKAGE       do not use PACKAGE (same as --with-PACKAGE=no)
+  --with-build-root=PATH  Path to find the Ada libraries
   --with-aws=x            Path for the Ada Web Server library
                           (http://libre.adacore.com/libre/tools/aws/)
 
@@ -1701,7 +1729,7 @@ fi
 
 
 # Auxiliary files required by this configure script.
-ac_aux_files="config.guess config.sub"
+ac_aux_files="install-sh config.guess config.sub"
 
 # Locations in which to look for auxiliary files.
 ac_aux_dir_candidates="${srcdir}${PATH_SEPARATOR}${srcdir}/..${PATH_SEPARATOR}${srcdir}/../.."
@@ -1867,93 +1895,6 @@ ac_compiler_gnu=$ac_cv_c_compiler_gnu
 
 
 
-# AM_GNAT_LIBRARY_PROJECT(adafr)
-
-# Current release settings
-ADAFR_MAJOR_VERSION=1
-ADAFR_MINOR_VERSION=19
-ADAFR_MICRO_VERSION=0
-ADAFR_VERSION=$ADAFR_MAJOR_VERSION.$ADAFR_MINOR_VERSION.$ADAFR_MICRO_VERSION
-
-# Set the version number of the project
-
-
-
-
-
-ac_enable_alire=no
-# Check whether --enable-alire was given.
-if test ${enable_alire+y}
-then :
-  enableval=$enable_alire; case "${enableval}" in
-  no|none)  ac_enable_alire=no ;;
-  *)
-    for ac_prog in alr
-do
-  # Extract the first word of "$ac_prog", so it can be a program name with args.
-set dummy $ac_prog; ac_word=$2
-{ printf "%s\n" "$as_me:${as_lineno-$LINENO}: checking for $ac_word" >&5
-printf %s "checking for $ac_word... " >&6; }
-if test ${ac_cv_prog_ALIRE+y}
-then :
-  printf %s "(cached) " >&6
-else $as_nop
-  if test -n "$ALIRE"; then
-  ac_cv_prog_ALIRE="$ALIRE" # Let the user override the test.
-else
-as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
-for as_dir in $PATH
-do
-  IFS=$as_save_IFS
-  case $as_dir in #(((
-    '') as_dir=./ ;;
-    */) ;;
-    *) as_dir=$as_dir/ ;;
-  esac
-    for ac_exec_ext in '' $ac_executable_extensions; do
-  if as_fn_executable_p "$as_dir$ac_word$ac_exec_ext"; then
-    ac_cv_prog_ALIRE="$ac_prog"
-    printf "%s\n" "$as_me:${as_lineno-$LINENO}: found $as_dir$ac_word$ac_exec_ext" >&5
-    break 2
-  fi
-done
-  done
-IFS=$as_save_IFS
-
-fi
-fi
-ALIRE=$ac_cv_prog_ALIRE
-if test -n "$ALIRE"; then
-  { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: $ALIRE" >&5
-printf "%s\n" "$ALIRE" >&6; }
-else
-  { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: no" >&5
-printf "%s\n" "no" >&6; }
-fi
-
-
-  test -n "$ALIRE" && break
-done
-test -n "$ALIRE" || ALIRE=""""
-
-    if test -z "$ALIRE"; then
-      as_fn_error $? "alr command must be installed when --enable-alire is used." "$LINENO" 5
-    fi;
-    ac_enable_alire=yes ;;
-esac
-fi
-
-{ printf "%s\n" "$as_me:${as_lineno-$LINENO}: checking whether alire must be used" >&5
-printf %s "checking whether alire must be used... " >&6; }
-HAVE_ALIRE=$ac_enable_alire
-{ printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: ${HAVE_ALIRE}" >&5
-printf "%s\n" "${HAVE_ALIRE}" >&6; }
-
-
-ADAFR_LIBDIR="lib"
-
-
-if test T$ac_enable_alire = Tno; then
 
 
 
@@ -2070,6 +2011,701 @@ test -n "$target_alias" &&
   test "$program_prefix$program_suffix$program_transform_name" = \
     NONENONEs,x,x, &&
   program_prefix=${target_alias}-
+
+  # Find a good install program.  We prefer a C program (faster),
+# so one script is as good as another.  But avoid the broken or
+# incompatible versions:
+# SysV /etc/install, /usr/sbin/install
+# SunOS /usr/etc/install
+# IRIX /sbin/install
+# AIX /bin/install
+# AmigaOS /C/install, which installs bootblocks on floppy discs
+# AIX 4 /usr/bin/installbsd, which doesn't work without a -g flag
+# AFS /usr/afsws/bin/install, which mishandles nonexistent args
+# SVR4 /usr/ucb/install, which tries to use the nonexistent group "staff"
+# OS/2's system install, which has a completely different semantic
+# ./install, which can be erroneously created by make from ./install.sh.
+# Reject install programs that cannot install multiple files.
+{ printf "%s\n" "$as_me:${as_lineno-$LINENO}: checking for a BSD-compatible install" >&5
+printf %s "checking for a BSD-compatible install... " >&6; }
+if test -z "$INSTALL"; then
+if test ${ac_cv_path_install+y}
+then :
+  printf %s "(cached) " >&6
+else $as_nop
+  as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
+for as_dir in $PATH
+do
+  IFS=$as_save_IFS
+  case $as_dir in #(((
+    '') as_dir=./ ;;
+    */) ;;
+    *) as_dir=$as_dir/ ;;
+  esac
+    # Account for fact that we put trailing slashes in our PATH walk.
+case $as_dir in #((
+  ./ | /[cC]/* | \
+  /etc/* | /usr/sbin/* | /usr/etc/* | /sbin/* | /usr/afsws/bin/* | \
+  ?:[\\/]os2[\\/]install[\\/]* | ?:[\\/]OS2[\\/]INSTALL[\\/]* | \
+  /usr/ucb/* ) ;;
+  *)
+    # OSF1 and SCO ODT 3.0 have their own names for install.
+    # Don't use installbsd from OSF since it installs stuff as root
+    # by default.
+    for ac_prog in ginstall scoinst install; do
+      for ac_exec_ext in '' $ac_executable_extensions; do
+	if as_fn_executable_p "$as_dir$ac_prog$ac_exec_ext"; then
+	  if test $ac_prog = install &&
+	    grep dspmsg "$as_dir$ac_prog$ac_exec_ext" >/dev/null 2>&1; then
+	    # AIX install.  It has an incompatible calling convention.
+	    :
+	  elif test $ac_prog = install &&
+	    grep pwplus "$as_dir$ac_prog$ac_exec_ext" >/dev/null 2>&1; then
+	    # program-specific install script used by HP pwplus--don't use.
+	    :
+	  else
+	    rm -rf conftest.one conftest.two conftest.dir
+	    echo one > conftest.one
+	    echo two > conftest.two
+	    mkdir conftest.dir
+	    if "$as_dir$ac_prog$ac_exec_ext" -c conftest.one conftest.two "`pwd`/conftest.dir/" &&
+	      test -s conftest.one && test -s conftest.two &&
+	      test -s conftest.dir/conftest.one &&
+	      test -s conftest.dir/conftest.two
+	    then
+	      ac_cv_path_install="$as_dir$ac_prog$ac_exec_ext -c"
+	      break 3
+	    fi
+	  fi
+	fi
+      done
+    done
+    ;;
+esac
+
+  done
+IFS=$as_save_IFS
+
+rm -rf conftest.one conftest.two conftest.dir
+
+fi
+  if test ${ac_cv_path_install+y}; then
+    INSTALL=$ac_cv_path_install
+  else
+    # As a last resort, use the slow shell script.  Don't cache a
+    # value for INSTALL within a source directory, because that will
+    # break other packages using the cache if that directory is
+    # removed, or if the value is a relative name.
+    INSTALL=$ac_install_sh
+  fi
+fi
+{ printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: $INSTALL" >&5
+printf "%s\n" "$INSTALL" >&6; }
+
+# Use test -z because SunOS4 sh mishandles braces in ${var-val}.
+# It thinks the first close brace ends the variable substitution.
+test -z "$INSTALL_PROGRAM" && INSTALL_PROGRAM='${INSTALL}'
+
+test -z "$INSTALL_SCRIPT" && INSTALL_SCRIPT='${INSTALL}'
+
+test -z "$INSTALL_DATA" && INSTALL_DATA='${INSTALL} -m 644'
+
+
+
+# Check whether --with-build-root was given.
+if test ${with_build_root+y}
+then :
+  withval=$with_build_root;
+      awa_build_root=${withval}/
+
+else $as_nop
+
+      awa_build_root=''
+
+fi
+
+
+  if test x${awa_build_root} != x; then
+
+  if test x${awa_host_pwd_check} != xyes; then
+    case "${target_os}" in
+       mingw32*|cygwin*|mingw64*|msys)
+       awa_pwd_option="-W"
+       ;;
+
+     *)
+      awa_pwd_option=""
+      ;;
+
+    esac
+    awa_host_pwd_check=yes
+  fi
+
+    awa_build_pwd=`cd ${awa_build_root} && pwd $awa_pwd_option`
+    if test x${awa_build_pwd} != x${awa_build_root}; then
+      awa_build_root=${awa_build_pwd}/
+    fi
+  fi
+
+  # checking for local tools
+
+
+  for ac_prog in gprbuild
+do
+  # Extract the first word of "$ac_prog", so it can be a program name with args.
+set dummy $ac_prog; ac_word=$2
+{ printf "%s\n" "$as_me:${as_lineno-$LINENO}: checking for $ac_word" >&5
+printf %s "checking for $ac_word... " >&6; }
+if test ${ac_cv_prog_GPRBUILD+y}
+then :
+  printf %s "(cached) " >&6
+else $as_nop
+  if test -n "$GPRBUILD"; then
+  ac_cv_prog_GPRBUILD="$GPRBUILD" # Let the user override the test.
+else
+as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
+for as_dir in $PATH
+do
+  IFS=$as_save_IFS
+  case $as_dir in #(((
+    '') as_dir=./ ;;
+    */) ;;
+    *) as_dir=$as_dir/ ;;
+  esac
+    for ac_exec_ext in '' $ac_executable_extensions; do
+  if as_fn_executable_p "$as_dir$ac_word$ac_exec_ext"; then
+    ac_cv_prog_GPRBUILD="$ac_prog"
+    printf "%s\n" "$as_me:${as_lineno-$LINENO}: found $as_dir$ac_word$ac_exec_ext" >&5
+    break 2
+  fi
+done
+  done
+IFS=$as_save_IFS
+
+fi
+fi
+GPRBUILD=$ac_cv_prog_GPRBUILD
+if test -n "$GPRBUILD"; then
+  { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: $GPRBUILD" >&5
+printf "%s\n" "$GPRBUILD" >&6; }
+else
+  { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: no" >&5
+printf "%s\n" "no" >&6; }
+fi
+
+
+  test -n "$GPRBUILD" && break
+done
+test -n "$GPRBUILD" || GPRBUILD=""""
+
+  if test -n "$GPRBUILD"; then
+    GNATMAKE="$GPRBUILD"
+  else
+    for ac_prog in gnatmake
+do
+  # Extract the first word of "$ac_prog", so it can be a program name with args.
+set dummy $ac_prog; ac_word=$2
+{ printf "%s\n" "$as_me:${as_lineno-$LINENO}: checking for $ac_word" >&5
+printf %s "checking for $ac_word... " >&6; }
+if test ${ac_cv_prog_GNATMAKE+y}
+then :
+  printf %s "(cached) " >&6
+else $as_nop
+  if test -n "$GNATMAKE"; then
+  ac_cv_prog_GNATMAKE="$GNATMAKE" # Let the user override the test.
+else
+as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
+for as_dir in $PATH
+do
+  IFS=$as_save_IFS
+  case $as_dir in #(((
+    '') as_dir=./ ;;
+    */) ;;
+    *) as_dir=$as_dir/ ;;
+  esac
+    for ac_exec_ext in '' $ac_executable_extensions; do
+  if as_fn_executable_p "$as_dir$ac_word$ac_exec_ext"; then
+    ac_cv_prog_GNATMAKE="$ac_prog"
+    printf "%s\n" "$as_me:${as_lineno-$LINENO}: found $as_dir$ac_word$ac_exec_ext" >&5
+    break 2
+  fi
+done
+  done
+IFS=$as_save_IFS
+
+fi
+fi
+GNATMAKE=$ac_cv_prog_GNATMAKE
+if test -n "$GNATMAKE"; then
+  { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: $GNATMAKE" >&5
+printf "%s\n" "$GNATMAKE" >&6; }
+else
+  { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: no" >&5
+printf "%s\n" "no" >&6; }
+fi
+
+
+  test -n "$GNATMAKE" && break
+done
+test -n "$GNATMAKE" || GNATMAKE=""""
+
+  fi
+
+  if test -z "$GNATMAKE"; then
+    as_fn_error $? "gnatmake or gprbuild must be installed." "$LINENO" 5
+  fi;
+
+  for ac_prog in gprclean
+do
+  # Extract the first word of "$ac_prog", so it can be a program name with args.
+set dummy $ac_prog; ac_word=$2
+{ printf "%s\n" "$as_me:${as_lineno-$LINENO}: checking for $ac_word" >&5
+printf %s "checking for $ac_word... " >&6; }
+if test ${ac_cv_prog_GPRCLEAN+y}
+then :
+  printf %s "(cached) " >&6
+else $as_nop
+  if test -n "$GPRCLEAN"; then
+  ac_cv_prog_GPRCLEAN="$GPRCLEAN" # Let the user override the test.
+else
+as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
+for as_dir in $PATH
+do
+  IFS=$as_save_IFS
+  case $as_dir in #(((
+    '') as_dir=./ ;;
+    */) ;;
+    *) as_dir=$as_dir/ ;;
+  esac
+    for ac_exec_ext in '' $ac_executable_extensions; do
+  if as_fn_executable_p "$as_dir$ac_word$ac_exec_ext"; then
+    ac_cv_prog_GPRCLEAN="$ac_prog"
+    printf "%s\n" "$as_me:${as_lineno-$LINENO}: found $as_dir$ac_word$ac_exec_ext" >&5
+    break 2
+  fi
+done
+  done
+IFS=$as_save_IFS
+
+fi
+fi
+GPRCLEAN=$ac_cv_prog_GPRCLEAN
+if test -n "$GPRCLEAN"; then
+  { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: $GPRCLEAN" >&5
+printf "%s\n" "$GPRCLEAN" >&6; }
+else
+  { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: no" >&5
+printf "%s\n" "no" >&6; }
+fi
+
+
+  test -n "$GPRCLEAN" && break
+done
+test -n "$GPRCLEAN" || GPRCLEAN=""""
+
+  if test -n "$GPRCLEAN"; then
+    GNATCLEAN="$GPRCLEAN"
+  else
+    for ac_prog in gnatclean
+do
+  # Extract the first word of "$ac_prog", so it can be a program name with args.
+set dummy $ac_prog; ac_word=$2
+{ printf "%s\n" "$as_me:${as_lineno-$LINENO}: checking for $ac_word" >&5
+printf %s "checking for $ac_word... " >&6; }
+if test ${ac_cv_prog_GNATCLEAN+y}
+then :
+  printf %s "(cached) " >&6
+else $as_nop
+  if test -n "$GNATCLEAN"; then
+  ac_cv_prog_GNATCLEAN="$GNATCLEAN" # Let the user override the test.
+else
+as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
+for as_dir in $PATH
+do
+  IFS=$as_save_IFS
+  case $as_dir in #(((
+    '') as_dir=./ ;;
+    */) ;;
+    *) as_dir=$as_dir/ ;;
+  esac
+    for ac_exec_ext in '' $ac_executable_extensions; do
+  if as_fn_executable_p "$as_dir$ac_word$ac_exec_ext"; then
+    ac_cv_prog_GNATCLEAN="$ac_prog"
+    printf "%s\n" "$as_me:${as_lineno-$LINENO}: found $as_dir$ac_word$ac_exec_ext" >&5
+    break 2
+  fi
+done
+  done
+IFS=$as_save_IFS
+
+fi
+fi
+GNATCLEAN=$ac_cv_prog_GNATCLEAN
+if test -n "$GNATCLEAN"; then
+  { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: $GNATCLEAN" >&5
+printf "%s\n" "$GNATCLEAN" >&6; }
+else
+  { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: no" >&5
+printf "%s\n" "no" >&6; }
+fi
+
+
+  test -n "$GNATCLEAN" && break
+done
+test -n "$GNATCLEAN" || GNATCLEAN=""""
+
+  fi
+
+  for ac_prog in gprinstall
+do
+  # Extract the first word of "$ac_prog", so it can be a program name with args.
+set dummy $ac_prog; ac_word=$2
+{ printf "%s\n" "$as_me:${as_lineno-$LINENO}: checking for $ac_word" >&5
+printf %s "checking for $ac_word... " >&6; }
+if test ${ac_cv_prog_GPRINSTALL+y}
+then :
+  printf %s "(cached) " >&6
+else $as_nop
+  if test -n "$GPRINSTALL"; then
+  ac_cv_prog_GPRINSTALL="$GPRINSTALL" # Let the user override the test.
+else
+as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
+for as_dir in $PATH
+do
+  IFS=$as_save_IFS
+  case $as_dir in #(((
+    '') as_dir=./ ;;
+    */) ;;
+    *) as_dir=$as_dir/ ;;
+  esac
+    for ac_exec_ext in '' $ac_executable_extensions; do
+  if as_fn_executable_p "$as_dir$ac_word$ac_exec_ext"; then
+    ac_cv_prog_GPRINSTALL="$ac_prog"
+    printf "%s\n" "$as_me:${as_lineno-$LINENO}: found $as_dir$ac_word$ac_exec_ext" >&5
+    break 2
+  fi
+done
+  done
+IFS=$as_save_IFS
+
+fi
+fi
+GPRINSTALL=$ac_cv_prog_GPRINSTALL
+if test -n "$GPRINSTALL"; then
+  { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: $GPRINSTALL" >&5
+printf "%s\n" "$GPRINSTALL" >&6; }
+else
+  { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: no" >&5
+printf "%s\n" "no" >&6; }
+fi
+
+
+  test -n "$GPRINSTALL" && break
+done
+test -n "$GPRINSTALL" || GPRINSTALL=""""
+
+
+  for ac_prog in gnat
+do
+  # Extract the first word of "$ac_prog", so it can be a program name with args.
+set dummy $ac_prog; ac_word=$2
+{ printf "%s\n" "$as_me:${as_lineno-$LINENO}: checking for $ac_word" >&5
+printf %s "checking for $ac_word... " >&6; }
+if test ${ac_cv_prog_GNAT+y}
+then :
+  printf %s "(cached) " >&6
+else $as_nop
+  if test -n "$GNAT"; then
+  ac_cv_prog_GNAT="$GNAT" # Let the user override the test.
+else
+as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
+for as_dir in $PATH
+do
+  IFS=$as_save_IFS
+  case $as_dir in #(((
+    '') as_dir=./ ;;
+    */) ;;
+    *) as_dir=$as_dir/ ;;
+  esac
+    for ac_exec_ext in '' $ac_executable_extensions; do
+  if as_fn_executable_p "$as_dir$ac_word$ac_exec_ext"; then
+    ac_cv_prog_GNAT="$ac_prog"
+    printf "%s\n" "$as_me:${as_lineno-$LINENO}: found $as_dir$ac_word$ac_exec_ext" >&5
+    break 2
+  fi
+done
+  done
+IFS=$as_save_IFS
+
+fi
+fi
+GNAT=$ac_cv_prog_GNAT
+if test -n "$GNAT"; then
+  { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: $GNAT" >&5
+printf "%s\n" "$GNAT" >&6; }
+else
+  { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: no" >&5
+printf "%s\n" "no" >&6; }
+fi
+
+
+  test -n "$GNAT" && break
+done
+test -n "$GNAT" || GNAT=""""
+
+  if test -n "$GNAT"; then
+    GNATCHECK="$GNAT ls"
+    GNATCHECK_ARG=" system.ads"
+  else
+    GNATCHECK="$GNATMAKE"
+    GNATCHECK_ARG=""
+  fi
+
+  { printf "%s\n" "$as_me:${as_lineno-$LINENO}: checking whether ${MAKE-make} sets \$(MAKE)" >&5
+printf %s "checking whether ${MAKE-make} sets \$(MAKE)... " >&6; }
+set x ${MAKE-make}
+ac_make=`printf "%s\n" "$2" | sed 's/+/p/g; s/[^a-zA-Z0-9_]/_/g'`
+if eval test \${ac_cv_prog_make_${ac_make}_set+y}
+then :
+  printf %s "(cached) " >&6
+else $as_nop
+  cat >conftest.make <<\_ACEOF
+SHELL = /bin/sh
+all:
+	@echo '@@@%%%=$(MAKE)=@@@%%%'
+_ACEOF
+# GNU make sometimes prints "make[1]: Entering ...", which would confuse us.
+case `${MAKE-make} -f conftest.make 2>/dev/null` in
+  *@@@%%%=?*=@@@%%%*)
+    eval ac_cv_prog_make_${ac_make}_set=yes;;
+  *)
+    eval ac_cv_prog_make_${ac_make}_set=no;;
+esac
+rm -f conftest.make
+fi
+if eval test \$ac_cv_prog_make_${ac_make}_set = yes; then
+  { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+printf "%s\n" "yes" >&6; }
+  SET_MAKE=
+else
+  { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: no" >&5
+printf "%s\n" "no" >&6; }
+  SET_MAKE="MAKE=${MAKE-make}"
+fi
+
+
+  { printf "%s\n" "$as_me:${as_lineno-$LINENO}: checking whether ln -s works" >&5
+printf %s "checking whether ln -s works... " >&6; }
+LN_S=$as_ln_s
+if test "$LN_S" = "ln -s"; then
+  { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+printf "%s\n" "yes" >&6; }
+else
+  { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: no, using $LN_S" >&5
+printf "%s\n" "no, using $LN_S" >&6; }
+fi
+
+
+  { printf "%s\n" "$as_me:${as_lineno-$LINENO}: checking shared library support" >&5
+printf %s "checking shared library support... " >&6; }
+  ac_enable_shared=no
+  # Check whether --enable-shared was given.
+if test ${enable_shared+y}
+then :
+  enableval=$enable_shared; case "${enableval}" in
+      no|none)  ac_enable_shared=no ;;
+      *)        ac_enable_shared=yes ;;
+    esac
+fi
+  ac_enable_default_shared=no
+  # Check whether --enable-default-shared was given.
+if test ${enable_default_shared+y}
+then :
+  enableval=$enable_default_shared; case "${enableval}" in
+      no|none)  ac_enable_default_shared=no ;;
+      *)        ac_enable_default_shared=yes ;;
+    esac
+fi
+
+  { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: ${ac_enable_shared}" >&5
+printf "%s\n" "${ac_enable_shared}" >&6; }
+  BUILDS_SHARED=$ac_enable_shared
+
+
+  { printf "%s\n" "$as_me:${as_lineno-$LINENO}: checking default library type" >&5
+printf %s "checking default library type... " >&6; }
+  if test ${ac_enable_shared} = yes && test ${ac_enable_default_shared} = yes; then
+    DEFAULT_LIBRARY_TYPE='relocatable'
+  else
+    DEFAULT_LIBRARY_TYPE='static'
+  fi
+  { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: ${DEFAULT_LIBRARY_TYPE}" >&5
+printf "%s\n" "${DEFAULT_LIBRARY_TYPE}" >&6; }
+
+
+
+  { printf "%s\n" "$as_me:${as_lineno-$LINENO}: checking distribution build" >&5
+printf %s "checking distribution build... " >&6; }
+  ac_enable_distrib=yes
+  ac_quiet_mode=-q
+  ac_build_mode=distrib
+  # Check whether --enable-distrib was given.
+if test ${enable_distrib+y}
+then :
+  enableval=$enable_distrib; case "${enableval}" in
+      no|none)  ac_enable_distrib=no
+                ac_build_mode=debug
+                ac_quiet_mode=
+                ;;
+      *)        ac_enable_distrib=yes
+                ac_build_mode=distrib
+                ac_quiet_mode=-q
+                ;;
+    esac
+fi
+
+  { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: ${ac_enable_distrib}" >&5
+printf "%s\n" "${ac_enable_distrib}" >&6; }
+  BUILDS_DISTRIB=$ac_enable_distrib
+
+
+  BUILDS_QUIET=$ac_quiet_mode
+
+
+
+  { printf "%s\n" "$as_me:${as_lineno-$LINENO}: checking coverage support" >&5
+printf %s "checking coverage support... " >&6; }
+  ac_enable_coverage=no
+  # Check whether --enable-coverage was given.
+if test ${enable_coverage+y}
+then :
+  enableval=$enable_coverage; case "${enableval}" in
+      no|none)  ac_enable_coverage=no ;;
+      *)        ac_enable_coverage=yes ;;
+    esac
+fi
+
+  { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: ${ac_enable_coverage}" >&5
+printf "%s\n" "${ac_enable_coverage}" >&6; }
+  BUILDS_COVERAGE=$ac_enable_coverage
+
+  if test T$ac_enable_coverage = Tyes; then
+     ac_build_mode='coverage'
+  fi
+
+
+  BUILD=$ac_build_mode
+
+
+  { printf "%s\n" "$as_me:${as_lineno-$LINENO}: checking number of processors" >&5
+printf %s "checking number of processors... " >&6; }
+if test ${ac_cv_proc_count+y}
+then :
+  printf %s "(cached) " >&6
+else $as_nop
+
+    ac_cv_proc_count=`getconf _NPROCESSORS_CONF 2>/dev/null || getconf NPROCESSORS_CONF 2>/dev/null || echo 1`
+
+fi
+{ printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: $ac_cv_proc_count" >&5
+printf "%s\n" "$ac_cv_proc_count" >&6; }
+  NR_CPUS=$ac_cv_proc_count
+
+
+
+  { printf "%s\n" "$as_me:${as_lineno-$LINENO}: checking preparing for GNAT project adafr" >&5
+printf %s "checking preparing for GNAT project adafr... " >&6; }
+  mkdir -p obj/adafr/static obj/adafr/relocatable lib/adafr/static lib/adafr/relocatable
+  { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: done" >&5
+printf "%s\n" "done" >&6; }
+
+
+
+# Current release settings
+ADAFR_MAJOR_VERSION=1
+ADAFR_MINOR_VERSION=19
+ADAFR_MICRO_VERSION=0
+ADAFR_VERSION=$ADAFR_MAJOR_VERSION.$ADAFR_MINOR_VERSION.$ADAFR_MICRO_VERSION
+
+# Set the version number of the project
+
+
+
+
+
+ac_enable_alire=no
+# Check whether --enable-alire was given.
+if test ${enable_alire+y}
+then :
+  enableval=$enable_alire; case "${enableval}" in
+  no|none)  ac_enable_alire=no ;;
+  *)
+    for ac_prog in alr
+do
+  # Extract the first word of "$ac_prog", so it can be a program name with args.
+set dummy $ac_prog; ac_word=$2
+{ printf "%s\n" "$as_me:${as_lineno-$LINENO}: checking for $ac_word" >&5
+printf %s "checking for $ac_word... " >&6; }
+if test ${ac_cv_prog_ALIRE+y}
+then :
+  printf %s "(cached) " >&6
+else $as_nop
+  if test -n "$ALIRE"; then
+  ac_cv_prog_ALIRE="$ALIRE" # Let the user override the test.
+else
+as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
+for as_dir in $PATH
+do
+  IFS=$as_save_IFS
+  case $as_dir in #(((
+    '') as_dir=./ ;;
+    */) ;;
+    *) as_dir=$as_dir/ ;;
+  esac
+    for ac_exec_ext in '' $ac_executable_extensions; do
+  if as_fn_executable_p "$as_dir$ac_word$ac_exec_ext"; then
+    ac_cv_prog_ALIRE="$ac_prog"
+    printf "%s\n" "$as_me:${as_lineno-$LINENO}: found $as_dir$ac_word$ac_exec_ext" >&5
+    break 2
+  fi
+done
+  done
+IFS=$as_save_IFS
+
+fi
+fi
+ALIRE=$ac_cv_prog_ALIRE
+if test -n "$ALIRE"; then
+  { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: $ALIRE" >&5
+printf "%s\n" "$ALIRE" >&6; }
+else
+  { printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: no" >&5
+printf "%s\n" "no" >&6; }
+fi
+
+
+  test -n "$ALIRE" && break
+done
+test -n "$ALIRE" || ALIRE=""""
+
+    if test -z "$ALIRE"; then
+      as_fn_error $? "alr command must be installed when --enable-alire is used." "$LINENO" 5
+    fi;
+    ac_enable_alire=yes ;;
+esac
+fi
+
+{ printf "%s\n" "$as_me:${as_lineno-$LINENO}: checking whether alire must be used" >&5
+printf %s "checking whether alire must be used... " >&6; }
+HAVE_ALIRE=$ac_enable_alire
+{ printf "%s\n" "$as_me:${as_lineno-$LINENO}: result: ${HAVE_ALIRE}" >&5
+printf "%s\n" "${HAVE_ALIRE}" >&6; }
+
+
+ADAFR_LIBDIR="lib"
+
+
+if test T$ac_enable_alire = Tno; then
 
 
 
@@ -2509,7 +3145,7 @@ GNAT_PROJECT_PATHS="$GNAT_PROJECT_PATHS:$ROOT_DIR/awa/ada-ado:$ROOT_DIR/awa/ada-
 GNAT_PROJECT_PATHS="$GNAT_PROJECT_PATHS:$ROOT_DIR/awa/ada-servlet/.alire/aws:$ROOT_DIR/awa/ada-servlet:$ROOT_DIR/awa/ada-asf/.alire:$ROOT_DIR/awa/ada-asf"
 GNAT_PROJECT_PATHS="$GNAT_PROJECT_PATHS:$ROOT_DIR/awa/ada-wiki/.alire:$ROOT_DIR/awa/ada-wiki:$ROOT_DIR/awa/ada-wiki/.alire:$ROOT_DIR/awa/openapi-ada/.alire"
 GNAT_PROJECT_PATHS="$GNAT_PROJECT_PATHS:$ROOT_DIR/awa/dynamo/.alire:$ROOT_DIR/awa/.alire:$ROOT_DIR/awa/awa"
-GNAT_PROJECT_PATHS="$GNAT_PROJECT_PATHS:/usr/share/gpr"
+GNAT_PROJECT_PATHS="$GNAT_PROJECT_PATHS"
 
 
 
@@ -3218,6 +3854,7 @@ gives unlimited permission to copy, distribute and modify it."
 
 ac_pwd='$ac_pwd'
 srcdir='$srcdir'
+INSTALL='$INSTALL'
 test -n "\$AWK" || AWK=awk
 _ACEOF
 
@@ -3655,6 +4292,10 @@ ac_abs_srcdir=$ac_abs_top_srcdir$ac_dir_suffix
   # CONFIG_FILE
   #
 
+  case $INSTALL in
+  [\\/$]* | ?:[\\/]* ) ac_INSTALL=$INSTALL ;;
+  *) ac_INSTALL=$ac_top_build_prefix$INSTALL ;;
+  esac
 _ACEOF
 
 cat >>$CONFIG_STATUS <<\_ACEOF || ac_write_fail=1
@@ -3708,6 +4349,7 @@ s&@abs_top_srcdir@&$ac_abs_top_srcdir&;t t
 s&@builddir@&$ac_builddir&;t t
 s&@abs_builddir@&$ac_abs_builddir&;t t
 s&@abs_top_builddir@&$ac_abs_top_builddir&;t t
+s&@INSTALL@&$ac_INSTALL&;t t
 $ac_datarootdir_hack
 "
 eval sed \"\$ac_sed_extra\" "$ac_file_inputs" | $AWK -f "$ac_tmp/subs.awk" \
