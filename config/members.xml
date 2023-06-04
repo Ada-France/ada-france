@@ -179,7 +179,7 @@
   </url-policy>
 
   <url-policy>
-    <permission>logged-user</permission>
+    <permission>member-view</permission>
     <url-pattern>/members/admin/.*</url-pattern>
     <url-pattern>/members/.*</url-pattern>
   </url-policy>

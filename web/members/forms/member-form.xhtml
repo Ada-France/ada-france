@@ -53,6 +53,14 @@
                              id='country' size='50' required='true'
                              value='#{adafrMember.country}'
                              title='Pays'/>
+                <h:panelGroup rendered="#{adafrMember.status eq 'WAITING_PAYMENT' or adafrMember.expired}">
+                  <dl class='awa-required ui-corner-all adafr-member-inactive'>
+                    <dd>
+                      <label for='member-inactive'>Marquer ce membre comme inactif</label>
+                      <h:selectBooleanCheckbox id="member-inactive" value="#{adafrMember.inactive}"/>
+                    </dd>
+                  </dl>
+                </h:panelGroup>
                 <ul class='awa-buttons'>
                     <li>
                         <h:commandButton id='send-mail'

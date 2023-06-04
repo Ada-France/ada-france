@@ -29,17 +29,15 @@
             <f:viewParam id='page' value='#{newsList.page}' required="false"/>
             <f:viewAction action="#{newsList.load}"/>
         </f:metadata>
-        <div id='awa-content'>
 
-            <div class='grid_9'>
-                <ui:include src="blogs/lists/post-list.xhtml">
-                    <ui:param name="postList" value="#{newsList}"/>
-                    <ui:param name="pageUrl" value="blogs/view.html"/>
-                </ui:include>
-            </div>
-            <div class='grid_3 blog-post-info'>
-                <ui:include src="blogs/lists/post-info.xhtml"/>
-            </div>
+        <div class='col-sm-9'>
+          <ui:include src="blogs/lists/post-list.xhtml">
+            <ui:param name="postList" value="#{newsList}"/>
+            <ui:param name="pageUrl" value="blogs/view.html"/>
+          </ui:include>
+        </div>
+        <div class='col-sm-3 blog-post-info'>
+          <ui:include src="blogs/lists/post-info.xhtml"/>
         </div>
     </ui:define>
 </ui:composition>

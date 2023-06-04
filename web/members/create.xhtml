@@ -25,7 +25,7 @@
 
     <!-- Main page body -->
     <ui:define name="pageBody">
-        <div id='awa-content' class="adafr-members">
+        <div class="adafr-members">
             <ui:include src="/workspaces/views/workspace-nav.xhtml"/>
             <c:choose>
                 <c:when test="#{auth:hasPermission('member-create', 1)}">

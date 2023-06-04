@@ -1,19 +1,12 @@
-<nav xmlns:c="http://java.sun.com/jstl/core"
-     xmlns:auth="http://code.google.com/p/ada-awa/auth"
-     class="navbar navbar-default">
-  <div class="navbar-header">
-      <a class="navbar-brand" id='nav-index' href="#{contextPath}/index.html">Ada-France</a>
-      <a class="navbar-brand" id='nav-resources' href="#{contextPath}/ressources.html">Ressources</a>
-      <a class="navbar-brand" id='nav-news' href="#{contextPath}/actualites.html">Actualités</a>
-      <a class="navbar-brand" id='nav-jobs' href="#{contextPath}/emploi.html">Emploi</a>
-  </div>
+<header xmlns:c="http://java.sun.com/jstl/core" xmlns:auth="http://code.google.com/p/ada-awa/auth">
+<div class="navbar navbar-default">
   <div class="collapse navbar-collapse navbar-right" id="mainmenu">
     <ul class="nav navbar-nav">
         <c:choose>
             <c:when test="#{user.isLogged}">
                 <c:if test="#{auth:hasPermission('blog-create-post',1)}">
-                    <li>
-                        <a id='nav-member' href="#{contextPath}/workspaces/main.html"
+                    <li id='nav-member'>
+                        <a href="#{contextPath}/workspaces/main.html"
                            title="#{layoutMsg.layout_workspace_title}">
                             Administration
                         </a>
@@ -38,17 +31,28 @@
             </a>
         </li>
         <li>
-            <a class="navbar-brand" href="https://groups.google.com/forum/?fromgroups#%21forum/fr.comp.lang.ada"
-               title="Groupe fr.comp.lang.ada" rel="noopener noreferrer nofollow" target="_blank">
-                <img src="#{contextPath}/images/logo_groups_29px.png"  alt="Forum" width="29" height="29"/>
-            </a>
-        </li>
-        <li>
             <a class="navbar-brand" href="https://twitter.com/adafrance" rel="noopener noreferrer nofollow" target="_blank"
                title="Ada-France sur Twitter">
                 <img src="#{contextPath}/images/Twitter_Social_Icon_Rounded_Square_Color.png" alt="Twitter" width="29" height="29"/>
             </a>
         </li>
+        <li>
+            <a class="navbar-brand" href="https://www.youtube.com/@adafrance1242"
+               title="Ada-France sur Youtube" rel="noopener noreferrer nofollow" target="_blank">
+                <img src="#{contextPath}/images/youtube_social_circle_red.png"  alt="Youtube" width="29" height="29"/>
+            </a>
+        </li>
     </ul>
   </div>
-</nav>
+  <input type='checkbox' id='adafr-top-nav' class='awa-side-menu' />
+  <label for='adafr-top-nav' class='awa-hamb-menu'><span class='awa-hamb-line'></span></label>
+  <nav class='awa-side-nav'>
+    <ul class="navbar-header awa-menu">
+      <li id='nav-index'><a class="navbar-brand" href="#{contextPath}/index.html">Ada-France</a></li>
+      <li id='nav-resources'><a class="navbar-brand" href="#{contextPath}/ressources.html">Ressources</a></li>
+      <li id='nav-news'><a class="navbar-brand" href="#{contextPath}/actualites.html">Actualités</a></li>
+      <li id='nav-jobs'><a class="navbar-brand" href="#{contextPath}/emploi.html">Emploi</a></li>
+    </ul>
+  </nav>
+</div>
+</header>

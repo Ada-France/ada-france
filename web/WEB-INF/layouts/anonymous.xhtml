@@ -14,9 +14,10 @@
     <link media="screen" type="text/css" rel="stylesheet" href="#{contextPath}/css/grids/fluid_grid.css"/>
     <link media="screen" type="text/css" rel="stylesheet" href="#{contextPath}/css/asf.css"/>
     <link media="screen" type="text/css" rel="stylesheet" href="#{contextPath}/css/awa.css"/>
-    <link media="screen" type="text/css" rel="stylesheet" href="#{contextPath}/css/users.css"/>
-    <link media="screen" type="text/css" rel="stylesheet" href="#{jquery.uiCssPath}"/>
+    <link media="screen" type="text/css" rel="stylesheet" href="#{jquery.uiCssPath}/jquery-ui.structure.css"/>
+    <link media="screen" type="text/css" rel="stylesheet" href="#{jquery.uiCssPath}/jquery-ui.theme.css"/>
     <link media="screen" type="text/css" rel="stylesheet" href="#{jquery.chosenCssPath}"/>
+    <link media="screen" type="text/css" rel="stylesheet" href="#{contextPath}/css/users.css"/>
     <link media="screen" type="text/css" rel="stylesheet" href="#{contextPath}/css/comments.css"/>
     <link media="screen" type="text/css" rel="stylesheet" href="#{contextPath}/css/blogs.css"/>
     <link media="screen" type="text/css" rel="stylesheet" href="#{contextPath}/css/markedit/jquery.markedit.css" />
@@ -37,10 +38,9 @@
 <!-- Top header with user account -->
 <ui:include src="top-bar.xhtml"/>
 
-<div id='awa-page' class='container_12'>
+<main>
     <ui:insert name="pageBody"/>
-    <div id="awa-clfooter"></div>
-</div>
+</main>
 <ui:include src="footer.xhtml"/>
 
 <ui:insert name="pageScript"/>

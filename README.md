@@ -1,7 +1,24 @@
 # Ada France Web Site
 
 Ce projet contient les sources de l'application Ada France qui permet
-au site [Ada France](https://www.ada-france.org) de diffuser des informations.
+au site [Ada France](https://www.ada-france.org) de diffuser des informations
+et promouvoir le langage Ada.
+
+# Version 1.19 - Mai 2023
+- Ajout du status `INACTIVE` pour marquer un membre qui n'est plus actif
+  ou qui utilise une autre adresse mail
+- Correction du mail pour changer son mot de passe
+
+# Version 1.18 - Mars 2023
+
+- Supression des liens externes morts et ajout de nouveaux sites,
+- Meilleure présentation sur les mobiles,
+- Génération des recus en asynchrone avec AWA.Jobs.
+
+# Version 1.16 - Dec 2022
+
+- L'authentification par Github ou Gitlab est possible pour les membres enregistrés
+- Intégration de l'éditeur EasyMDE pour éditer des articles et wiki en Markdown
 
 Cette version est basee sur SQLite et utilise Alire pour la construction
 et gestion des dependances.
@@ -12,9 +29,26 @@ et gestion des dependances.
 
 # Compilation
 
-Lancer la compilation avec:
+## Setup
+
+Le serveur tourne sous Debian 10 at la configuration suivante est nécessaire avant de lancer
+le `configure`:
+
 ```
-make generate build
+sudo apt-get install gnat gprbuild libxmlada-dom8-dev \
+   libaws18-dev libgpr2-dev imagemagick unzip xsltproc libmariadb-dev
+```
+
+## Build
+
+Lancer la commande configure:
+```
+   ./configure
+```
+
+Ensuite lancer la compilation avec:
+```
+   make generate build
 ```
 
 # Lancement

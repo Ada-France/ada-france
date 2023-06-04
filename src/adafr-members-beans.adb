@@ -31,8 +31,10 @@ package body Adafr.Members.Beans is
    use Ada.Strings.Unbounded;
    use type ADO.Identifier;
    use type Ada.Calendar.Time;
+   use type Models.Status_Type;
 
    package ASC renames AWA.Services.Contexts;
+   package UBO renames Util.Beans.Objects;
 
    procedure Invalid_Secure_Key (Outcome : out Ada.Strings.Unbounded.Unbounded_String);
 
@@ -55,13 +57,18 @@ package body Adafr.Members.Beans is
    overriding
    procedure Set_Value (Item  : in out Member_Bean;
                         Name  : in String;
-                        Value : in Util.Beans.Objects.Object) is
+                        Value : in UBO.Object) is
    begin
-      if Name = "id" and not Util.Beans.Objects.Is_Empty (Value) then
+      if Name = "id" and not UBO.Is_Empty (Value) then
          Item.Id := ADO.Utils.To_Identifier (Value);
       elsif Name = "confirmEmail" then
-         if not Util.Beans.Objects.Is_Empty (Value) then
+         if not UBO.Is_Empty (Value) then
             raise Constraint_Error;
+         end if;
+      elsif Name = "inactive" then
+         Item.Inactive.Is_Null := UBO.Is_Null (Value);
+         if not Item.Inactive.Is_Null then
+            Item.Inactive.Value := UBO.To_Boolean (Value);
          end if;
       else
          Models.Member_Bean (Item).Set_Value (Name, Value);
@@ -73,21 +80,27 @@ package body Adafr.Members.Beans is
    --  ------------------------------
    overriding
    function Get_Value (From : in Member_Bean;
-                       Name : in String) return Util.Beans.Objects.Object is
+                       Name : in String) return UBO.Object is
    begin
       if Name = "history" then
-         return Util.Beans.Objects.To_Object (Value   => From.History_Bean,
-                                              Storage => Util.Beans.Objects.STATIC);
+         return UBO.To_Object (Value   => From.History_Bean,
+                               Storage => Util.Beans.Objects.STATIC);
 
       elsif Name = "expired" then
-         return Util.Beans.Objects.To_Object (Modules.Is_Expired (From));
+         return UBO.To_Object (Modules.Is_Expired (From));
 
       elsif Name = "payment_date" and then Modules.Is_Expired (From) then
-         return Util.Beans.Objects.Time.To_Object (Ada.Calendar.Clock);
+         return UBO.Time.To_Object (Ada.Calendar.Clock);
 
       elsif Name = "last_payment_date" then
          return Models.Member_Bean (From).Get_Value ("payment_date");
 
+      elsif Name = "inactive" then
+         if From.Inactive.Is_Null then
+            return UBO.To_Object (From.Get_Status = Models.INACTIVE);
+         else
+            return UBO.To_Object (From.Inactive.Value);
+         end if;
       else
          return Models.Member_Bean (From).Get_Value (Name);
       end if;
@@ -111,7 +124,7 @@ package body Adafr.Members.Beans is
    procedure Save (Bean    : in out Member_Bean;
                    Outcome : in out Ada.Strings.Unbounded.Unbounded_String) is
    begin
-      Bean.Module.Save (Bean.Id, To_String (Bean.Key), Bean);
+      Bean.Module.Save (Bean.Id, To_String (Bean.Key), Bean.Inactive, Bean);
       Outcome := To_Unbounded_String ("saved");
 
    exception
@@ -214,18 +227,18 @@ package body Adafr.Members.Beans is
    --  ------------------------------
    overriding
    function Get_Value (From : in Member_List_Bean;
-                       Name : in String) return Util.Beans.Objects.Object is
+                       Name : in String) return UBO.Object is
       Pos : Natural;
    begin
       if Name = "members" then
-         return Util.Beans.Objects.To_Object (Value   => From.Members_Bean,
-                                              Storage => Util.Beans.Objects.STATIC);
+         return UBO.To_Object (Value   => From.Members_Bean,
+                               Storage => Util.Beans.Objects.STATIC);
 
       elsif Name = "page" then
-         return Util.Beans.Objects.To_Object (From.Page);
+         return UBO.To_Object (From.Page);
 
       elsif Name = "count" then
-         return Util.Beans.Objects.To_Object (From.Count);
+         return UBO.To_Object (From.Count);
 
       elsif Name = "filter" then
          return Models.Filter_Type_Objects.To_Object (From.Filter);
@@ -233,14 +246,14 @@ package body Adafr.Members.Beans is
       elsif Name = "expired" then
          Pos := From.Members.Get_Row_Index;
          if Pos = 0 then
-            return Util.Beans.Objects.Null_Object;
+            return UBO.Null_Object;
          end if;
          declare
             Item : constant Models.Member_Info := From.Members.List.Element (Pos);
             Now  : constant Ada.Calendar.Time := Ada.Calendar.Clock;
             Date : constant ADO.Nullable_Time := Item.Subscription_Deadline;
          begin
-            return Util.Beans.Objects.To_Object (Date.Is_Null or else Date.Value < Now);
+            return UBO.To_Object (Date.Is_Null or else Date.Value < Now);
          end;
 
       else
@@ -293,6 +306,10 @@ package body Adafr.Members.Beans is
             Query.Bind_Param ("status2", Integer (3));
             Query.Bind_Param ("date", Now);
             Query.Set_Query (Adafr.Members.Models.Query_Adafr_Member_List_Expired);
+
+         when Models.LIST_INACTIVE =>
+            Query.Bind_Param ("status1", Integer (4));
+            Query.Set_Query (Adafr.Members.Models.Query_Adafr_Member_List_By_Status);
 
       end case;
       Adafr.Members.Models.List (List.Members_Bean.all, Session, Query);

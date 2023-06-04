@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  adafr-members-servlets -- Export the members in Excel sheet
---  Copyright (C) 2021 Stephane Carrez
+--  Copyright (C) 2021, 2022 Ada France
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -56,6 +56,7 @@ package body Adafr.Members.Servlets is
    procedure Do_Get (Server   : in Excel_Servlet;
                      Request  : in out ASF.Requests.Request'Class;
                      Response : in out ASF.Responses.Response'Class) is
+      pragma Unreferenced (Server);
       use Adafr.Members.Models;
       use type Excel_Out.Cell_Border;
       use type Ada.Calendar.Time;

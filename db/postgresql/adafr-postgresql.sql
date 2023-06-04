@@ -1,4 +1,5 @@
 /* File generated automatically by dynamo */
+SET client_min_messages = warning;
 /* The Member table holds the list of Ada France members with the necessary
 information so that we can send them the Ada User Journal if they are
 member of Ada Europe. The member is first in the PENDING state
@@ -65,48 +66,51 @@ CREATE TABLE IF NOT EXISTS adafr_receipt (
   "member" BIGINT NOT NULL,
   PRIMARY KEY ("id")
 );
-INSERT INTO entity_type (name) VALUES
+INSERT INTO ado_entity_type (name) VALUES
 ('adafr_member'), ('adafr_receipt')
   ON CONFLICT DO NOTHING;
 INSERT INTO awa_audit_field (entity_type, name)
-  VALUES ((SELECT id FROM entity_type WHERE name = 'adafr_member'), 'first_name')
+  VALUES ((SELECT id FROM ado_entity_type WHERE name = 'adafr_member'), 'first_name')
   ON CONFLICT DO NOTHING;
 INSERT INTO awa_audit_field (entity_type, name)
-  VALUES ((SELECT id FROM entity_type WHERE name = 'adafr_member'), 'last_name')
+  VALUES ((SELECT id FROM ado_entity_type WHERE name = 'adafr_member'), 'last_name')
   ON CONFLICT DO NOTHING;
 INSERT INTO awa_audit_field (entity_type, name)
-  VALUES ((SELECT id FROM entity_type WHERE name = 'adafr_member'), 'company')
+  VALUES ((SELECT id FROM ado_entity_type WHERE name = 'adafr_member'), 'company')
   ON CONFLICT DO NOTHING;
 INSERT INTO awa_audit_field (entity_type, name)
-  VALUES ((SELECT id FROM entity_type WHERE name = 'adafr_member'), 'address1')
+  VALUES ((SELECT id FROM ado_entity_type WHERE name = 'adafr_member'), 'address1')
   ON CONFLICT DO NOTHING;
 INSERT INTO awa_audit_field (entity_type, name)
-  VALUES ((SELECT id FROM entity_type WHERE name = 'adafr_member'), 'address2')
+  VALUES ((SELECT id FROM ado_entity_type WHERE name = 'adafr_member'), 'address2')
   ON CONFLICT DO NOTHING;
 INSERT INTO awa_audit_field (entity_type, name)
-  VALUES ((SELECT id FROM entity_type WHERE name = 'adafr_member'), 'address3')
+  VALUES ((SELECT id FROM ado_entity_type WHERE name = 'adafr_member'), 'address3')
   ON CONFLICT DO NOTHING;
 INSERT INTO awa_audit_field (entity_type, name)
-  VALUES ((SELECT id FROM entity_type WHERE name = 'adafr_member'), 'postal_code')
+  VALUES ((SELECT id FROM ado_entity_type WHERE name = 'adafr_member'), 'postal_code')
   ON CONFLICT DO NOTHING;
 INSERT INTO awa_audit_field (entity_type, name)
-  VALUES ((SELECT id FROM entity_type WHERE name = 'adafr_member'), 'city')
+  VALUES ((SELECT id FROM ado_entity_type WHERE name = 'adafr_member'), 'city')
   ON CONFLICT DO NOTHING;
 INSERT INTO awa_audit_field (entity_type, name)
-  VALUES ((SELECT id FROM entity_type WHERE name = 'adafr_member'), 'country')
+  VALUES ((SELECT id FROM ado_entity_type WHERE name = 'adafr_member'), 'country')
   ON CONFLICT DO NOTHING;
 INSERT INTO awa_audit_field (entity_type, name)
-  VALUES ((SELECT id FROM entity_type WHERE name = 'adafr_member'), 'mail_verify_date')
+  VALUES ((SELECT id FROM ado_entity_type WHERE name = 'adafr_member'), 'mail_verify_date')
   ON CONFLICT DO NOTHING;
 INSERT INTO awa_audit_field (entity_type, name)
-  VALUES ((SELECT id FROM entity_type WHERE name = 'adafr_member'), 'payment_date')
+  VALUES ((SELECT id FROM ado_entity_type WHERE name = 'adafr_member'), 'payment_date')
   ON CONFLICT DO NOTHING;
 INSERT INTO awa_audit_field (entity_type, name)
-  VALUES ((SELECT id FROM entity_type WHERE name = 'adafr_member'), 'status')
+  VALUES ((SELECT id FROM ado_entity_type WHERE name = 'adafr_member'), 'status')
   ON CONFLICT DO NOTHING;
 INSERT INTO awa_audit_field (entity_type, name)
-  VALUES ((SELECT id FROM entity_type WHERE name = 'adafr_member'), 'ada_europe')
+  VALUES ((SELECT id FROM ado_entity_type WHERE name = 'adafr_member'), 'ada_europe')
   ON CONFLICT DO NOTHING;
 INSERT INTO awa_audit_field (entity_type, name)
-  VALUES ((SELECT id FROM entity_type WHERE name = 'adafr_member'), 'amount')
+  VALUES ((SELECT id FROM ado_entity_type WHERE name = 'adafr_member'), 'amount')
+  ON CONFLICT DO NOTHING;
+INSERT INTO ado_version (name, version)
+  VALUES ('adafr', 1)
   ON CONFLICT DO NOTHING;

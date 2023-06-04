@@ -8,3 +8,7 @@ Makefile.conf
 autom4te.cache
 bin/
 obj/
+alire/
+upload/
+tmp/
+receipts/

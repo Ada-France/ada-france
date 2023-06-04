@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  adafr-receipt -- Receipt generation
---  Copyright (C) 2020 Ada France
+--  Copyright (C) 2020-2023 Ada France
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -72,9 +72,10 @@ package body Adafr.Receipt is
    procedure Create (Path     : in String;
                      Template : in String;
                      Member   : in Information) is
-      Dir    : constant String := Ada.Directories.Containing_Directory (Path);
-      Set    : Templates_Parser.Translate_Set;
-      Output : Ada.Text_IO.File_Type;
+      Dir     : constant String := Ada.Directories.Containing_Directory (Path);
+      Cur_Dir : constant String := Ada.Directories.Current_Directory;
+      Set     : Templates_Parser.Translate_Set;
+      Output  : Ada.Text_IO.File_Type;
    begin
       Log.Info ("Create receipt for {0} in {1}", Member.Last_Name, Path);
 
@@ -94,6 +95,7 @@ package body Adafr.Receipt is
       Templates_Parser.Insert (Set, Templates_Parser.Assoc ("DATE", Member.Date));
       Templates_Parser.Insert (Set, Templates_Parser.Assoc ("ADA_EUROPE", Member.Ada_Europe));
       Templates_Parser.Insert (Set, Templates_Parser.Assoc ("SIGNATURE", Member.Signature));
+      Templates_Parser.Insert (Set, Templates_Parser.Assoc ("INSTALLDIR", Cur_Dir));
 
       Ada.Text_IO.Create (Output, Ada.Text_IO.Out_File, Path);
       Ada.Text_IO.Put_Line (Output, Templates_Parser.Parse (Template, Set));

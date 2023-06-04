@@ -1,7 +1,8 @@
 /* Copied from ado-postgresql.sql*/
 /* File generated automatically by dynamo */
+SET client_min_messages = warning;
 /* Entity table that enumerates all known database tables */
-CREATE TABLE IF NOT EXISTS entity_type (
+CREATE TABLE IF NOT EXISTS ado_entity_type (
   /* the database table unique entity index */
   "id" SERIAL,
   /* the database entity name */
@@ -9,7 +10,7 @@ CREATE TABLE IF NOT EXISTS entity_type (
   PRIMARY KEY ("id")
 );
 /* Sequence generator */
-CREATE TABLE IF NOT EXISTS sequence (
+CREATE TABLE IF NOT EXISTS ado_sequence (
   /* the sequence name */
   "name" VARCHAR(127) UNIQUE NOT NULL,
   /* the sequence record version */
@@ -20,8 +21,19 @@ CREATE TABLE IF NOT EXISTS sequence (
   "block_size" BIGINT NOT NULL,
   PRIMARY KEY ("name")
 );
-INSERT INTO entity_type (name) VALUES
-('entity_type'), ('sequence')
+/* Database schema version (per module) */
+CREATE TABLE IF NOT EXISTS ado_version (
+  /* the module name */
+  "name" VARCHAR(127) UNIQUE NOT NULL,
+  /* the database version schema for this module */
+  "version" INTEGER NOT NULL,
+  PRIMARY KEY ("name")
+);
+INSERT INTO ado_entity_type (name) VALUES
+('ado_entity_type'), ('ado_sequence'), ('ado_version')
+  ON CONFLICT DO NOTHING;
+INSERT INTO ado_version (name, version)
+  VALUES ('ado', 2)
   ON CONFLICT DO NOTHING;
 /* Copied from awa-postgresql.sql*/
 /* File generated automatically by dynamo */
@@ -219,6 +231,26 @@ CREATE TABLE IF NOT EXISTS awa_access_key (
   "user_id" BIGINT NOT NULL,
   PRIMARY KEY ("id")
 );
+/*  */
+CREATE TABLE IF NOT EXISTS awa_authenticate (
+  /* the identifier */
+  "id" BIGINT NOT NULL,
+  /* the optimistic lock version. */
+  "version" INTEGER NOT NULL,
+  /* the identification string */
+  "ident" VARCHAR(255) NOT NULL,
+  /* the optional salt */
+  "salt" VARCHAR(255) NOT NULL,
+  /* the optional hash */
+  "hash" VARCHAR(255) NOT NULL,
+  /* the authenticate method */
+  "method" SMALLINT NOT NULL,
+  /* the email that we authenticate */
+  "email_id" BIGINT NOT NULL,
+  /* the user that is authenticated */
+  "user_id" BIGINT NOT NULL,
+  PRIMARY KEY ("id")
+);
 /* The Email entity defines the user email addresses.
 The user has a primary email address that is obtained
 from the registration process (either through a form
@@ -258,6 +290,8 @@ CREATE TABLE IF NOT EXISTS awa_session (
   "auth_id" BIGINT ,
   /*  */
   "user_id" BIGINT NOT NULL,
+  /* the user authenticate record that authentified this session. */
+  "user_auth_id" BIGINT ,
   PRIMARY KEY ("id")
 );
 /* The User entity represents a user that can access and use the application. */
@@ -266,10 +300,6 @@ CREATE TABLE IF NOT EXISTS awa_user (
   "first_name" VARCHAR(255) NOT NULL,
   /* the user last name. */
   "last_name" VARCHAR(255) NOT NULL,
-  /* the user password hash. */
-  "password" VARCHAR(255) NOT NULL,
-  /* the user OpenID identifier. */
-  "open_id" VARCHAR(255) NOT NULL,
   /* the user country. */
   "country" VARCHAR(255) NOT NULL,
   /* the user display name. */
@@ -278,26 +308,32 @@ CREATE TABLE IF NOT EXISTS awa_user (
   "version" INTEGER NOT NULL,
   /* the user identifier. */
   "id" BIGINT NOT NULL,
-  /* the password salt. */
-  "salt" VARCHAR(255) NOT NULL,
+  /* the status of this user. */
+  "status" SMALLINT NOT NULL,
   /*  */
   "email_id" BIGINT NOT NULL,
   PRIMARY KEY ("id")
 );
-INSERT INTO entity_type (name) VALUES
-('awa_audit'), ('awa_audit_field'), ('awa_message'), ('awa_message_type'), ('awa_queue'), ('awa_application'), ('awa_callback'), ('awa_oauth_session'), ('awa_acl'), ('awa_permission'), ('awa_access_key'), ('awa_email'), ('awa_session'), ('awa_user')
+INSERT INTO ado_entity_type (name) VALUES
+('awa_audit'), ('awa_audit_field'), ('awa_message'), ('awa_message_type'), ('awa_queue'), ('awa_application'), ('awa_callback'), ('awa_oauth_session'), ('awa_acl'), ('awa_permission'), ('awa_access_key'), ('awa_authenticate'), ('awa_email'), ('awa_session'), ('awa_user')
   ON CONFLICT DO NOTHING;
 INSERT INTO awa_audit_field (entity_type, name)
-  VALUES ((SELECT id FROM entity_type WHERE name = 'awa_user'), 'first_name')
+  VALUES ((SELECT id FROM ado_entity_type WHERE name = 'awa_user'), 'first_name')
   ON CONFLICT DO NOTHING;
 INSERT INTO awa_audit_field (entity_type, name)
-  VALUES ((SELECT id FROM entity_type WHERE name = 'awa_user'), 'last_name')
+  VALUES ((SELECT id FROM ado_entity_type WHERE name = 'awa_user'), 'last_name')
   ON CONFLICT DO NOTHING;
 INSERT INTO awa_audit_field (entity_type, name)
-  VALUES ((SELECT id FROM entity_type WHERE name = 'awa_user'), 'country')
+  VALUES ((SELECT id FROM ado_entity_type WHERE name = 'awa_user'), 'country')
   ON CONFLICT DO NOTHING;
 INSERT INTO awa_audit_field (entity_type, name)
-  VALUES ((SELECT id FROM entity_type WHERE name = 'awa_user'), 'name')
+  VALUES ((SELECT id FROM ado_entity_type WHERE name = 'awa_user'), 'name')
+  ON CONFLICT DO NOTHING;
+INSERT INTO awa_audit_field (entity_type, name)
+  VALUES ((SELECT id FROM ado_entity_type WHERE name = 'awa_user'), 'status')
+  ON CONFLICT DO NOTHING;
+INSERT INTO ado_version (name, version)
+  VALUES ("awa", 3)
   ON CONFLICT DO NOTHING;
 /* Copied from awa-workspaces-postgresql.sql*/
 /* File generated automatically by dynamo */
@@ -368,8 +404,11 @@ CREATE TABLE IF NOT EXISTS awa_workspace_member (
   "workspace_id" BIGINT NOT NULL,
   PRIMARY KEY ("id")
 );
-INSERT INTO entity_type (name) VALUES
+INSERT INTO ado_entity_type (name) VALUES
 ('awa_invitation'), ('awa_workspace'), ('awa_workspace_feature'), ('awa_workspace_member')
+  ON CONFLICT DO NOTHING;
+INSERT INTO ado_version (name, version)
+  VALUES ("awa-workspaces", 1)
   ON CONFLICT DO NOTHING;
 /* Copied from awa-comments-postgresql.sql*/
 /* File generated automatically by dynamo */
@@ -396,17 +435,20 @@ CREATE TABLE IF NOT EXISTS awa_comment (
   "author_id" BIGINT NOT NULL,
   PRIMARY KEY ("id")
 );
-INSERT INTO entity_type (name) VALUES
+INSERT INTO ado_entity_type (name) VALUES
 ('awa_comment')
   ON CONFLICT DO NOTHING;
 INSERT INTO awa_audit_field (entity_type, name)
-  VALUES ((SELECT id FROM entity_type WHERE name = 'awa_comment'), 'message')
+  VALUES ((SELECT id FROM ado_entity_type WHERE name = 'awa_comment'), 'message')
   ON CONFLICT DO NOTHING;
 INSERT INTO awa_audit_field (entity_type, name)
-  VALUES ((SELECT id FROM entity_type WHERE name = 'awa_comment'), 'status')
+  VALUES ((SELECT id FROM ado_entity_type WHERE name = 'awa_comment'), 'status')
   ON CONFLICT DO NOTHING;
 INSERT INTO awa_audit_field (entity_type, name)
-  VALUES ((SELECT id FROM entity_type WHERE name = 'awa_comment'), 'format')
+  VALUES ((SELECT id FROM ado_entity_type WHERE name = 'awa_comment'), 'format')
+  ON CONFLICT DO NOTHING;
+INSERT INTO ado_version (name, version)
+  VALUES ("awa-comments", 1)
   ON CONFLICT DO NOTHING;
 /* Copied from awa-tags-postgresql.sql*/
 /* File generated automatically by dynamo */
@@ -431,8 +473,11 @@ Date: 2013-02-23the database entity to which the tag is associated */
   "tag_id" BIGINT NOT NULL,
   PRIMARY KEY ("id")
 );
-INSERT INTO entity_type (name) VALUES
+INSERT INTO ado_entity_type (name) VALUES
 ('awa_tag'), ('awa_tagged_entity')
+  ON CONFLICT DO NOTHING;
+INSERT INTO ado_version (name, version)
+  VALUES ("awa-tags", 1)
   ON CONFLICT DO NOTHING;
 /* Copied from awa-counters-postgresql.sql*/
 /* File generated automatically by dynamo */
@@ -474,8 +519,11 @@ CREATE TABLE IF NOT EXISTS awa_visit (
   "definition_id" BIGINT NOT NULL,
   PRIMARY KEY ("object_id", "user", "definition_id")
 );
-INSERT INTO entity_type (name) VALUES
+INSERT INTO ado_entity_type (name) VALUES
 ('awa_counter'), ('awa_counter_definition'), ('awa_visit')
+  ON CONFLICT DO NOTHING;
+INSERT INTO ado_version (name, version)
+  VALUES ("awa-counters", 1)
   ON CONFLICT DO NOTHING;
 /* Copied from awa-blogs-postgresql.sql*/
 /* File generated automatically by dynamo */
@@ -537,44 +585,47 @@ CREATE TABLE IF NOT EXISTS awa_post (
   "image_id" BIGINT ,
   PRIMARY KEY ("id")
 );
-INSERT INTO entity_type (name) VALUES
+INSERT INTO ado_entity_type (name) VALUES
 ('awa_blog'), ('awa_post')
   ON CONFLICT DO NOTHING;
 INSERT INTO awa_audit_field (entity_type, name)
-  VALUES ((SELECT id FROM entity_type WHERE name = 'awa_blog'), 'name')
+  VALUES ((SELECT id FROM ado_entity_type WHERE name = 'awa_blog'), 'name')
   ON CONFLICT DO NOTHING;
 INSERT INTO awa_audit_field (entity_type, name)
-  VALUES ((SELECT id FROM entity_type WHERE name = 'awa_blog'), 'uid')
+  VALUES ((SELECT id FROM ado_entity_type WHERE name = 'awa_blog'), 'uid')
   ON CONFLICT DO NOTHING;
 INSERT INTO awa_audit_field (entity_type, name)
-  VALUES ((SELECT id FROM entity_type WHERE name = 'awa_blog'), 'url')
+  VALUES ((SELECT id FROM ado_entity_type WHERE name = 'awa_blog'), 'url')
   ON CONFLICT DO NOTHING;
 INSERT INTO awa_audit_field (entity_type, name)
-  VALUES ((SELECT id FROM entity_type WHERE name = 'awa_blog'), 'format')
+  VALUES ((SELECT id FROM ado_entity_type WHERE name = 'awa_blog'), 'format')
   ON CONFLICT DO NOTHING;
 INSERT INTO awa_audit_field (entity_type, name)
-  VALUES ((SELECT id FROM entity_type WHERE name = 'awa_blog'), 'default_image_url')
+  VALUES ((SELECT id FROM ado_entity_type WHERE name = 'awa_blog'), 'default_image_url')
   ON CONFLICT DO NOTHING;
 INSERT INTO awa_audit_field (entity_type, name)
-  VALUES ((SELECT id FROM entity_type WHERE name = 'awa_post'), 'title')
+  VALUES ((SELECT id FROM ado_entity_type WHERE name = 'awa_post'), 'title')
   ON CONFLICT DO NOTHING;
 INSERT INTO awa_audit_field (entity_type, name)
-  VALUES ((SELECT id FROM entity_type WHERE name = 'awa_post'), 'uri')
+  VALUES ((SELECT id FROM ado_entity_type WHERE name = 'awa_post'), 'uri')
   ON CONFLICT DO NOTHING;
 INSERT INTO awa_audit_field (entity_type, name)
-  VALUES ((SELECT id FROM entity_type WHERE name = 'awa_post'), 'publish_date')
+  VALUES ((SELECT id FROM ado_entity_type WHERE name = 'awa_post'), 'publish_date')
   ON CONFLICT DO NOTHING;
 INSERT INTO awa_audit_field (entity_type, name)
-  VALUES ((SELECT id FROM entity_type WHERE name = 'awa_post'), 'status')
+  VALUES ((SELECT id FROM ado_entity_type WHERE name = 'awa_post'), 'status')
   ON CONFLICT DO NOTHING;
 INSERT INTO awa_audit_field (entity_type, name)
-  VALUES ((SELECT id FROM entity_type WHERE name = 'awa_post'), 'allow_comments')
+  VALUES ((SELECT id FROM ado_entity_type WHERE name = 'awa_post'), 'allow_comments')
   ON CONFLICT DO NOTHING;
 INSERT INTO awa_audit_field (entity_type, name)
-  VALUES ((SELECT id FROM entity_type WHERE name = 'awa_post'), 'summary')
+  VALUES ((SELECT id FROM ado_entity_type WHERE name = 'awa_post'), 'summary')
   ON CONFLICT DO NOTHING;
 INSERT INTO awa_audit_field (entity_type, name)
-  VALUES ((SELECT id FROM entity_type WHERE name = 'awa_post'), 'format')
+  VALUES ((SELECT id FROM ado_entity_type WHERE name = 'awa_post'), 'format')
+  ON CONFLICT DO NOTHING;
+INSERT INTO ado_version (name, version)
+  VALUES ("awa-blogs", 1)
   ON CONFLICT DO NOTHING;
 /* Copied from awa-storages-postgresql.sql*/
 /* File generated automatically by dynamo */
@@ -663,8 +714,11 @@ CREATE TABLE IF NOT EXISTS awa_store_local (
   "storage_id" BIGINT ,
   PRIMARY KEY ("id")
 );
-INSERT INTO entity_type (name) VALUES
+INSERT INTO ado_entity_type (name) VALUES
 ('awa_storage'), ('awa_storage_data'), ('awa_storage_folder'), ('awa_store_local')
+  ON CONFLICT DO NOTHING;
+INSERT INTO ado_version (name, version)
+  VALUES ("awa-storages", 1)
   ON CONFLICT DO NOTHING;
 /* Copied from awa-jobs-postgresql.sql*/
 /* File generated automatically by dynamo */
@@ -700,8 +754,11 @@ CREATE TABLE IF NOT EXISTS awa_job (
   "session_id" BIGINT ,
   PRIMARY KEY ("id")
 );
-INSERT INTO entity_type (name) VALUES
+INSERT INTO ado_entity_type (name) VALUES
 ('awa_job')
+  ON CONFLICT DO NOTHING;
+INSERT INTO ado_version (name, version)
+  VALUES ("awa-jobs", 1)
   ON CONFLICT DO NOTHING;
 /* Copied from awa-images-postgresql.sql*/
 /* File generated automatically by dynamo */
@@ -726,18 +783,21 @@ CREATE TABLE IF NOT EXISTS awa_image (
   "public" BOOLEAN NOT NULL,
   /*  */
   "version" INTEGER NOT NULL,
-  /*  */
+  /* the thumbnail storage */
   "thumbnail_id" BIGINT ,
-  /*  */
+  /* the folder where the image is stored */
   "folder_id" BIGINT NOT NULL,
-  /*  */
+  /* the user who uploaded the image */
   "owner_id" BIGINT NOT NULL,
-  /*  */
+  /* the image storage */
   "storage_id" BIGINT NOT NULL,
   PRIMARY KEY ("id")
 );
-INSERT INTO entity_type (name) VALUES
+INSERT INTO ado_entity_type (name) VALUES
 ('awa_image')
+  ON CONFLICT DO NOTHING;
+INSERT INTO ado_version (name, version)
+  VALUES ("awa-images", 1)
   ON CONFLICT DO NOTHING;
 /* Copied from awa-wikis-postgresql.sql*/
 /* File generated automatically by dynamo */
@@ -813,32 +873,36 @@ CREATE TABLE IF NOT EXISTS awa_wiki_space (
   "workspace_id" BIGINT NOT NULL,
   PRIMARY KEY ("id")
 );
-INSERT INTO entity_type (name) VALUES
+INSERT INTO ado_entity_type (name) VALUES
 ('awa_wiki_content'), ('awa_wiki_page'), ('awa_wiki_space')
   ON CONFLICT DO NOTHING;
 INSERT INTO awa_audit_field (entity_type, name)
-  VALUES ((SELECT id FROM entity_type WHERE name = 'awa_wiki_page'), 'name')
+  VALUES ((SELECT id FROM ado_entity_type WHERE name = 'awa_wiki_page'), 'name')
   ON CONFLICT DO NOTHING;
 INSERT INTO awa_audit_field (entity_type, name)
-  VALUES ((SELECT id FROM entity_type WHERE name = 'awa_wiki_page'), 'last_version')
+  VALUES ((SELECT id FROM ado_entity_type WHERE name = 'awa_wiki_page'), 'last_version')
   ON CONFLICT DO NOTHING;
 INSERT INTO awa_audit_field (entity_type, name)
-  VALUES ((SELECT id FROM entity_type WHERE name = 'awa_wiki_page'), 'is_public')
+  VALUES ((SELECT id FROM ado_entity_type WHERE name = 'awa_wiki_page'), 'is_public')
   ON CONFLICT DO NOTHING;
 INSERT INTO awa_audit_field (entity_type, name)
-  VALUES ((SELECT id FROM entity_type WHERE name = 'awa_wiki_page'), 'title')
+  VALUES ((SELECT id FROM ado_entity_type WHERE name = 'awa_wiki_page'), 'title')
   ON CONFLICT DO NOTHING;
 INSERT INTO awa_audit_field (entity_type, name)
-  VALUES ((SELECT id FROM entity_type WHERE name = 'awa_wiki_space'), 'name')
+  VALUES ((SELECT id FROM ado_entity_type WHERE name = 'awa_wiki_space'), 'name')
   ON CONFLICT DO NOTHING;
 INSERT INTO awa_audit_field (entity_type, name)
-  VALUES ((SELECT id FROM entity_type WHERE name = 'awa_wiki_space'), 'is_public')
+  VALUES ((SELECT id FROM ado_entity_type WHERE name = 'awa_wiki_space'), 'is_public')
   ON CONFLICT DO NOTHING;
 INSERT INTO awa_audit_field (entity_type, name)
-  VALUES ((SELECT id FROM entity_type WHERE name = 'awa_wiki_space'), 'format')
+  VALUES ((SELECT id FROM ado_entity_type WHERE name = 'awa_wiki_space'), 'format')
+  ON CONFLICT DO NOTHING;
+INSERT INTO ado_version (name, version)
+  VALUES ("awa-wikis", 1)
   ON CONFLICT DO NOTHING;
 /* Copied from adafr-postgresql.sql*/
 /* File generated automatically by dynamo */
+SET client_min_messages = warning;
 /* The Member table holds the list of Ada France members with the necessary
 information so that we can send them the Ada User Journal if they are
 member of Ada Europe. The member is first in the PENDING state
@@ -905,48 +969,51 @@ CREATE TABLE IF NOT EXISTS adafr_receipt (
   "member" BIGINT NOT NULL,
   PRIMARY KEY ("id")
 );
-INSERT INTO entity_type (name) VALUES
+INSERT INTO ado_entity_type (name) VALUES
 ('adafr_member'), ('adafr_receipt')
   ON CONFLICT DO NOTHING;
 INSERT INTO awa_audit_field (entity_type, name)
-  VALUES ((SELECT id FROM entity_type WHERE name = 'adafr_member'), 'first_name')
+  VALUES ((SELECT id FROM ado_entity_type WHERE name = 'adafr_member'), 'first_name')
   ON CONFLICT DO NOTHING;
 INSERT INTO awa_audit_field (entity_type, name)
-  VALUES ((SELECT id FROM entity_type WHERE name = 'adafr_member'), 'last_name')
+  VALUES ((SELECT id FROM ado_entity_type WHERE name = 'adafr_member'), 'last_name')
   ON CONFLICT DO NOTHING;
 INSERT INTO awa_audit_field (entity_type, name)
-  VALUES ((SELECT id FROM entity_type WHERE name = 'adafr_member'), 'company')
+  VALUES ((SELECT id FROM ado_entity_type WHERE name = 'adafr_member'), 'company')
   ON CONFLICT DO NOTHING;
 INSERT INTO awa_audit_field (entity_type, name)
-  VALUES ((SELECT id FROM entity_type WHERE name = 'adafr_member'), 'address1')
+  VALUES ((SELECT id FROM ado_entity_type WHERE name = 'adafr_member'), 'address1')
   ON CONFLICT DO NOTHING;
 INSERT INTO awa_audit_field (entity_type, name)
-  VALUES ((SELECT id FROM entity_type WHERE name = 'adafr_member'), 'address2')
+  VALUES ((SELECT id FROM ado_entity_type WHERE name = 'adafr_member'), 'address2')
   ON CONFLICT DO NOTHING;
 INSERT INTO awa_audit_field (entity_type, name)
-  VALUES ((SELECT id FROM entity_type WHERE name = 'adafr_member'), 'address3')
+  VALUES ((SELECT id FROM ado_entity_type WHERE name = 'adafr_member'), 'address3')
   ON CONFLICT DO NOTHING;
 INSERT INTO awa_audit_field (entity_type, name)
-  VALUES ((SELECT id FROM entity_type WHERE name = 'adafr_member'), 'postal_code')
+  VALUES ((SELECT id FROM ado_entity_type WHERE name = 'adafr_member'), 'postal_code')
   ON CONFLICT DO NOTHING;
 INSERT INTO awa_audit_field (entity_type, name)
-  VALUES ((SELECT id FROM entity_type WHERE name = 'adafr_member'), 'city')
+  VALUES ((SELECT id FROM ado_entity_type WHERE name = 'adafr_member'), 'city')
   ON CONFLICT DO NOTHING;
 INSERT INTO awa_audit_field (entity_type, name)
-  VALUES ((SELECT id FROM entity_type WHERE name = 'adafr_member'), 'country')
+  VALUES ((SELECT id FROM ado_entity_type WHERE name = 'adafr_member'), 'country')
   ON CONFLICT DO NOTHING;
 INSERT INTO awa_audit_field (entity_type, name)
-  VALUES ((SELECT id FROM entity_type WHERE name = 'adafr_member'), 'mail_verify_date')
+  VALUES ((SELECT id FROM ado_entity_type WHERE name = 'adafr_member'), 'mail_verify_date')
   ON CONFLICT DO NOTHING;
 INSERT INTO awa_audit_field (entity_type, name)
-  VALUES ((SELECT id FROM entity_type WHERE name = 'adafr_member'), 'payment_date')
+  VALUES ((SELECT id FROM ado_entity_type WHERE name = 'adafr_member'), 'payment_date')
   ON CONFLICT DO NOTHING;
 INSERT INTO awa_audit_field (entity_type, name)
-  VALUES ((SELECT id FROM entity_type WHERE name = 'adafr_member'), 'status')
+  VALUES ((SELECT id FROM ado_entity_type WHERE name = 'adafr_member'), 'status')
   ON CONFLICT DO NOTHING;
 INSERT INTO awa_audit_field (entity_type, name)
-  VALUES ((SELECT id FROM entity_type WHERE name = 'adafr_member'), 'ada_europe')
+  VALUES ((SELECT id FROM ado_entity_type WHERE name = 'adafr_member'), 'ada_europe')
   ON CONFLICT DO NOTHING;
 INSERT INTO awa_audit_field (entity_type, name)
-  VALUES ((SELECT id FROM entity_type WHERE name = 'adafr_member'), 'amount')
+  VALUES ((SELECT id FROM ado_entity_type WHERE name = 'adafr_member'), 'amount')
+  ON CONFLICT DO NOTHING;
+INSERT INTO ado_version (name, version)
+  VALUES ('adafr', 1)
   ON CONFLICT DO NOTHING;
