@@ -18,16 +18,39 @@ AC_SUBST(ADAFR_MAJOR_VERSION)
 AC_SUBST(ADAFR_MINOR_VERSION)
 AC_SUBST(ADAFR_MICRO_VERSION)
 
+ac_enable_alire=no
+AC_ARG_ENABLE(alire,
+[  --enable-alire          Enable the use of Alire to build the project (disabled)],
+[case "${enableval}" in
+  no|none)  ac_enable_alire=no ;;
+  *)
+    AC_CHECK_PROGS(ALIRE, alr, "")
+    if test -z "$ALIRE"; then
+      AC_MSG_ERROR([alr command must be installed when --enable-alire is used.])
+    fi;
+    ac_enable_alire=yes ;;
+esac])dnl
+
+AC_MSG_CHECKING([whether alire must be used])
+HAVE_ALIRE=$ac_enable_alire
+AC_MSG_RESULT(${HAVE_ALIRE})
+AC_SUBST(HAVE_ALIRE)
+
 ADAFR_LIBDIR="lib"
 AC_SUBST(ADAFR_LIBDIR)
 
-AM_ADA_UTIL_HARDWARE()
-AM_ADA_UTIL_AWS_VERSION()
+if test T$ac_enable_alire = Tno; then
+  AM_ADA_UTIL_HARDWARE()
+  AM_ADA_UTIL_AWS_VERSION()
+  AC_CHECK_PROG(HAVE_DYNAMO,dynamo,yes)
+else
+  HAVE_DYNAMO=no
+  AC_SUBST(HAVE_DYNAMO)
+fi
 
 AC_CHECK_PROG(HAVE_PANDOC,pandoc,yes)
-AC_CHECK_PROG(HAVE_DYNAMO,dynamo,yes)
-AC_CHECK_PROG(HAVE_ARE,are,yes)
 
+# Configuration for Dynamo
 ROOT_DIR=`pwd`
 GNAT_PROJECT_PATHS="$ROOT_DIR/awa/ada-util/.alire:$ROOT_DIR/awa/ada-util/.alire/xml:$ROOT_DIR/awa/ada-util/.alire/aws:$ROOT_DIR/awa/ada-util/.alire/unit"
 GNAT_PROJECT_PATHS="$GNAT_PROJECT_PATHS:$ROOT_DIR/awa/ada-util:$ROOT_DIR/awa/ada-el/.alire:$ROOT_DIR/awa/ada-el:$ROOT_DIR/awa/ada-keystore/.alire"
@@ -62,7 +85,9 @@ fi
 AC_SUBST(USE_MAGICK)
 AC_SUBST(USE_CONVERT)
 
-AC_OUTPUT(
-Makefile.conf
+AC_CONFIG_FILES([Makefile.conf
 awa/dynamo/config/generator.properties
-awa/awa/plugins/awa-images/config/images.xml)
+awa/awa/plugins/awa-images/config/images.xml
+])
+AC_OUTPUT
+
