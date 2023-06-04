@@ -29,7 +29,7 @@ aggregate project adafr is
                          "awa/.alire",
                          "awa/awa");
 
---   for Create_Missing_Dirs use "True";
+   for Create_Missing_Dirs use "True";
 
    Build_Dynamo : Adafr_Config.Yes_No := external ("BUILD_DYNAMO", "yes");
 
