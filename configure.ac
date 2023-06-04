@@ -60,7 +60,7 @@ GNAT_PROJECT_PATHS="$GNAT_PROJECT_PATHS:$ROOT_DIR/awa/ada-ado:$ROOT_DIR/awa/ada-
 GNAT_PROJECT_PATHS="$GNAT_PROJECT_PATHS:$ROOT_DIR/awa/ada-servlet/.alire/aws:$ROOT_DIR/awa/ada-servlet:$ROOT_DIR/awa/ada-asf/.alire:$ROOT_DIR/awa/ada-asf"
 GNAT_PROJECT_PATHS="$GNAT_PROJECT_PATHS:$ROOT_DIR/awa/ada-wiki/.alire:$ROOT_DIR/awa/ada-wiki:$ROOT_DIR/awa/ada-wiki/.alire:$ROOT_DIR/awa/openapi-ada/.alire"
 GNAT_PROJECT_PATHS="$GNAT_PROJECT_PATHS:$ROOT_DIR/awa/dynamo/.alire:$ROOT_DIR/awa/.alire:$ROOT_DIR/awa/awa"
-GNAT_PROJECT_PATHS="$GNAT_PROJECT_PATHS:/usr/share/gpr"
+GNAT_PROJECT_PATHS="$GNAT_PROJECT_PATHS"
 
 AC_SUBST(GNAT_PROJECT_PATHS)
 
