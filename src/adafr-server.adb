@@ -26,6 +26,7 @@ with AWA.Commands.Stop;
 with AWA.Commands.List;
 with AWA.Commands.Info;
 with AWA.Commands.Migrate;
+with AWA.Commands.User;
 
 with ADO.Mysql;
 with ADO.Sqlite;
@@ -43,10 +44,11 @@ procedure Adafr.Server is
    package Stop_Command is new AWA.Commands.Stop (Server_Commands);
    package Info_Command is new AWA.Commands.Info (Server_Commands);
    package Migrate_Command is new AWA.Commands.Migrate (Server_Commands);
+   package User_Command is new AWA.Commands.User (Server_Commands);
    package Setup_Command is new AWA.Commands.Setup (Start_Command);
 
    pragma Unreferenced (List_Command, Info_Command, Start_Command, Stop_Command,
-                        Migrate_Command, Setup_Command);
+                        Migrate_Command, User_Command, Setup_Command);
 
    WS        : Servlet.Server.Web.AWS_Container renames Server_Commands.WS;
    Context   : AWA.Commands.Context_Type;
