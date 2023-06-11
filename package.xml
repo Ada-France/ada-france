@@ -3,6 +3,7 @@
    <dist>
      <install mode='copy'>
          <include name="bin/*-server"/>
+         <include name="bin/akt"/>
          <include name="bin/*.sh"/>
          <include name="etc/init.d/*.sh"/>
          <include name="config/*.xml"/>
