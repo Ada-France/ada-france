@@ -32,12 +32,22 @@ aggregate project adafr is
    for Create_Missing_Dirs use "True";
 
    Build_Dynamo : Adafr_Config.Yes_No := external ("BUILD_DYNAMO", "yes");
+   Build_Akt    : Adafr_Config.Yes_No := external ("BUILD_AKT", "yes");
 
    for Project_Files use ("adafr_server.gpr");
 
    case Build_Dynamo is
       when "yes" =>
          for Project_Files use Project'Project_Files & ("awa/dynamo/dynamo_tool.gpr");
+
+      when others =>
+         null;
+
+   end case;
+
+   case Build_Akt is
+      when "yes" =>
+         for Project_Files use Project'Project_Files & ("awa/ada-keystore/.alire/keystoreada_tools.gpr");
 
       when others =>
          null;
