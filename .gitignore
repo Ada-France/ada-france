@@ -2,6 +2,7 @@
 *~
 *.log
 *.db
+.clangd
 config.status
 adafr.properties
 Makefile.conf
@@ -12,3 +13,4 @@ alire/
 upload/
 tmp/
 receipts/
+web/preview/

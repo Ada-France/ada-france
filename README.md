@@ -4,6 +4,10 @@ Ce projet contient les sources de l'application Ada France qui permet
 au site [Ada France](https://www.ada-france.org) de diffuser des informations
 et promouvoir le langage Ada.
 
+# Version 1.20 - Juin 2023
+- Construction avec Alire
+- Mise à jour de AWA
+
 # Version 1.19 - Mai 2023
 - Ajout du status `INACTIVE` pour marquer un membre qui n'est plus actif
   ou qui utilise une autre adresse mail
@@ -31,24 +35,31 @@ et gestion des dependances.
 
 ## Setup
 
-Le serveur tourne sous Debian 10 at la configuration suivante est nécessaire avant de lancer
-le `configure`:
+Pour une compilation sous Debian 12, la configuration suivante est nécessaire:
 
 ```
-sudo apt-get install gnat gprbuild libxmlada-dom8-dev \
-   libaws18-dev libgpr2-dev imagemagick unzip xsltproc libmariadb-dev
+sudo apt-get install alire imagemagick unzip xsltproc \
+  libmariadb-dev mariadb-server mariadb-client libsqlite3-dev \
+  context context-modules libjpeg-turbo-progs closure-compiler
 ```
+
+Notes:
+
+* `imagemagick` est utilisé pour la conversion d'images,
+* `context` est utilisé pour la génération des attestations
 
 ## Build
 
-Lancer la commande configure:
+Récupération des sources et des sous modules git:
+
 ```
-   ./configure
+git clone --recursive https://github.com/Ada-France/ada-france.git
+cd ada-france
 ```
 
 Ensuite lancer la compilation avec:
 ```
-   make generate build
+alr build -- -XSOCKET=openssl
 ```
 
 # Lancement
@@ -79,5 +90,5 @@ Pour lancer l'application, utilisez:
    bin/adafr-server start --upload=./upload
 ```
 
-Par défault, la base de donnée SQLite est créee avec l'utilisateur `admin` at `ada-france.org` et mot de passe `admin`.
+Par défault, la base de donnée SQLite est créée avec l'utilisateur `admin` at `ada-france.org` et mot de passe `admin`.
 Cet utilisateur n'existe pas en prod, inutile d'essayer!

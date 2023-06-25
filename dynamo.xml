@@ -6,7 +6,7 @@
     <property name="is_ado">FALSE</property>
     <property name="license">apache</property>
     <property name="is_gtk">FALSE</property>
-    <property name="build">29</property>
+    <property name="build">30</property>
     <property name="author">Stephane Carrez</property>
     <property name="is_web">TRUE</property>
     <property name="database">sqlite:///adafr.db?synchronous=OFF&amp;encoding=UTF-8</property>

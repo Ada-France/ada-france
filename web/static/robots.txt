@@ -1,0 +1,13 @@
+User-agent: *
+Disallow: *.rpm
+Disallow: *.exe
+Disallow: *.gz
+Disallow: /adafr/storages/*
+
+User-agent: SemrushBot
+Disallow: /
+
+User-agent: SemrushBot-SA
+Disallow: /
+
+
