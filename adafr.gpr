@@ -47,7 +47,7 @@ aggregate project adafr is
 
    case Build_Akt is
       when "yes" =>
-         for Project_Files use Project'Project_Files & ("awa/ada-keystore/.alire/keystoreada_tools.gpr");
+         for Project_Files use Project'Project_Files & ("awa/ada-keystore/.alire/akt/keystoreada_tools.gpr");
 
       when others =>
          null;

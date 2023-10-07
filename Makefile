@@ -9,7 +9,7 @@ ROOT_DIR=$(shell pwd)
 
 ifeq (${HAVE_ALIRE},yes)
 DYNAMO=alr exec -- dynamo
-BUILD_COMMAND=alr build
+BUILD_COMMAND=alr build -- -XSOCKET=openssl
 HAVE_SETUP=yes
 else
 GPRFLAGS += -j$(PROCESSORS) -XROOT_DIR=$(ROOT_DIR) -XUTIL_OS=$(UTIL_OS) -XUTIL_AWS_IMPL=$(UTIL_AWS_VERSION)
