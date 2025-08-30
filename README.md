@@ -1,5 +1,8 @@
 # Ada France Web Site
 
+[![License](http://img.shields.io/badge/license-APACHE2-blue.svg)](LICENSE)
+[![Build Status](https://img.shields.io/endpoint?url=https://porion.vacs.fr/porion/api/v1/projects/ada-france/badges/build.json)](https://porion.vacs.fr/porion/projects/view/ada-france/summary)
+
 Ce projet contient les sources de l'application Ada France qui permet
 au site [Ada France](https://www.ada-france.org) de diffuser des informations
 et promouvoir le langage Ada.
