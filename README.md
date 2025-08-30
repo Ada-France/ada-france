@@ -45,7 +45,7 @@ et gestion des dependances.
 Pour une compilation sous Debian 12, la configuration suivante est nécessaire:
 
 ```
-sudo apt-get install alire imagemagick unzip xsltproc \
+sudo apt-get install imagemagick unzip xsltproc \
   libmariadb-dev mariadb-server mariadb-client libsqlite3-dev \
   context context-modules libjpeg-turbo-progs closure-compiler
 ```
@@ -54,10 +54,11 @@ Notes:
 
 * `imagemagick` est utilisé pour la conversion d'images,
 * `context` est utilisé pour la génération des attestations
+* `alire` 2.x est nécessaire et doit etre récupéré via https://ada-lang.io/
 
 ## Build
 
-Récupération des sources et des sous modules git:
+Récupération des sources et des sous-modules git:
 
 ```
 git clone --recursive https://github.com/Ada-France/ada-france.git
@@ -66,6 +67,7 @@ cd ada-france
 
 Ensuite lancer la compilation avec:
 ```
+alr update
 alr build -- -XSOCKET=openssl
 ```
 
@@ -86,7 +88,7 @@ Le setup permet de:
 * configurer les secrets pour OAuth2 (Google, Facebook),
 * configurer les paramètres SMTP pour envoyer les mails
 
-Une fois le setup terminée, l'application Ada France est lancée.
+Une fois le setup terminé, l'application Ada France est lancée.
 
 Pour re-faire une setup, supprimer le fichier `.initialized` et relancer la commande.
 

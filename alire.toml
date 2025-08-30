@@ -58,7 +58,7 @@ utilada_unit = { path = 'awa/ada-util/unit' }
 elada = { path = 'awa/ada-el' }
 serverfaces = { path = 'awa/ada-asf' }
 ado = { path = 'awa/ada-ado' }
-# ado_all = { path = 'awa/ada-ado/drivers' }
+ado_all = { path = 'awa/ada-ado/drivers' }
 ado_sqlite = { path = 'awa/ada-ado/sqlite' }
 ado_mysql = { path = 'awa/ada-ado/mysql' }
 security = { path = 'awa/ada-security' }
