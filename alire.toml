@@ -1,6 +1,6 @@
 description = "Ada France Web Site"
 name = "adafrance"
-version = "1.20.0"
+version = "1.22.0"
 authors = ["Stephane.Carrez@gmail.com"]
 licenses = "Apache-2.0"
 maintainers = ["Stephane.Carrez@gmail.com"]
@@ -22,13 +22,22 @@ for production.
 """
 
 [[depends-on]]
-aws = "~23.0"
+aws = "~24.0"
 xmlada = "any"
 libgpr = "any"
-
-[[actions]]
-type = "post-fetch"
-command = ["sh", "./alire-setup.sh"]
+utilada = "*"
+utilada_xml = "*"
+utilada_aws = "*"
+elada = "*"
+serverfaces = "*"
+ado = "*"
+ado_sqlite = "*"
+ado_mysql = "*"
+security = "*"
+keystoreada = "*"
+awa = "*"
+openapi = "*"
+openapi_server = "*"
 
 [configuration]
 disabled = true
@@ -37,6 +46,28 @@ disabled = true
 ROOT_DIR.set = "${CRATE_ROOT}"
 PATH.prepend = "${CRATE_ROOT}/bin:${CRATE_ROOT}/awa/dynamo/bin"
 MANPATH.prepend = "${CRATE_ROOT}/man"
-DYNAMO_SEARCH_PATH.prepend = "${CRATE_ROOT}/awa/awa/plugins"
-DYNAMO_UML_PATH.prepend = "${CRATE_ROOT}/awa/awa/uml"
+DYNAMO_SEARCH_PATH.prepend = "${CRATE_ROOT}/awa/plugins"
+DYNAMO_UML_PATH.prepend = "${CRATE_ROOT}/awa/uml"
 DYNAMO_BUNDLE_PATH.prepend = "${CRATE_ROOT}/awa/ada-asf/bundles"
+
+[[pins]]
+utilada = { path = 'awa/ada-util' }
+utilada_xml = { path = 'awa/ada-util/xml' }
+utilada_aws = { path = 'awa/ada-util/aws' }
+utilada_unit = { path = 'awa/ada-util/unit' }
+elada = { path = 'awa/ada-el' }
+serverfaces = { path = 'awa/ada-asf' }
+ado = { path = 'awa/ada-ado' }
+# ado_all = { path = 'awa/ada-ado/drivers' }
+ado_sqlite = { path = 'awa/ada-ado/sqlite' }
+ado_mysql = { path = 'awa/ada-ado/mysql' }
+security = { path = 'awa/ada-security' }
+keystoreada = { path = 'awa/ada-keystore' }
+akt = { path = 'awa/ada-keystore/akt' }
+awa = { path = 'awa' }
+openapi = { path = 'awa/openapi-ada' }
+openapi_server = { path = 'awa/openapi-ada/server' }
+servletada_aws = { path = 'awa/ada-servlet/aws' }
+dynamo = { path = 'awa/dynamo' }
+wikiada = { path = 'awa/ada-wiki' }
+

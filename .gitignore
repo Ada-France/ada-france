@@ -3,10 +3,8 @@
 *.log
 *.db
 .clangd
-config.status
 adafr.properties
 Makefile.conf
-autom4te.cache
 bin/
 obj/
 alire/
@@ -14,3 +12,5 @@ upload/
 tmp/
 receipts/
 web/preview/
+storage/
+*.iml

@@ -1,5 +1,9 @@
 NAME=adafr
 GPRPATH=${NAME}.gpr
+VERSION=1.22.0
+
+DIST_DIR=adafr-$(VERSION)
+DIST_FILE=adafr-$(VERSION).tar.gz
 
 -include Makefile.conf
 
@@ -7,26 +11,16 @@ include Makefile.defaults
 
 ROOT_DIR=$(shell pwd)
 
-ifeq (${HAVE_ALIRE},yes)
+CLEAN_FILES= \
+  awa/obj awa/ada-util/obj awa/ada-el/obj awa/ada-ado/obj \
+  awa/ada-security/obj awa/ada-keystore/obj awa/ada-servlet/obj \
+  awa/openapi-ada/obj awa/ada-lzma/obj awa/ada-security/obj \
+  awa/ada-asf/obj awa/ada-wiki/obj awa/dynamo/obj awa/awa/obj \
+  awa/plugins/awa-*/obj
+
 DYNAMO=alr exec -- dynamo
 BUILD_COMMAND=alr build -- -XSOCKET=openssl
 HAVE_SETUP=yes
-else
-GPRFLAGS += -j$(PROCESSORS) -XROOT_DIR=$(ROOT_DIR) -XUTIL_OS=$(UTIL_OS) -XUTIL_AWS_IMPL=$(UTIL_AWS_VERSION)
-
-ifeq (${HAVE_DYNAMO},yes)
-HAVE_SETUP=no
-GPRFLAGS += -XBUILD_DYNAMO=no
-else
-HAVE_SETUP=yes
-GPRFLAGS += -XBUILD_DYNAMO=yes
-DYNAMO=env DYNAMO_UML_PATH=awa/awa/uml DYNAMO_SEARCH_PATH=awa/awa/plugins $(ROOT_DIR)/bin/dynamo
-BUILD_COMMAND=$(GNATMAKE) $(GPRFLAGS) -p -P "$(GPRPATH)" $(MAKE_ARGS)
-endif
-
-endif
-
-LIBNAME=lib${NAME}
 
 # Model generation arguments with Dynamo
 # --package XXX.XXX.Models db uml/xxx.zargo
@@ -46,36 +40,18 @@ package:
 	$(DYNAMO) dist $(DIST_DIR) package.xml
 	tar czf $(DIST_FILE) $(DIST_DIR)
 
-ifeq (${HAVE_SETUP},yes)
-setup:: awa/dynamo/src/gen-configs.ads
-awa/dynamo/src/gen-configs.ads:   Makefile.conf awa/dynamo/src/gen-configs.gpb
-	cd awa/dynamo && sh ./alire-setup.sh
-
-setup:: awa/ada-ado/src/drivers/ado-drivers-initialize.adb
-awa/ada-ado/src/drivers/ado-drivers-initialize.adb: awa/ada-ado/src/drivers/ado-drivers-initialize.gpb Makefile.conf
-	gnatprep -DHAVE_MYSQL=True \
-	          -DHAVE_SQLITE=False \
-	          -DHAVE_POSTGRESQL=False \
-		  awa/ada-ado/src/drivers/ado-drivers-initialize.gpb $@
-
-setup:: awa/ada-keystore/tools/akt-configs.ads
-awa/ada-keystore/tools/akt-configs.ads:   Makefile.conf awa/ada-keystore/tools/akt-configs.gpb
-	gnatprep -DPREFIX='"${prefix}"' -DVERSION='"$(VERSION)"' \
-		  awa/ada-keystore/tools/akt-configs.gpb awa/ada-keystore/tools/akt-configs.ads
-
-# Install the AWA UML model in Dynamo UML search path
-awa/dynamo/config/uml/AWA.xmi: awa/awa/uml/awa.zargo
-	unzip -cq awa/awa/uml/awa.zargo awa.xmi > awa/dynamo/config/uml/AWA.xmi
+setup::
 
 build-dynamo: bin/dynamo awa/dynamo/config/uml/AWA.xmi
 
-bin/dynamo: setup
-	$(BUILD_COMMAND)
+bin/dynamo:
+	$(BUILD_COMMAND) $(GPRFLAGS) $(MAKE_ARGS)
 
-else
+# Install the AWA UML model in Dynamo UML search path
+awa/dynamo/config/uml/AWA.xmi: awa/uml/awa.zargo
+	unzip -cq awa/uml/awa.zargo awa.xmi > awa/dynamo/config/uml/AWA.xmi
 
-setup::
-
-build-dynamo:
-
-endif
+# Give information about GPR path and Dynamo.xml files identified for the project
+# => this indicates the search paths used to search for files (Ada, but also HTML, CSS, JS, SQL)
+info:
+	$(DYNAMO) info

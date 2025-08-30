@@ -1,33 +1,6 @@
 with "adafr_config";
-aggregate project adafr is
 
-   for Project_Path use ("awa/ada-util/.alire",
-                         "awa/ada-util/.alire/xml",
-                         "awa/ada-util/.alire/aws",
-                         "awa/ada-util/.alire/unit",
-                         "awa/ada-util",
-                         "awa/ada-el/.alire",
-                         "awa/ada-el",
-                         "awa/ada-keystore/.alire",
-                         "awa/ada-keystore",
-                         "awa/ada-ado/.alire/sqlite",
-                         "awa/ada-ado/.alire/postgresql",
-                         "awa/ada-ado/.alire/mysql",
-                         "awa/ada-ado/.alire/all",
-                         "awa/ada-ado/.alire",
-                         "awa/ada-ado",
-                         "awa/ada-security/.alire",
-                         "awa/ada-security",
-                         "awa/ada-servlet/.alire",
-                         "awa/ada-servlet/.alire/aws",
-                         "awa/ada-servlet",
-                         "awa/ada-asf/.alire",
-                         "awa/ada-asf",
-                         "awa/ada-wiki/.alire",
-                         "awa/ada-wiki",
-                         "awa/dynamo",
-                         "awa/.alire",
-                         "awa/awa");
+aggregate project adafr is
 
    for Create_Missing_Dirs use "True";
 
@@ -47,7 +20,7 @@ aggregate project adafr is
 
    case Build_Akt is
       when "yes" =>
-         for Project_Files use Project'Project_Files & ("awa/ada-keystore/.alire/akt/keystoreada_tools.gpr");
+         for Project_Files use Project'Project_Files & ("awa/ada-keystore/akt/akt_nofuse.gpr");
 
       when others =>
          null;

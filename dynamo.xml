@@ -2,11 +2,10 @@
     <name>adafr</name>
     <property name="model_version">1</property>
     <property name="author_email">Stephane.Carrez@gmail.com</property>
-    <property name="search_dirs">.;awa/awa/plugins/awa-easymde;awa/awa/plugins/awa-trumbowyg;awa/awa/plugins/awa-flotcharts;awa/awa/plugins/awa-setup;awa/awa/plugins/awa-markedit;awa/awa/plugins/awa-wikis;awa/awa/plugins/awa-images;awa/awa/plugins/awa-jobs;awa/awa/plugins/awa-storages;awa/awa/plugins/awa-blogs;awa/awa/plugins/awa-counters;awa/awa/plugins/awa-tags;awa/awa/plugins/awa-comments;awa/awa/plugins/awa-mail;awa/awa/plugins/awa-workspaces;awa/.alire/../awa;awa/dynamo;awa/ada-ado/.alire;awa/ada-asf/.alire/..;awa/ada-util</property>
     <property name="is_ado">FALSE</property>
     <property name="license">apache</property>
     <property name="is_gtk">FALSE</property>
-    <property name="build">30</property>
+    <property name="build">32</property>
     <property name="author">Stephane Carrez</property>
     <property name="is_web">TRUE</property>
     <property name="database">sqlite:///adafr.db?synchronous=OFF&amp;encoding=UTF-8</property>
@@ -26,11 +25,12 @@
     <depend name="awa-jobs"></depend>
     <depend name="awa-images"></depend>
     <depend name="awa-wikis"></depend>
-    <depend name="awa-markedit"></depend>
-    <depend name="awa-trumbowyg"></depend>
+    <depend name="awa_markedit"></depend>
+    <depend name="awa_trumbowyg"></depend>
     <depend name="awa-flotcharts"></depend>
     <depend name="setup"></depend>
     <depend name="awa-setup"></depend>
-    <depend name="util"></depend>
-    <depend name="dynamo"></depend>
+    <depend name="security"></depend>
+    <depend name="servlet"></depend>
+    <depend name="keystore"></depend>
 </project>

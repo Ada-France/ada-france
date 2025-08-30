@@ -4,6 +4,13 @@ Ce projet contient les sources de l'application Ada France qui permet
 au site [Ada France](https://www.ada-france.org) de diffuser des informations
 et promouvoir le langage Ada.
 
+# Version 1.22 - Under development
+- Utilisation de AWA 2.6.0
+- Suppression des scripts configure
+
+# Version 1.21 - Oct 2023
+- Utilisation de AWA 2.5.0
+
 # Version 1.20 - Juin 2023
 - Construction avec Alire
 - Mise à jour de AWA
