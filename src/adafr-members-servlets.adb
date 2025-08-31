@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  adafr-members-servlets -- Export the members in Excel sheet
---  Copyright (C) 2021, 2022 Ada France
+--  Copyright (C) 2021, 2022, 2025 Ada France
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -122,7 +122,7 @@ package body Adafr.Members.Servlets is
                   else
                      Content.Use_Format (Fmt_Default);
                   end if;
-                  Content.Write (Row, 1, Ado.Identifier'Image (Member.Id));
+                  Content.Write (Row, 1, ADO.Identifier'Image (Member.Id));
                   Content.Write (Row, 2, To_Latin1 (Member.First_Name));
                   Content.Write (Row, 3, To_Latin1 (Member.Last_Name));
                   Content.Write (Row, 4, To_Latin1 (Member.Email));
@@ -156,26 +156,26 @@ package body Adafr.Members.Servlets is
       Content.Header ("Ada France members");
       Content.Footer ("Ada France");
       Content.Margins (0.5, 0.5, 0.5, 0.5);
-      Content.Page_Setup (Orientation => Excel_Out.Landscape,
-                          Scale_Or_Fit => Excel_Out.Fit);
+      Content.Page_Setup (orientation => Excel_Out.landscape,
+                          scale_or_fit => Excel_Out.fit);
 
-      Content.Define_font ("Arial Narrow", 16, font_title, Excel_Out.bold);
-      Content.Define_font ("Calibri", 12, font_normal);
+      Content.Define_Font ("Arial Narrow", 16, Font_Title, Excel_Out.bold);
+      Content.Define_Font ("Calibri", 12, Font_Normal);
 
-      Content.Define_format (font_title, Excel_Out.general,
+      Content.Define_Format (Font_Title, Excel_Out.general,
                              Fmt_Title,
                              border => Excel_Out.top & Excel_Out.bottom,
                              vertical_align => Excel_Out.centred);
-      Content.Define_format (font_normal, Excel_Out.general,
+      Content.Define_Format (Font_Normal, Excel_Out.general,
                              Fmt_Header,
-                             Background_Color => Excel_Out.Dark_Blue,
-                             border => Excel_Out.Bottom,
-                             Vertical_Align => Excel_Out.Centred);
-      Content.Define_format (font_normal, Excel_Out.general,
+                             background_color => Excel_Out.dark_blue,
+                             border => Excel_Out.bottom,
+                             vertical_align => Excel_Out.centred);
+      Content.Define_Format (Font_Normal, Excel_Out.general,
                              Fmt_Default);
-      Content.Define_format (font_normal, Excel_Out.general,
+      Content.Define_Format (Font_Normal, Excel_Out.general,
                              Fmt_Expired,
-                             Background_Color => Excel_Out.Silver);
+                             background_color => Excel_Out.silver);
 
       --  Setup sizes of various columns.
       Content.Write_Column_Width (1, 5);
@@ -192,16 +192,16 @@ package body Adafr.Members.Servlets is
       Content.Write_Column_Width (12, 20);
 
       Row := 5;
-      Report ("Membres Ada France et Ada Europe", Models.Member_Ada_Europe, False);
+      Report ("Membres Ada France et Ada Europe", Models.MEMBER_ADA_EUROPE, False);
 
       Row := Row + 3;
-      Report ("Membres Ada France", Models.Member_Ada_France, False);
+      Report ("Membres Ada France", Models.MEMBER_ADA_FRANCE, False);
 
       Row := Row + 3;
-      Report ("En attente de la cotisation", Models.Waiting_Payment, False);
+      Report ("En attente de la cotisation", Models.WAITING_PAYMENT, False);
 
       Row := Row + 3;
-      Report (To_Latin1 ("Expirés"), Models.Waiting_Payment, True);
+      Report (To_Latin1 ("Expirés"), Models.WAITING_PAYMENT, True);
 
       Content.Close;
       declare

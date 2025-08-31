@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  adafr-members-beans -- Beans for module members
---  Copyright (C) 2020, 2021 Stephane Carrez
+--  Copyright (C) 2020, 2021, 2025 Stephane Carrez
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -297,11 +297,11 @@ package body Adafr.Members.Beans is
             Query.Bind_Param ("date", Now);
             Query.Set_Query (Adafr.Members.Models.Query_Adafr_Member_List);
 
-         when Models.List_Pending =>
+         when Models.LIST_PENDING =>
             Query.Bind_Param ("status1", Integer (1));
             Query.Set_Query (Adafr.Members.Models.Query_Adafr_Member_List_By_Status);
 
-         when Models.List_Expired =>
+         when Models.LIST_EXPIRED =>
             Query.Bind_Param ("status1", Integer (2));
             Query.Bind_Param ("status2", Integer (3));
             Query.Bind_Param ("date", Now);
@@ -327,7 +327,7 @@ package body Adafr.Members.Beans is
       Object.Page_Size := 20;
       Object.Page := 1;
       Object.Count := 0;
-      Object.Filter := Adafr.Members.Models.List_ALL;
+      Object.Filter := Adafr.Members.Models.LIST_ALL;
       Object.Members_Bean := Object.Members'Access;
       return Object.all'Access;
    end Create_Member_List_Bean;
