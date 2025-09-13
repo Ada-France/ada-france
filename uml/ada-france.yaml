@@ -1,0 +1,293 @@
+Adafr.Members.Models.Status_Type:
+  type: enum
+  values: 
+    PENDING: 0
+    WAITING_PAYMENT: 1
+    MEMBER_ADA_FRANCE: 2
+    MEMBER_ADA_EUROPE: 3
+    INACTIVE: 4
+Adafr.Members.Models.Filter_Type:
+  type: enum
+  values: 
+    LIST_ALL: 0
+    LIST_MEMBERS: 1
+    LIST_AE_MEMBERS: 2
+    LIST_PENDING: 3
+    LIST_AF_MEMBERS: 4
+    LIST_EXPIRED: 5
+    LIST_INACTIVE: 6
+Adafr.Members.Models.Member:
+  type: entity
+  table: adafr_member
+  description: |
+    The Member table holds the list of Ada France members with the necessary
+    information so that we can send them the Ada User Journal if they are
+    member of Ada Europe. The member is first in the PENDING state
+    until we receive the validation of the email address. Then, it enters
+    int the WAITNG_PAYMENT state until the payment is acknowledged.
+    The payment process is manual (wire transfer or by check) and
+    switch to MEMBER once it is received.the member identifier
+
+  hasList: false
+  serializable: false
+  indexes: 
+  id: 
+    id:
+      type: identifier
+      column: id
+      not-null: true
+      unique: false
+      description: 
+      generator:
+        strategy: AUTO
+  fields: 
+    version:
+      type: integer
+      column: version
+      not-null: true
+      version: true
+      readonly: true
+      unique: false
+      description: optimistic locking version
+    first_name:
+      type: string
+      length: 255
+      column: first_name
+      not-null: true
+      auditable: true
+      unique: false
+      description: the member's first name.
+    last_name:
+      type: string
+      length: 255
+      column: last_name
+      not-null: true
+      auditable: true
+      unique: false
+      description: the member's last name.
+    company:
+      type: string
+      length: 255
+      column: company
+      not-null: true
+      auditable: true
+      unique: false
+      description: the optional member's company name.
+    address1:
+      type: string
+      length: 255
+      column: address1
+      not-null: true
+      auditable: true
+      unique: false
+      description: first adress field.
+    address2:
+      type: string
+      length: 255
+      column: address2
+      not-null: true
+      auditable: true
+      unique: false
+      description: second address field.
+    address3:
+      type: string
+      length: 255
+      column: address3
+      not-null: true
+      auditable: true
+      unique: false
+      description: third address field.
+    postal_code:
+      type: string
+      length: 255
+      column: postal_code
+      not-null: true
+      auditable: true
+      unique: false
+      description: address postal code.
+    city:
+      type: string
+      length: 255
+      column: city
+      not-null: true
+      auditable: true
+      unique: false
+      description: address tiown.
+    country:
+      type: string
+      length: 255
+      column: country
+      not-null: true
+      auditable: true
+      unique: false
+      description: the country.
+    create_date:
+      type: dateTime
+      column: create_date
+      not-null: true
+      unique: false
+      description: the date when the member record was created.
+    mail_verify_date:
+      type: dateTime
+      column: mail_verify_date
+      nullable: true
+      not-null: false
+      auditable: true
+      unique: false
+      description: the date when the member's email was validated.
+    payment_date:
+      type: dateTime
+      column: payment_date
+      nullable: true
+      not-null: false
+      auditable: true
+      unique: false
+      description: the date when the payment was received.
+    status:
+      type: Adafr.Members.Models.Status_Type
+      column: status
+      not-null: true
+      auditable: true
+      unique: false
+      description: 
+    ada_europe:
+      type: boolean
+      column: ada_europe
+      not-null: true
+      auditable: true
+      unique: false
+      description: whether the member is also member of Ada Europe.
+    salt:
+      type: string
+      length: 255
+      column: salt
+      not-null: true
+      unique: false
+      description: secure key salt.
+    update_date:
+      type: dateTime
+      column: update_date
+      not-null: true
+      unique: false
+      description: date when the information was updated.
+    subscription_deadline:
+      type: date
+      column: subscription_deadline
+      nullable: true
+      not-null: false
+      unique: false
+      description: the subscription deadline
+    amount:
+      type: integer
+      column: amount
+      not-null: true
+      auditable: true
+      unique: false
+      description: amount in euros
+  oneToMany:
+    receipt:
+      type: Adafr.Members.Models.Receipt
+      column: receipt_id
+      not-null: false
+      unique: false
+      description: 
+    email:
+      type: AWA.Users.Models.Email
+      column: email_id
+      not-null: true
+      unique: false
+      description: the member's email address.
+Adafr.Members.Models.Receipt:
+  type: entity
+  table: adafr_receipt
+  description: 
+  hasList: false
+  serializable: false
+  indexes: 
+  id: 
+    id:
+      type: identifier
+      column: id
+      not-null: true
+      unique: false
+      description: the receipt id
+      generator:
+        strategy: none
+  fields: 
+    create_date:
+      type: date
+      column: create_date
+      not-null: true
+      unique: false
+      description: the receipt creation date
+    amount:
+      type: integer
+      column: amount
+      not-null: true
+      unique: false
+      description: the amount in euros
+  oneToMany:
+    member:
+      type: Adafr.Members.Models.Member
+      column: member
+      not-null: true
+      useForeignKey: true
+      unique: false
+      description: 
+Adafr.Members.Models.Member_Bean:
+  type: bean
+  description: save the member in the database.
+  hasList: true
+  parent: Adafr.Members.Models.Member
+  serializable: false
+  fields: 
+    email:
+      type: string
+      length: 255
+      not-null: true
+      description: 
+    key:
+      type: string
+      length: 255
+      not-null: true
+      description: validation key used to grant the register operation.
+  operations:
+    save:
+      type: action
+    send:
+      type: action
+    register:
+      type: action
+    validate:
+      type: action
+    load:
+      type: action
+    save_payment:
+      type: action
+    create:
+      type: action
+Adafr.Members.Models.Member_List_Bean:
+  type: limited_bean
+  description: 
+  hasList: true
+  serializable: false
+  fields: 
+    page:
+      type: integer
+      not-null: true
+      description: the number of pages.
+    count:
+      type: integer
+      not-null: true
+      description: the total number of members found.
+    filter:
+      type: Adafr.Members.Models.Filter_Type
+      not-null: true
+      description: the list filter mode.
+    page_size:
+      type: integer
+      not-null: true
+      description: the number of members per page.
+  operations:
+    load:
+      type: action
