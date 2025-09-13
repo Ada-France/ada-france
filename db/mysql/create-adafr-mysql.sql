@@ -429,32 +429,6 @@ INSERT IGNORE INTO awa_audit_field (entity_type, name)
 INSERT IGNORE INTO awa_audit_field (entity_type, name)
   VALUES ((SELECT id FROM ado_entity_type WHERE name = "awa_comment"), "format");
 INSERT IGNORE INTO ado_version (name, version) VALUES ("awa-comments", 1);
-/* Copied from awa-tags-mysql.sql*/
-/* File generated automatically by dynamo */
-/* The tag definition. */
-CREATE TABLE IF NOT EXISTS awa_tag (
-  /* the tag identifier */
-  `id` BIGINT NOT NULL,
-  /* the tag name */
-  `name` VARCHAR(255) BINARY NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-/*  */
-CREATE TABLE IF NOT EXISTS awa_tagged_entity (
-  /* the tag entity identifier */
-  `id` BIGINT NOT NULL,
-  /* Title: Tag model
-Date: 2013-02-23the database entity to which the tag is associated */
-  `for_entity_id` BIGINT NOT NULL,
-  /* the entity type */
-  `entity_type` INTEGER NOT NULL,
-  /*  */
-  `tag_id` BIGINT NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-INSERT IGNORE INTO ado_entity_type (name) VALUES
-("awa_tag"), ("awa_tagged_entity");
-INSERT IGNORE INTO ado_version (name, version) VALUES ("awa-tags", 1);
 /* Copied from awa-counters-mysql.sql*/
 /* File generated automatically by dynamo */
 /*  */
@@ -498,93 +472,69 @@ CREATE TABLE IF NOT EXISTS awa_visit (
 INSERT IGNORE INTO ado_entity_type (name) VALUES
 ("awa_counter"), ("awa_counter_definition"), ("awa_visit");
 INSERT IGNORE INTO ado_version (name, version) VALUES ("awa-counters", 1);
-/* Copied from awa-blogs-mysql.sql*/
+/* Copied from awa-tags-mysql.sql*/
 /* File generated automatically by dynamo */
-/*  */
-CREATE TABLE IF NOT EXISTS awa_blog (
-  /* the blog identifier */
+/* The tag definition. */
+CREATE TABLE IF NOT EXISTS awa_tag (
+  /* the tag identifier */
   `id` BIGINT NOT NULL,
-  /* the blog name */
+  /* the tag name */
   `name` VARCHAR(255) BINARY NOT NULL,
-  /* the version */
-  `version` INTEGER NOT NULL,
-  /* the blog uuid */
-  `uid` VARCHAR(255) BINARY NOT NULL,
-  /* the blog creation date */
-  `create_date` DATETIME NOT NULL,
-  /* the date when the blog was updated */
-  `update_date` DATETIME NOT NULL,
-  /* The blog base URL. */
-  `url` VARCHAR(255) BINARY NOT NULL,
-  /* the default post format. */
-  `format` TINYINT NOT NULL,
-  /* the default image URL to be used */
-  `default_image_url` VARCHAR(255) BINARY NOT NULL,
-  /* the workspace that this blog belongs to */
-  `workspace_id` BIGINT NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*  */
-CREATE TABLE IF NOT EXISTS awa_post (
-  /* the post identifier */
+CREATE TABLE IF NOT EXISTS awa_tagged_entity (
+  /* the tag entity identifier */
   `id` BIGINT NOT NULL,
-  /* the post title */
-  `title` VARCHAR(255) BINARY NOT NULL,
-  /* the post text content */
-  `text` TEXT NOT NULL,
-  /* the post creation date */
-  `create_date` DATETIME NOT NULL,
-  /* the post URI */
-  `uri` VARCHAR(255) BINARY NOT NULL,
+  /* Title: Tag model
+Date: 2013-02-23the database entity to which the tag is associated */
+  `for_entity_id` BIGINT NOT NULL,
+  /* the entity type */
+  `entity_type` INTEGER NOT NULL,
   /*  */
-  `version` INTEGER NOT NULL,
-  /* the post publication date */
-  `publish_date` DATETIME ,
-  /* the post status */
-  `status` TINYINT NOT NULL,
-  /*  */
-  `allow_comments` TINYINT NOT NULL,
-  /* the number of times the post was read. */
-  `read_count` INTEGER NOT NULL,
-  /* the post summary. */
-  `summary` VARCHAR(4096) BINARY NOT NULL,
-  /* the blog post format. */
-  `format` TINYINT NOT NULL,
-  /*  */
-  `author_id` BIGINT NOT NULL,
-  /*  */
-  `blog_id` BIGINT NOT NULL,
-  /*  */
-  `image_id` BIGINT ,
+  `tag_id` BIGINT NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 INSERT IGNORE INTO ado_entity_type (name) VALUES
-("awa_blog"), ("awa_post");
-INSERT IGNORE INTO awa_audit_field (entity_type, name)
-  VALUES ((SELECT id FROM ado_entity_type WHERE name = "awa_blog"), "name");
-INSERT IGNORE INTO awa_audit_field (entity_type, name)
-  VALUES ((SELECT id FROM ado_entity_type WHERE name = "awa_blog"), "uid");
-INSERT IGNORE INTO awa_audit_field (entity_type, name)
-  VALUES ((SELECT id FROM ado_entity_type WHERE name = "awa_blog"), "url");
-INSERT IGNORE INTO awa_audit_field (entity_type, name)
-  VALUES ((SELECT id FROM ado_entity_type WHERE name = "awa_blog"), "format");
-INSERT IGNORE INTO awa_audit_field (entity_type, name)
-  VALUES ((SELECT id FROM ado_entity_type WHERE name = "awa_blog"), "default_image_url");
-INSERT IGNORE INTO awa_audit_field (entity_type, name)
-  VALUES ((SELECT id FROM ado_entity_type WHERE name = "awa_post"), "title");
-INSERT IGNORE INTO awa_audit_field (entity_type, name)
-  VALUES ((SELECT id FROM ado_entity_type WHERE name = "awa_post"), "uri");
-INSERT IGNORE INTO awa_audit_field (entity_type, name)
-  VALUES ((SELECT id FROM ado_entity_type WHERE name = "awa_post"), "publish_date");
-INSERT IGNORE INTO awa_audit_field (entity_type, name)
-  VALUES ((SELECT id FROM ado_entity_type WHERE name = "awa_post"), "status");
-INSERT IGNORE INTO awa_audit_field (entity_type, name)
-  VALUES ((SELECT id FROM ado_entity_type WHERE name = "awa_post"), "allow_comments");
-INSERT IGNORE INTO awa_audit_field (entity_type, name)
-  VALUES ((SELECT id FROM ado_entity_type WHERE name = "awa_post"), "summary");
-INSERT IGNORE INTO awa_audit_field (entity_type, name)
-  VALUES ((SELECT id FROM ado_entity_type WHERE name = "awa_post"), "format");
-INSERT IGNORE INTO ado_version (name, version) VALUES ("awa-blogs", 1);
+("awa_tag"), ("awa_tagged_entity");
+INSERT IGNORE INTO ado_version (name, version) VALUES ("awa-tags", 1);
+/* Copied from awa-jobs-mysql.sql*/
+/* File generated automatically by dynamo */
+/* The job is associated with a dispatching queue. */
+CREATE TABLE IF NOT EXISTS awa_job (
+  /* the job identifier */
+  `id` BIGINT NOT NULL,
+  /* the job status */
+  `status` TINYINT NOT NULL,
+  /* the job name */
+  `name` VARCHAR(255) BINARY NOT NULL,
+  /* the job start date */
+  `start_date` DATETIME ,
+  /* the job creation date */
+  `create_date` DATETIME NOT NULL,
+  /* the job finish date */
+  `finish_date` DATETIME ,
+  /* the job progress indicator */
+  `progress` INTEGER NOT NULL,
+  /* the job parameters */
+  `parameters` TEXT NOT NULL,
+  /* the job result */
+  `results` TEXT NOT NULL,
+  /*  */
+  `version` INTEGER NOT NULL,
+  /* the job priority */
+  `priority` INTEGER NOT NULL,
+  /*  */
+  `user_id` BIGINT ,
+  /*  */
+  `event_id` BIGINT ,
+  /*  */
+  `session_id` BIGINT ,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+INSERT IGNORE INTO ado_entity_type (name) VALUES
+("awa_job");
+INSERT IGNORE INTO ado_version (name, version) VALUES ("awa-jobs", 1);
 /* Copied from awa-storages-mysql.sql*/
 /* File generated automatically by dynamo */
 /* The uri member holds the URI if the storage type is URL.
@@ -675,43 +625,6 @@ CREATE TABLE IF NOT EXISTS awa_store_local (
 INSERT IGNORE INTO ado_entity_type (name) VALUES
 ("awa_storage"), ("awa_storage_data"), ("awa_storage_folder"), ("awa_store_local");
 INSERT IGNORE INTO ado_version (name, version) VALUES ("awa-storages", 1);
-/* Copied from awa-jobs-mysql.sql*/
-/* File generated automatically by dynamo */
-/* The job is associated with a dispatching queue. */
-CREATE TABLE IF NOT EXISTS awa_job (
-  /* the job identifier */
-  `id` BIGINT NOT NULL,
-  /* the job status */
-  `status` TINYINT NOT NULL,
-  /* the job name */
-  `name` VARCHAR(255) BINARY NOT NULL,
-  /* the job start date */
-  `start_date` DATETIME ,
-  /* the job creation date */
-  `create_date` DATETIME NOT NULL,
-  /* the job finish date */
-  `finish_date` DATETIME ,
-  /* the job progress indicator */
-  `progress` INTEGER NOT NULL,
-  /* the job parameters */
-  `parameters` TEXT NOT NULL,
-  /* the job result */
-  `results` TEXT NOT NULL,
-  /*  */
-  `version` INTEGER NOT NULL,
-  /* the job priority */
-  `priority` INTEGER NOT NULL,
-  /*  */
-  `user_id` BIGINT ,
-  /*  */
-  `event_id` BIGINT ,
-  /*  */
-  `session_id` BIGINT ,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-INSERT IGNORE INTO ado_entity_type (name) VALUES
-("awa_job");
-INSERT IGNORE INTO ado_version (name, version) VALUES ("awa-jobs", 1);
 /* Copied from awa-images-mysql.sql*/
 /* File generated automatically by dynamo */
 /* - The workspace contains one or several folders.
@@ -839,6 +752,93 @@ INSERT IGNORE INTO awa_audit_field (entity_type, name)
 INSERT IGNORE INTO awa_audit_field (entity_type, name)
   VALUES ((SELECT id FROM ado_entity_type WHERE name = "awa_wiki_space"), "format");
 INSERT IGNORE INTO ado_version (name, version) VALUES ("awa-wikis", 1);
+/* Copied from awa-blogs-mysql.sql*/
+/* File generated automatically by dynamo */
+/*  */
+CREATE TABLE IF NOT EXISTS awa_blog (
+  /* the blog identifier */
+  `id` BIGINT NOT NULL,
+  /* the blog name */
+  `name` VARCHAR(255) BINARY NOT NULL,
+  /* the version */
+  `version` INTEGER NOT NULL,
+  /* the blog uuid */
+  `uid` VARCHAR(255) BINARY NOT NULL,
+  /* the blog creation date */
+  `create_date` DATETIME NOT NULL,
+  /* the date when the blog was updated */
+  `update_date` DATETIME NOT NULL,
+  /* The blog base URL. */
+  `url` VARCHAR(255) BINARY NOT NULL,
+  /* the default post format. */
+  `format` TINYINT NOT NULL,
+  /* the default image URL to be used */
+  `default_image_url` VARCHAR(255) BINARY NOT NULL,
+  /* the workspace that this blog belongs to */
+  `workspace_id` BIGINT NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*  */
+CREATE TABLE IF NOT EXISTS awa_post (
+  /* the post identifier */
+  `id` BIGINT NOT NULL,
+  /* the post title */
+  `title` VARCHAR(255) BINARY NOT NULL,
+  /* the post text content */
+  `text` TEXT NOT NULL,
+  /* the post creation date */
+  `create_date` DATETIME NOT NULL,
+  /* the post URI */
+  `uri` VARCHAR(255) BINARY NOT NULL,
+  /*  */
+  `version` INTEGER NOT NULL,
+  /* the post publication date */
+  `publish_date` DATETIME ,
+  /* the post status */
+  `status` TINYINT NOT NULL,
+  /*  */
+  `allow_comments` TINYINT NOT NULL,
+  /* the number of times the post was read. */
+  `read_count` INTEGER NOT NULL,
+  /* the post summary. */
+  `summary` VARCHAR(4096) BINARY NOT NULL,
+  /* the blog post format. */
+  `format` TINYINT NOT NULL,
+  /*  */
+  `author_id` BIGINT NOT NULL,
+  /*  */
+  `blog_id` BIGINT NOT NULL,
+  /*  */
+  `image_id` BIGINT ,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+INSERT IGNORE INTO ado_entity_type (name) VALUES
+("awa_blog"), ("awa_post");
+INSERT IGNORE INTO awa_audit_field (entity_type, name)
+  VALUES ((SELECT id FROM ado_entity_type WHERE name = "awa_blog"), "name");
+INSERT IGNORE INTO awa_audit_field (entity_type, name)
+  VALUES ((SELECT id FROM ado_entity_type WHERE name = "awa_blog"), "uid");
+INSERT IGNORE INTO awa_audit_field (entity_type, name)
+  VALUES ((SELECT id FROM ado_entity_type WHERE name = "awa_blog"), "url");
+INSERT IGNORE INTO awa_audit_field (entity_type, name)
+  VALUES ((SELECT id FROM ado_entity_type WHERE name = "awa_blog"), "format");
+INSERT IGNORE INTO awa_audit_field (entity_type, name)
+  VALUES ((SELECT id FROM ado_entity_type WHERE name = "awa_blog"), "default_image_url");
+INSERT IGNORE INTO awa_audit_field (entity_type, name)
+  VALUES ((SELECT id FROM ado_entity_type WHERE name = "awa_post"), "title");
+INSERT IGNORE INTO awa_audit_field (entity_type, name)
+  VALUES ((SELECT id FROM ado_entity_type WHERE name = "awa_post"), "uri");
+INSERT IGNORE INTO awa_audit_field (entity_type, name)
+  VALUES ((SELECT id FROM ado_entity_type WHERE name = "awa_post"), "publish_date");
+INSERT IGNORE INTO awa_audit_field (entity_type, name)
+  VALUES ((SELECT id FROM ado_entity_type WHERE name = "awa_post"), "status");
+INSERT IGNORE INTO awa_audit_field (entity_type, name)
+  VALUES ((SELECT id FROM ado_entity_type WHERE name = "awa_post"), "allow_comments");
+INSERT IGNORE INTO awa_audit_field (entity_type, name)
+  VALUES ((SELECT id FROM ado_entity_type WHERE name = "awa_post"), "summary");
+INSERT IGNORE INTO awa_audit_field (entity_type, name)
+  VALUES ((SELECT id FROM ado_entity_type WHERE name = "awa_post"), "format");
+INSERT IGNORE INTO ado_version (name, version) VALUES ("awa-blogs", 1);
 /* Copied from adafr-mysql.sql*/
 /* File generated automatically by dynamo */
 /* The Member table holds the list of Ada France members with the necessary

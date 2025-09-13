@@ -65,34 +65,34 @@ CREATE TABLE IF NOT EXISTS adafr_receipt (
   `member` BIGINT NOT NULL,
   PRIMARY KEY (`id`)
 );
-INSERT OR IGNORE INTO ado_entity_type (name) VALUES ("adafr_member");
-INSERT OR IGNORE INTO ado_entity_type (name) VALUES ("adafr_receipt");
+INSERT OR IGNORE INTO ado_entity_type (name) VALUES ('adafr_member');
+INSERT OR IGNORE INTO ado_entity_type (name) VALUES ('adafr_receipt');
 INSERT OR IGNORE INTO awa_audit_field (entity_type, name)
-  VALUES ((SELECT id FROM ado_entity_type WHERE name = "adafr_member"), "first_name");
+  VALUES ((SELECT id FROM ado_entity_type WHERE name = 'adafr_member'), 'first_name');
 INSERT OR IGNORE INTO awa_audit_field (entity_type, name)
-  VALUES ((SELECT id FROM ado_entity_type WHERE name = "adafr_member"), "last_name");
+  VALUES ((SELECT id FROM ado_entity_type WHERE name = 'adafr_member'), 'last_name');
 INSERT OR IGNORE INTO awa_audit_field (entity_type, name)
-  VALUES ((SELECT id FROM ado_entity_type WHERE name = "adafr_member"), "company");
+  VALUES ((SELECT id FROM ado_entity_type WHERE name = 'adafr_member'), 'company');
 INSERT OR IGNORE INTO awa_audit_field (entity_type, name)
-  VALUES ((SELECT id FROM ado_entity_type WHERE name = "adafr_member"), "address1");
+  VALUES ((SELECT id FROM ado_entity_type WHERE name = 'adafr_member'), 'address1');
 INSERT OR IGNORE INTO awa_audit_field (entity_type, name)
-  VALUES ((SELECT id FROM ado_entity_type WHERE name = "adafr_member"), "address2");
+  VALUES ((SELECT id FROM ado_entity_type WHERE name = 'adafr_member'), 'address2');
 INSERT OR IGNORE INTO awa_audit_field (entity_type, name)
-  VALUES ((SELECT id FROM ado_entity_type WHERE name = "adafr_member"), "address3");
+  VALUES ((SELECT id FROM ado_entity_type WHERE name = 'adafr_member'), 'address3');
 INSERT OR IGNORE INTO awa_audit_field (entity_type, name)
-  VALUES ((SELECT id FROM ado_entity_type WHERE name = "adafr_member"), "postal_code");
+  VALUES ((SELECT id FROM ado_entity_type WHERE name = 'adafr_member'), 'postal_code');
 INSERT OR IGNORE INTO awa_audit_field (entity_type, name)
-  VALUES ((SELECT id FROM ado_entity_type WHERE name = "adafr_member"), "city");
+  VALUES ((SELECT id FROM ado_entity_type WHERE name = 'adafr_member'), 'city');
 INSERT OR IGNORE INTO awa_audit_field (entity_type, name)
-  VALUES ((SELECT id FROM ado_entity_type WHERE name = "adafr_member"), "country");
+  VALUES ((SELECT id FROM ado_entity_type WHERE name = 'adafr_member'), 'country');
 INSERT OR IGNORE INTO awa_audit_field (entity_type, name)
-  VALUES ((SELECT id FROM ado_entity_type WHERE name = "adafr_member"), "mail_verify_date");
+  VALUES ((SELECT id FROM ado_entity_type WHERE name = 'adafr_member'), 'mail_verify_date');
 INSERT OR IGNORE INTO awa_audit_field (entity_type, name)
-  VALUES ((SELECT id FROM ado_entity_type WHERE name = "adafr_member"), "payment_date");
+  VALUES ((SELECT id FROM ado_entity_type WHERE name = 'adafr_member'), 'payment_date');
 INSERT OR IGNORE INTO awa_audit_field (entity_type, name)
-  VALUES ((SELECT id FROM ado_entity_type WHERE name = "adafr_member"), "status");
+  VALUES ((SELECT id FROM ado_entity_type WHERE name = 'adafr_member'), 'status');
 INSERT OR IGNORE INTO awa_audit_field (entity_type, name)
-  VALUES ((SELECT id FROM ado_entity_type WHERE name = "adafr_member"), "ada_europe");
+  VALUES ((SELECT id FROM ado_entity_type WHERE name = 'adafr_member'), 'ada_europe');
 INSERT OR IGNORE INTO awa_audit_field (entity_type, name)
-  VALUES ((SELECT id FROM ado_entity_type WHERE name = "adafr_member"), "amount");
-INSERT OR IGNORE INTO ado_version (name, version) VALUES ("adafr", 1);
+  VALUES ((SELECT id FROM ado_entity_type WHERE name = 'adafr_member'), 'amount');
+INSERT OR IGNORE INTO ado_version (name, version) VALUES ('adafr', 1);

@@ -12,13 +12,13 @@ with "awa";
 with "awa_workspaces";
 with "awa_mail";
 with "awa_comments";
-with "awa_blogs";
-with "awa_storages";
+with "awa_counters";
 with "awa_tags";
 with "awa_jobs";
-with "awa_counters";
+with "awa_storages";
 with "awa_images";
 with "awa_wikis";
+with "awa_blogs";
 with "awa_setup";
 with "excel-writer/excel_out";
 
