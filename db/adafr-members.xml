@@ -17,8 +17,8 @@
         <property type='Adafr.Members.Models.Status_Type' name="status">
             <comment>the member status.</comment>
         </property>
-        <property type='Boolean' name="ada_europe" not-null="no">
-            <comment>whether the member is member of Ada-Europe.</comment>
+        <property type='Adafr.Members.Models.Member_Type' name="membership" not-null="yes">
+            <comment>the membership type asked by this member.</comment>
         </property>
         <property type='Date' name="create_date" not-null="no">
             <comment>the date when the member was created.</comment>
@@ -48,7 +48,7 @@
       m.first_name AS first_name,
       m.last_name AS last_name,
       COALESCE(m.status, 0) AS status,
-      COALESCE(m.ada_europe, 0) AS ada_europe,
+      COALESCE(m.membership, 0) AS membership,
       m.create_date AS create_date,
       m.payment_date AS payment_date,
       m.subscription_deadline AS deadline,
@@ -59,7 +59,7 @@
     LEFT JOIN adafr_member AS m ON m.email_id = email.id
     LEFT JOIN awa_user AS user ON user.email_id = email.id
     LEFT JOIN awa_workspace_member AS wm ON wm.member_id = user.id AND wm.workspace_id = 1
-    WHERE (m.status = :status1 OR m.status = :status2 OR m.status = :status3) OR wm.id IS NOT NULL
+    WHERE (m.status = :status1 OR m.status = :status2 OR m.status = :status3 OR m.status = :status4) OR wm.id IS NOT NULL
     ORDER BY last_name, first_name, email, user_name
        </sql>
        <sql-count>
@@ -78,7 +78,7 @@
       m.first_name AS first_name,
       m.last_name AS last_name,
       COALESCE(m.status, 0) AS status,
-      COALESCE(m.ada_europe, 0) AS ada_europe,
+      COALESCE(m.membership, 0) AS membership,
       m.create_date AS create_date,
       m.payment_date AS payment_date,
       m.subscription_deadline AS deadline,
@@ -108,7 +108,7 @@
       m.first_name AS first_name,
       m.last_name AS last_name,
       COALESCE(m.status, 0) AS status,
-      COALESCE(m.ada_europe, 0) AS ada_europe,
+      COALESCE(m.membership, 0) AS membership,
       m.create_date AS create_date,
       m.payment_date AS payment_date,
       m.subscription_deadline AS deadline,
@@ -138,7 +138,7 @@
       m.first_name AS first_name,
       m.last_name AS last_name,
       COALESCE(m.status, 0) AS status,
-      COALESCE(m.ada_europe, 0) AS ada_europe,
+      COALESCE(m.membership, 0) AS membership,
       m.create_date AS create_date,
       m.payment_date AS payment_date,
       m.subscription_deadline AS deadline,
@@ -149,7 +149,7 @@
     INNER JOIN awa_email AS email ON m.email_id = email.id
     LEFT JOIN awa_user AS user ON user.email_id = email.id
     LEFT JOIN awa_workspace_member AS wm ON wm.member_id = user.id AND wm.workspace_id = 1
-    WHERE (m.status = :status1 OR m.status = :status2) AND m.subscription_deadline &lt; :date
+    WHERE (m.status = :status1 OR m.status = :status2 OR m.status = :status3) AND m.subscription_deadline &lt; :date
     ORDER BY last_name, first_name, email, user_name
        </sql>
        <sql-count>

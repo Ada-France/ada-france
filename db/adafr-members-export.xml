@@ -17,8 +17,8 @@
         <property type='Adafr.Members.Models.Status_Type' name="status">
             <comment>the member status.</comment>
         </property>
-        <property type='Boolean' name="ada_europe" not-null="yes">
-            <comment>whether the member is member of Ada-Europe.</comment>
+        <property type='Adafr.Members.Models.Member_Type' name="membership" not-null="yes">
+            <comment>the membership type asked by this member.</comment>
         </property>
         <property type='Date' name="create_date" not-null="yes">
             <comment>the date when the member was created.</comment>
@@ -66,7 +66,7 @@
       m.first_name AS first_name,
       m.last_name AS last_name,
       COALESCE(m.status, 0) AS status,
-      COALESCE(m.ada_europe, 0) AS ada_europe,
+      COALESCE(m.membership, 0) AS membership,
       m.create_date AS create_date,
       m.payment_date AS payment_date,
       m.subscription_deadline AS deadline,

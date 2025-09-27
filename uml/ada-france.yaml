@@ -6,16 +6,24 @@ Adafr.Members.Models.Status_Type:
     MEMBER_ADA_FRANCE: 2
     MEMBER_ADA_EUROPE: 3
     INACTIVE: 4
+    MEMBER_ADA_USER_SOCIETY: 5
+Adafr.Members.Models.Member_Type:
+  type: enum
+  values: 
+    ADA_FRANCE: 0
+    ADA_EUROPE: 1
+    ADA_USER_SOCIETY: 2
 Adafr.Members.Models.Filter_Type:
   type: enum
   values: 
     LIST_ALL: 0
     LIST_MEMBERS: 1
     LIST_AE_MEMBERS: 2
-    LIST_PENDING: 3
-    LIST_AF_MEMBERS: 4
-    LIST_EXPIRED: 5
-    LIST_INACTIVE: 6
+    LIST_AUS_MEMBERS: 3
+    LIST_PENDING: 4
+    LIST_AF_MEMBERS: 5
+    LIST_EXPIRED: 6
+    LIST_INACTIVE: 7
 Adafr.Members.Models.Member:
   type: entity
   table: adafr_member
@@ -150,13 +158,13 @@ Adafr.Members.Models.Member:
       auditable: true
       unique: false
       description: 
-    ada_europe:
-      type: boolean
-      column: ada_europe
+    membership:
+      type: Adafr.Members.Models.Member_Type
+      column: membership
       not-null: true
       auditable: true
       unique: false
-      description: whether the member is also member of Ada Europe.
+      description: the membership type asked by the member.
     salt:
       type: string
       length: 255
