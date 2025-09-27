@@ -104,3 +104,18 @@ Pour lancer l'application, utilisez:
 
 Par défault, la base de donnée SQLite est créée avec l'utilisateur `admin` at `ada-france.org` et mot de passe `admin`.
 Cet utilisateur n'existe pas en prod, inutile d'essayer!
+
+## Developpement
+
+### Lancement gnatstudio
+
+```
+alr exec gnatstudio adafr.gpr
+```
+
+### Generation de code Ada + SQL
+
+```
+make generate
+```
+
