@@ -42,10 +42,16 @@
 \startletter[]
 
 Je, soussignée Natacha {\sc Porté}, trésorière de l'association Ada France,
-reconnaît avoir reçu @_AMOUNT_@ euros de cotisations à Ada~France
+reconnaît avoir reçu @_AMOUNT_@ euros de cotisations à
+@@IF@@ @_ADA_USER_SOCIETY_@
+Ada~France, à Ada~Europe et à Ada~User~Society
+@@ELSE@@
 @@IF@@ @_ADA_EUROPE_@
-et à Ada~Europe
-@@END_IF@@,
+Ada~France et à Ada~Europe
+@@ELSE@@
+Ada~France
+@@END_IF@@
+@@END_IF@@
 @@IF@@ not @_IS_EMPTY:COMPANY_@
 de la société @_COMPANY_@.
 @@ELSE@@

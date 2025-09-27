@@ -21,7 +21,7 @@ Adresse:  #{event.member.address1}
           #{event.member.postal_code} #{event.member.city}
           #{event.member.country}
 Email:    #{event.email}
-Adhésion: #{event.member.ada_europe ? 'Ada-France et Ada-Europe' : 'Ada-France'}
+Adhésion: #{event.member.membership eq 'ADA_EUROPE' ? 'Ada-France et Ada-Europe' : (event.member.membership eq 'ADA_USER_SOCIETY' ? 'Ada-France, Ada-Europe et Ada-User-Society' : 'Ada-France')}
 
 Une fois le paiement reçu, il faut changer le statut de ce membre sur la page:
 #{initParam['app_url_base']}/members/index.html
@@ -47,7 +47,7 @@ L'équipe Ada-France
   <tr><td></td><td>#{event.member.address3}</td></tr>
   <tr><td></td><td>#{event.member.postal_code} #{event.member.city}</td></tr>
   <tr><td></td><td>#{event.member.country}</td></tr>
-  <tr><td>Adhésion</td><td>#{event.member.ada_europe ? 'Ada-France et Ada-Europe' : 'Ada-France'}</td></tr>
+  <tr><td>Adhésion</td><td>#{event.member.membership eq 'ADA_EUROPE' ? 'Ada-France et Ada-Europe' : (event.member.membership eq 'ADA_USER_SOCIETY' ? 'Ada-France, Ada-Europe et Ada-User-Society' : 'Ada-France')}</td></tr>
 </table>
 <p>
   Une fois le paiement reçu, il faut changer le statut de

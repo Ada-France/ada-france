@@ -23,6 +23,14 @@
                 Vous êtes actuellement membre de Ada-France et Ada-Europe.
             </p>
         </h:panelGroup>
+        <h:panelGroup rendered="#{adafrMember.status eq 'MEMBER_ADA_USER_SOCIETY'}">
+            <p>
+                Merci pour votre support à notre association.
+            </p>
+            <p>
+                Vous êtes actuellement membre de Ada-France, Ada-Europe et Ada-User-Society.
+            </p>
+        </h:panelGroup>
         <h:panelGroup rendered="#{adafrMember.status eq 'WAITING_PAYMENT'}">
             <p>
                 Vous êtes actuellement enregistré et nous attendons votre
@@ -35,7 +43,7 @@
             </p>
             <ui:include src="/adhesion/views/payment-info.xhtml"/>
         </h:panelGroup>
-        <h:panelGroup rendered="#{adafrMember.ada_europe or adafrMember.status eq 'MEMBER_ADA_EUROPE'}">
+        <h:panelGroup rendered="#{adafrMember.membership ne 'ADA_FRANCE' or adafrMember.status eq 'MEMBER_ADA_EUROPE' or adafrMember.status eq 'MEMBER_ADA_USER_SOCIETY'}">
             <p>
                 En tant que membre de Ada-Europe, nous vous enverrons
                 les <b>Ada User Journals</b> à l'adresse suivante:

@@ -36,9 +36,20 @@
                 <h:panelGroup rendered="#{adafrMember.status eq 'MEMBER_ADA_EUROPE'}">
                     Membre Ada-Europe
                 </h:panelGroup>
+                <h:panelGroup rendered="#{adafrMember.status eq 'MEMBER_ADA_USER_SOCIETY'}">
+                    Membre Ada-Europe et Ada User Society
+                </h:panelGroup>
                 <h:panelGroup rendered="#{adafrMember.status eq 'WAITING_PAYMENT'}">
                     Membre en attente
-                    #{adafrMember.ada_europe ? 'Ada-France et Ada-Europe' : 'Ada-France'}
+                    <h:panelGroup rendered="#{adafrMember.membership eq 'ADA_FRANCE'}">
+                      Ada-France
+                    </h:panelGroup>
+                    <h:panelGroup rendered="#{adafrMember.membership eq 'ADA_EUROPE'}">
+                      Ada-Europe
+                    </h:panelGroup>
+                    <h:panelGroup rendered="#{adafrMember.membership eq 'ADA_USER_SOCIETY'}">
+                      Ada-Europe et Ada User Society
+                    </h:panelGroup>
                 </h:panelGroup>
             </h3>
             <ui:include src="views/member-actions.xhtml"/>

@@ -28,13 +28,16 @@
                   </p>
                 </h:panelGroup>
                 <h:messages styleClass='awa-error'/>
-                <h:selectOneRadio styleClass="awa-radio" id="mode" value="#{adafrMember.ada_europe}">
+                <h:selectOneRadio styleClass="awa-radio" id="mode" value="#{adafrMember.membership}">
                     <f:selectItem id="ada-europe-no" name="mode"
-                                  itemValue="FALSE"
+                                  itemValue="ADA_FRANCE"
                                   itemLabel="Ada-France (30 euros)" />
                     <f:selectItem id="ada-europe-yes" name="mode"
-                                  itemValue="TRUE"
+                                  itemValue="ADA_EUROPE"
                                   itemLabel="Ada-France + Ada-Europe (65 euros)" />
+                    <f:selectItem id="ada-europe-aus-yes" name="mode"
+                                  itemValue="ADA_USER_SOCIETY"
+                                  itemLabel="Ada-France + Ada-Europe + Ada-User-Society (65 euros)" />
                 </h:selectOneRadio>
                 <ul class='awa-buttons'>
                     <li>

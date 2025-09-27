@@ -277,6 +277,7 @@ package body Adafr.Members.Beans is
             Query.Bind_Param ("status1", Integer (1));
             Query.Bind_Param ("status2", Integer (2));
             Query.Bind_Param ("status3", Integer (3));
+            Query.Bind_Param ("status4", Integer (5));
             Query.Set_Query (Adafr.Members.Models.Query_Adafr_User_List);
 
          when Models.LIST_MEMBERS =>
@@ -285,9 +286,15 @@ package body Adafr.Members.Beans is
             Query.Bind_Param ("date", Now);
             Query.Set_Query (Adafr.Members.Models.Query_Adafr_Member_List);
 
+         when Models.LIST_AUS_MEMBERS =>
+            Query.Bind_Param ("status1", Integer (5));
+            Query.Bind_Param ("status2", Integer (5));
+            Query.Bind_Param ("date", Now);
+            Query.Set_Query (Adafr.Members.Models.Query_Adafr_Member_List);
+
          when Models.LIST_AE_MEMBERS =>
-            Query.Bind_Param ("status1", Integer (3));
-            Query.Bind_Param ("status2", Integer (3));
+            Query.Bind_Param ("status1", Integer (3)); --  AE member
+            Query.Bind_Param ("status2", Integer (5)); --  AUS member
             Query.Bind_Param ("date", Now);
             Query.Set_Query (Adafr.Members.Models.Query_Adafr_Member_List);
 
@@ -302,8 +309,9 @@ package body Adafr.Members.Beans is
             Query.Set_Query (Adafr.Members.Models.Query_Adafr_Member_List_By_Status);
 
          when Models.LIST_EXPIRED =>
-            Query.Bind_Param ("status1", Integer (2));
-            Query.Bind_Param ("status2", Integer (3));
+            Query.Bind_Param ("status1", Integer (2)); --  AF member
+            Query.Bind_Param ("status2", Integer (3)); --  AE member
+            Query.Bind_Param ("status3", Integer (5)); --  AUS member
             Query.Bind_Param ("date", Now);
             Query.Set_Query (Adafr.Members.Models.Query_Adafr_Member_List_Expired);
 

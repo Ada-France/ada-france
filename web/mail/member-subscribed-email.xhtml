@@ -10,7 +10,7 @@
         <mail:attachment fileName="IBAN-Ada-France.pdf" value="../private-documents/IBAN-Ada-France.pdf" contentType="application/pdf"/>
     </ui:define>
     <ui:define name="mailTextBody">
-Vous avez souhaité devenir membre d'#{event.member.ada_europe ? 'Ada-France+Ada-Europe' : 'Ada-France'} et nous vous en remercions.
+Vous avez souhaité devenir membre d'#{event.member.membership eq 'ADA_EUROPE' ? 'Ada-France et Ada-Europe' : (event.member.membership eq 'ADA_USER_SOCIETY' ? 'Ada-France, Ada-Europe et Ada-User-Society' : 'Ada-France')} et nous vous en remercions.
 
 Votre enregistrement est actuellement en attente du paiement de #{event.member.amount} euros.
 
@@ -25,7 +25,7 @@ L'équipe Ada-France
 </ui:define>
 <ui:define name="mailBody">
 <p>
-  Vous avez souhaité devenir membre d'#{event.member.ada_europe ? 'Ada-France+Ada-Europe' : 'Ada-France'} et nous vous en remercions.
+  Vous avez souhaité devenir membre d'#{event.member.membership eq 'ADA_EUROPE' ? 'Ada-France et Ada-Europe' : (event.member.membership eq 'ADA_USER_SOCIETY' ? 'Ada-France, Ada-Europe et Ada-User-Society' : 'Ada-France')} et nous vous en remercions.
 </p>
 <p>
   Votre enregistrement est actuellement en attente du paiement de #{event.member.amount} euros.

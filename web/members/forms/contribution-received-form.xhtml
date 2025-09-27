@@ -15,13 +15,16 @@
             <div class='awa-messages'>
                 <h:message styleClass='awa-error'/>
             </div>
-            <h:selectOneRadio styleClass="awa-radio" id="mode" value="#{adafrMember.ada_europe}">
+            <h:selectOneRadio styleClass="awa-radio" id="mode" value="#{adafrMember.membership}">
                 <f:selectItem id="ada-europe-no" name="mode"
-                              itemValue="FALSE"
+                              itemValue="ADA_FRANCE"
                               itemLabel="Ada-France" />
                 <f:selectItem id="ada-europe-yes" name="mode"
-                              itemValue="TRUE"
+                              itemValue="ADA_EUROPE"
                               itemLabel="Ada-France + Ada-Europe" />
+                <f:selectItem id="ada-user-society-yes" name="mode"
+                              itemValue="ADA_USER_SOCIETY"
+                              itemLabel="Ada-User-Society" />
             </h:selectOneRadio>
             <w:inputText styleClass="awa-required ui-corner-all"
                          id='amount' size='10' required='true'

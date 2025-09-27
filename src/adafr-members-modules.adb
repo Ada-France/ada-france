@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  adafr-members-modules -- Module members
---  Copyright (C) 2020, 2021, 2022 Stephane Carrez
+--  Copyright (C) 2020, 2021, 2022, 2025 Ada-France
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -42,6 +42,7 @@ package body Adafr.Members.Modules is
    use Ada.Strings.Unbounded;
    use Util.Encoders.HMAC.SHA256;
    use type Adafr.Members.Models.Status_Type;
+   use type Adafr.Members.Models.Member_Type;
    use type ADO.Identifier;
 
    package ASC renames AWA.Services.Contexts;
@@ -155,7 +156,6 @@ package body Adafr.Members.Modules is
       Found : Boolean;
       Mail  : AWA.Users.Models.Email_Ref;
       Event : AWA.Events.Module_Event;
-      Ada_Europe : constant Boolean := Entity.Get_Ada_Europe;
    begin
       Log.Info ("Send mail validation to {0}", Email);
 
@@ -184,7 +184,7 @@ package body Adafr.Members.Modules is
          Entity.Set_Status (Adafr.Members.Models.PENDING);
          Entity.Set_Create_Date (Ada.Calendar.Clock);
          Entity.Set_Country ("France");
-         Entity.Set_Ada_Europe (Ada_Europe);
+         Entity.Set_Membership (Models.ADA_USER_SOCIETY);
          Entity.Set_Amount (65);
       end if;
       Entity.Set_Salt (Salt);
@@ -333,8 +333,8 @@ package body Adafr.Members.Modules is
       Log.Info ("Register member with key {0}", Key);
 
       Model.Validate_Key (Key, Current_Entity);
-      Current_Entity.Set_Ada_Europe (Member.Get_Ada_Europe);
-      if not Member.Get_Ada_Europe then
+      Current_Entity.Set_Membership (Member.Get_Membership);
+      if Member.Get_Membership = Models.ADA_FRANCE then
          Current_Entity.Set_Amount (30);
       else
          Current_Entity.Set_Amount (65);
@@ -416,11 +416,14 @@ package body Adafr.Members.Modules is
                              Entity     => Id);
 
       Current_Entity.Load (DB, Id);
-      if Member.Get_Ada_Europe then
-         Current_Entity.Set_Status (Models.MEMBER_ADA_EUROPE);
-      else
-         Current_Entity.Set_Status (Models.MEMBER_ADA_FRANCE);
-      end if;
+      case Member.Get_Membership is
+         when Models.ADA_FRANCE =>
+            Current_Entity.Set_Status (Models.MEMBER_ADA_FRANCE);
+         when Models.ADA_EUROPE =>
+            Current_Entity.Set_Status (Models.MEMBER_ADA_EUROPE);
+         when Models.ADA_USER_SOCIETY =>
+            Current_Entity.Set_Status (Models.MEMBER_ADA_USER_SOCIETY);
+      end case;
       Current_Entity.Set_Amount (Member.Get_Amount);
       Current_Entity.Set_Payment_Date (Member.Get_Payment_Date);
 
@@ -563,7 +566,7 @@ package body Adafr.Members.Modules is
       Member.Set_Email (Email_Entity);
       Member.Set_Create_Date (Ada.Calendar.Clock);
       Member.Set_Update_Date (Ada.Calendar.Clock);
-      Member.Set_Amount ((if Member.Get_Ada_Europe then 65 else 30));
+      Member.Set_Amount ((if Member.Get_Membership /= Models.ADA_FRANCE then 65 else 30));
       Member.Save (DB);
       Ctx.Commit;
    end Create;
@@ -602,7 +605,8 @@ package body Adafr.Members.Modules is
       Info.City := Member.Get_City;
       Info.Country := Member.Get_Country;
       Info.Amount := To_Unbounded_String (Util.Strings.Image (Receipt.Get_Amount));
-      Info.Ada_Europe := Member.Get_Ada_Europe;
+      Info.Ada_Europe := Member.Get_Membership /= Models.ADA_FRANCE;
+      Info.Ada_User_Society := Member.Get_Membership = Models.ADA_USER_SOCIETY;
       Util.Dates.Formats.Format (Into    => Info.Date,
                                  Pattern => "%A %d %B %Y",
                                  Date    => Member.Get_Payment_Date.Value,

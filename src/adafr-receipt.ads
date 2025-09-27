@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  adafr-receipt -- Receipt generation
---  Copyright (C) 2020 Ada France
+--  Copyright (C) 2020, 2025 Ada France
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -34,6 +34,7 @@ package Adafr.Receipt is
       Amount      : Unbounded_String; --  @_AMOUNT_@
       Date        : Unbounded_String; --  @_DATE_@
       Ada_Europe  : Boolean;          --  @_ADA_EUROPE_@
+      Ada_User_Society : Boolean;     --  @_ADA_USER_SOCIETY_@
       Signature   : Unbounded_String; --  @_SIGNATURE_@
    end record;
 

@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  adafr-receipt -- Receipt generation
---  Copyright (C) 2020-2023 Ada France
+--  Copyright (C) 2020-2025 Ada France
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -94,6 +94,7 @@ package body Adafr.Receipt is
       Templates_Parser.Insert (Set, Templates_Parser.Assoc ("AMOUNT", Member.Amount));
       Templates_Parser.Insert (Set, Templates_Parser.Assoc ("DATE", Member.Date));
       Templates_Parser.Insert (Set, Templates_Parser.Assoc ("ADA_EUROPE", Member.Ada_Europe));
+      Templates_Parser.Insert (Set, Templates_Parser.Assoc ("ADA_USER_SOCIETY", Member.Ada_User_Society));
       Templates_Parser.Insert (Set, Templates_Parser.Assoc ("SIGNATURE", Member.Signature));
       Templates_Parser.Insert (Set, Templates_Parser.Assoc ("INSTALLDIR", Cur_Dir));
 

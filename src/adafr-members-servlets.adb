@@ -192,6 +192,10 @@ package body Adafr.Members.Servlets is
       Content.Write_Column_Width (12, 20);
 
       Row := 5;
+      Report ("Membres Ada France, Ada Europe et Ada User Society",
+              Models.MEMBER_ADA_USER_SOCIETY, False);
+
+      Row := Row + 3;
       Report ("Membres Ada France et Ada Europe", Models.MEMBER_ADA_EUROPE, False);
 
       Row := Row + 3;

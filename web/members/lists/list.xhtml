@@ -1,5 +1,5 @@
 <!-- List of workspace members
-  -  Copyright (C) 2017, 2018 Stephane Carrez
+  -  Copyright (C) 2017, 2025 Ada-France
   -  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
   -
   -  Licensed under the Apache License, Version 2.0 (the "License");
@@ -43,7 +43,7 @@
             <div class='member-subscription'>
                 <h:panelGroup rendered="#{member.id gt 0}">
                     <a href="#{contextPath}/members/view.html?id=#{member.id}">View</a>
-                    #{member.ada_europe ? 'Ada-Europe' : 'Ada-France'}
+                    #{member.membership eq 'ADA_EUROPE' ? 'Ada-Europe' : (member.membership eq 'ADA_USER_SOCIETY' ? 'Ada-User-Society' : 'Ada-France')}
                 </h:panelGroup>
             </div>
             <div class='member-role'>
