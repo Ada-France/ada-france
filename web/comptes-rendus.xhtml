@@ -24,6 +24,10 @@
     <ui:param name="title" value="Compte rendus Assemblées Générales"/>
     <ui:param name="pageStyle" value="page-news"/>
 
+    <ui:define name="pageHeader">
+        <meta property="description" content="Comptes rendus des assemblées générales de l'association francophone des utilisateurs du langage de programmation Ada." />
+    </ui:define>
+
     <!-- Main page body -->
     <ui:define name="pageBody">
         <f:metadata>
@@ -33,6 +37,7 @@
         </f:metadata>
 
         <div class='col-sm-9'>
+          <h1>Assemblées Générales</h1>
           <div class="wiki-text">
             <awa:wiki styleClass='wiki-text'
                       value="#{wikiComptesRendus.content}"

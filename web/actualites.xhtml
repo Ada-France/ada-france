@@ -23,6 +23,10 @@
     <ui:param name="title" value="#{newsList.tag}"/>
     <ui:param name="pageStyle" value="page-news"/>
 
+    <ui:define name="pageHeader">
+        <meta property="description" content="Actualités sur l'association et les langages de programmation Ada et SPARK." />
+    </ui:define>
+
     <!-- Main page body -->
     <ui:define name="pageBody">
         <f:metadata>
@@ -31,6 +35,7 @@
         </f:metadata>
 
         <div class='col-sm-9'>
+          <h1>Quoi de neuf du coté Ada et SPARK</h1>
           <ui:include src="blogs/lists/post-list.xhtml">
             <ui:param name="postList" value="#{newsList}"/>
             <ui:param name="pageUrl" value="blogs/view.html"/>

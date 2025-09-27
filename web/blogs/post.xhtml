@@ -1,5 +1,5 @@
 <!-- View a single post
-  -  Copyright (C) 2014, 2015, 2016, 2018, 2019 Stephane Carrez
+  -  Copyright (C) 2014, 2015, 2016, 2018, 2019 Ada-France
   -  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
   -
   -  Licensed under the Apache License, Version 2.0 (the "License");
@@ -47,7 +47,7 @@
         <div class='awa-grid-9'>
           <div class='blog-post' id="p_#{post.id}">
             <div class='post-title'>
-              <h2><a href="#{contextPath}/blogs/post.html?post=#{post.uri}">#{post.title}</a></h2>
+              <h1><a href="#{contextPath}/blogs/post.html?post=#{post.uri}">#{post.title}</a></h1>
               <p>
                 <h:outputFormat value="#{blogMsg.blog_post_author}">
                   <f:param value="#{post.username}"/>

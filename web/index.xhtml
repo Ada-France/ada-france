@@ -11,6 +11,13 @@
 
     <ui:define name="pageHeader">
         <link media="screen" type="text/css" rel="stylesheet" href="#{contextPath}/css/highlight/idea.css"/>
+        <meta property="og:title" content="Ada-France – Communauté francophone du langage Ada"/>
+        <meta property="og:url" content="https://www.ada-france.org/"/>
+        <meta property="og:type" content="website"/>
+        <meta property="og:image" content="https://www.ada-france.org/adafr/images/AdaFrance-logo.png"/>
+        <meta property="og:description" content="Association francophone des utilisateurs du langage de programmation Ada. Actualités, ressources et événements." />
+        <meta property="description" content="Association francophone des utilisateurs du langage de programmation Ada. Actualités, ressources et événements." />
+        <meta name="keywords" content="Ada, Ada France, langage Ada, SPARK Ada, programmation sûre, logiciel critique, association Ada, Ada-Europe"/>
     </ui:define>
 
     <!-- Main page body -->
@@ -26,6 +33,7 @@
                         </div>
                     </div>
                     <div class="container">
+                        <h1>Association des utilisateurs du langage Ada</h1>
                         <h:list var="post" value="#{recentPostList.posts}">
                             <div class='blog-post' id="p_#{post.id}">
                                 <div class='post-title'>

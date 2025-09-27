@@ -545,6 +545,15 @@ ul.openid-invite li {
     #nav-member, .navbar .navbar-brand {
         font-size: 16px;
     }
+    #subscribe-steps #subscribe-validate, #subscribe-steps #subscribe-mode {
+        padding-top: 20px;
+    }
+    #subscribe-steps li {
+        font-size: 0.9em;
+    }
+    .col-md-4, .col-md-8 {
+        padding: 0;
+    }
 }
 @media (min-width: 600px) {
     .navbar-collapse.collapse {
@@ -593,5 +602,8 @@ ul.openid-invite li {
     ul.awa-pagination li {
         margin-left: 5%;
         margin-right: 5%;
+    }
+    #subscribe-validate, #subscribe-mode {
+        padding-top: 20px;
     }
 }
