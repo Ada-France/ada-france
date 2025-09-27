@@ -37,8 +37,8 @@ CREATE TABLE IF NOT EXISTS adafr_member (
   `payment_date` DATETIME ,
   /*  */
   `status` TINYINT NOT NULL,
-  /* whether the member is also member of Ada Europe. */
-  `ada_europe` TINYINT NOT NULL,
+  /* the membership type asked by the member. */
+  `membership` TINYINT NOT NULL,
   /* secure key salt. */
   `salt` VARCHAR(255) BINARY NOT NULL,
   /* date when the information was updated. */
@@ -92,7 +92,7 @@ INSERT IGNORE INTO awa_audit_field (entity_type, name)
 INSERT IGNORE INTO awa_audit_field (entity_type, name)
   VALUES ((SELECT id FROM ado_entity_type WHERE name = "adafr_member"), "status");
 INSERT IGNORE INTO awa_audit_field (entity_type, name)
-  VALUES ((SELECT id FROM ado_entity_type WHERE name = "adafr_member"), "ada_europe");
+  VALUES ((SELECT id FROM ado_entity_type WHERE name = "adafr_member"), "membership");
 INSERT IGNORE INTO awa_audit_field (entity_type, name)
   VALUES ((SELECT id FROM ado_entity_type WHERE name = "adafr_member"), "amount");
-INSERT IGNORE INTO ado_version (name, version) VALUES ("adafr", 1);
+INSERT IGNORE INTO ado_version (name, version) VALUES ("adafr", 2);

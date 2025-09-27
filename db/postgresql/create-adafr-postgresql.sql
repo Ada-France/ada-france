@@ -941,8 +941,8 @@ CREATE TABLE IF NOT EXISTS adafr_member (
   "payment_date" TIMESTAMP ,
   /*  */
   "status" SMALLINT NOT NULL,
-  /* whether the member is also member of Ada Europe. */
-  "ada_europe" BOOLEAN NOT NULL,
+  /* the membership type asked by the member. */
+  "membership" SMALLINT NOT NULL,
   /* secure key salt. */
   "salt" VARCHAR(255) NOT NULL,
   /* date when the information was updated. */
@@ -1009,11 +1009,11 @@ INSERT INTO awa_audit_field (entity_type, name)
   VALUES ((SELECT id FROM ado_entity_type WHERE name = 'adafr_member'), 'status')
   ON CONFLICT DO NOTHING;
 INSERT INTO awa_audit_field (entity_type, name)
-  VALUES ((SELECT id FROM ado_entity_type WHERE name = 'adafr_member'), 'ada_europe')
+  VALUES ((SELECT id FROM ado_entity_type WHERE name = 'adafr_member'), 'membership')
   ON CONFLICT DO NOTHING;
 INSERT INTO awa_audit_field (entity_type, name)
   VALUES ((SELECT id FROM ado_entity_type WHERE name = 'adafr_member'), 'amount')
   ON CONFLICT DO NOTHING;
 INSERT INTO ado_version (name, version)
-  VALUES ('adafr', 1)
+  VALUES ('adafr', 2)
   ON CONFLICT DO NOTHING;

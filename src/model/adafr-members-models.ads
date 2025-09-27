@@ -32,8 +32,8 @@ package Adafr.Members.Models is
 
    pragma Style_Checks ("-mrIu");
 
-   type Filter_Type is (LIST_ALL, LIST_MEMBERS, LIST_AE_MEMBERS, LIST_PENDING, LIST_AF_MEMBERS, LIST_EXPIRED, LIST_INACTIVE);
-   for Filter_Type use (LIST_ALL => 0, LIST_MEMBERS => 1, LIST_AE_MEMBERS => 2, LIST_PENDING => 3, LIST_AF_MEMBERS => 4, LIST_EXPIRED => 5, LIST_INACTIVE => 6);
+   type Filter_Type is (LIST_ALL, LIST_MEMBERS, LIST_AE_MEMBERS, LIST_AUS_MEMBERS, LIST_PENDING, LIST_AF_MEMBERS, LIST_EXPIRED, LIST_INACTIVE);
+   for Filter_Type use (LIST_ALL => 0, LIST_MEMBERS => 1, LIST_AE_MEMBERS => 2, LIST_AUS_MEMBERS => 3, LIST_PENDING => 4, LIST_AF_MEMBERS => 5, LIST_EXPIRED => 6, LIST_INACTIVE => 7);
    package Filter_Type_Objects is
       new Util.Beans.Objects.Enums (Filter_Type);
 
@@ -42,8 +42,18 @@ package Adafr.Members.Models is
       Value   : Filter_Type;
    end record;
 
-   type Status_Type is (PENDING, WAITING_PAYMENT, MEMBER_ADA_FRANCE, MEMBER_ADA_EUROPE, INACTIVE);
-   for Status_Type use (PENDING => 0, WAITING_PAYMENT => 1, MEMBER_ADA_FRANCE => 2, MEMBER_ADA_EUROPE => 3, INACTIVE => 4);
+   type Member_Type is (ADA_FRANCE, ADA_EUROPE, ADA_USER_SOCIETY);
+   for Member_Type use (ADA_FRANCE => 0, ADA_EUROPE => 1, ADA_USER_SOCIETY => 2);
+   package Member_Type_Objects is
+      new Util.Beans.Objects.Enums (Member_Type);
+
+   type Nullable_Member_Type is record
+      Is_Null : Boolean := True;
+      Value   : Member_Type;
+   end record;
+
+   type Status_Type is (PENDING, WAITING_PAYMENT, MEMBER_ADA_FRANCE, MEMBER_ADA_EUROPE, INACTIVE, MEMBER_ADA_USER_SOCIETY);
+   for Status_Type use (PENDING => 0, WAITING_PAYMENT => 1, MEMBER_ADA_FRANCE => 2, MEMBER_ADA_EUROPE => 3, INACTIVE => 4, MEMBER_ADA_USER_SOCIETY => 5);
    package Status_Type_Objects is
       new Util.Beans.Objects.Enums (Status_Type);
 
@@ -313,13 +323,13 @@ package Adafr.Members.Models is
    function Get_Status (Object : in Member_Ref)
                  return Status_Type;
 
-   --  Set whether the member is also member of Ada Europe.
-   procedure Set_Ada_Europe (Object : in out Member_Ref;
-                             Value  : in Boolean);
+   --  Set the membership type asked by the member.
+   procedure Set_Membership (Object : in out Member_Ref;
+                             Value  : in Member_Type);
 
-   --  Get whether the member is also member of Ada Europe.
-   function Get_Ada_Europe (Object : in Member_Ref)
-                 return Boolean;
+   --  Get the membership type asked by the member.
+   function Get_Membership (Object : in Member_Ref)
+                 return Member_Type;
 
    --  Set secure key salt.
    procedure Set_Salt (Object : in out Member_Ref;
@@ -501,8 +511,8 @@ package Adafr.Members.Models is
       --  the member status.
       Status : Status_Type;
 
-      --  whether the member is member of Ada-Europe.
-      Ada_Europe : Boolean;
+      --  the membership type asked by this member.
+      Membership : Member_Type;
 
       --  the date when the member was created.
       Create_Date : Ada.Calendar.Time;
@@ -592,8 +602,8 @@ package Adafr.Members.Models is
       --  the member status.
       Status : Status_Type;
 
-      --  whether the member is member of Ada-Europe.
-      Ada_Europe : ADO.Nullable_Boolean;
+      --  the membership type asked by this member.
+      Membership : Member_Type;
 
       --  the date when the member was created.
       Create_Date : ADO.Nullable_Time;
@@ -818,7 +828,7 @@ private
    COL_12_2_NAME : aliased constant String := "mail_verify_date";
    COL_13_2_NAME : aliased constant String := "payment_date";
    COL_14_2_NAME : aliased constant String := "status";
-   COL_15_2_NAME : aliased constant String := "ada_europe";
+   COL_15_2_NAME : aliased constant String := "membership";
    COL_16_2_NAME : aliased constant String := "salt";
    COL_17_2_NAME : aliased constant String := "update_date";
    COL_18_2_NAME : aliased constant String := "subscription_deadline";
@@ -900,7 +910,7 @@ private
        Mail_Verify_Date : ADO.Nullable_Time;
        Payment_Date : ADO.Nullable_Time;
        Status : Status_Type;
-       Ada_Europe : Boolean;
+       Membership : Member_Type;
        Salt : Ada.Strings.Unbounded.Unbounded_String;
        Update_Date : Ada.Calendar.Time;
        Subscription_Deadline : ADO.Nullable_Time;
@@ -954,7 +964,7 @@ private
 
    package File_2 is
       new ADO.Queries.Loaders.File (Path => "adafr-members-export.xml",
-                                    Sha1 => "50EA1E34DC5A163A59D89631B1F5BF45A16DFB8D");
+                                    Sha1 => "EC0B2CFEAA6322BD1053B544D4C58140F9658BB6");
 
    package Def_Exportmemberinfo_Adafr_Export_Member_List is
       new ADO.Queries.Loaders.Query (Name => "adafr-export-member-list",
@@ -964,7 +974,7 @@ private
 
    package File_3 is
       new ADO.Queries.Loaders.File (Path => "adafr-members.xml",
-                                    Sha1 => "4AC5A1DCF0193D455D6866C6E9450788C890CA04");
+                                    Sha1 => "E406F2A11C27AB225FE7925A4A244231651C6FC5");
 
    package Def_Memberinfo_Adafr_User_List is
       new ADO.Queries.Loaders.Query (Name => "adafr-user-list",

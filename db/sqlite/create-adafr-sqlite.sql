@@ -893,8 +893,8 @@ CREATE TABLE IF NOT EXISTS adafr_member (
   `payment_date` DATETIME ,
   /*  */
   `status` TINYINT NOT NULL,
-  /* whether the member is also member of Ada Europe. */
-  `ada_europe` TINYINT NOT NULL,
+  /* the membership type asked by the member. */
+  `membership` TINYINT NOT NULL,
   /* secure key salt. */
   `salt` VARCHAR(255) NOT NULL,
   /* date when the information was updated. */
@@ -948,10 +948,10 @@ INSERT OR IGNORE INTO awa_audit_field (entity_type, name)
 INSERT OR IGNORE INTO awa_audit_field (entity_type, name)
   VALUES ((SELECT id FROM ado_entity_type WHERE name = 'adafr_member'), 'status');
 INSERT OR IGNORE INTO awa_audit_field (entity_type, name)
-  VALUES ((SELECT id FROM ado_entity_type WHERE name = 'adafr_member'), 'ada_europe');
+  VALUES ((SELECT id FROM ado_entity_type WHERE name = 'adafr_member'), 'membership');
 INSERT OR IGNORE INTO awa_audit_field (entity_type, name)
   VALUES ((SELECT id FROM ado_entity_type WHERE name = 'adafr_member'), 'amount');
-INSERT OR IGNORE INTO ado_version (name, version) VALUES ('adafr', 1);
+INSERT OR IGNORE INTO ado_version (name, version) VALUES ('adafr', 2);
 /* Copied from adafr-init-sqlite.sql*/
 /* Setup permission */
 INSERT INTO `awa_permission` VALUES (1,'url');

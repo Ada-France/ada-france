@@ -440,7 +440,7 @@ package body Adafr.Members.Models is
       Impl.Mail_Verify_Date.Is_Null := True;
       Impl.Payment_Date.Is_Null := True;
       Impl.Status := Status_Type'First;
-      Impl.Ada_Europe := False;
+      Impl.Membership := Member_Type'First;
       Impl.Update_Date := ADO.DEFAULT_TIME;
       Impl.Subscription_Deadline.Is_Null := True;
       Impl.Amount := 0;
@@ -819,21 +819,25 @@ package body Adafr.Members.Models is
    end Get_Status;
 
 
-   procedure Set_Ada_Europe (Object : in out Member_Ref;
-                             Value  : in Boolean) is
+   procedure Set_Membership (Object : in out Member_Ref;
+                             Value  : in Member_Type) is
+      procedure Set_Field_Discrete is
+        new ADO.Audits.Set_Field_Operation
+          (Member_Type,
+           Member_Type_Objects.To_Object);
       Impl : Member_Access;
    begin
       Set_Field (Object, Impl);
-      ADO.Audits.Set_Field_Boolean (Impl.all, 16, Impl.Ada_Europe, Value);
-   end Set_Ada_Europe;
+      Set_Field_Discrete (Impl.all, 16, Impl.Membership, Value);
+   end Set_Membership;
 
-   function Get_Ada_Europe (Object : in Member_Ref)
-                  return Boolean is
+   function Get_Membership (Object : in Member_Ref)
+                  return Member_Type is
       Impl : constant Member_Access
          := Member_Impl (Object.Get_Load_Object.all)'Access;
    begin
-      return Impl.Ada_Europe;
-   end Get_Ada_Europe;
+      return Impl.Membership;
+   end Get_Membership;
 
 
    procedure Set_Salt (Object : in out Member_Ref;
@@ -978,7 +982,7 @@ package body Adafr.Members.Models is
             Copy.Mail_Verify_Date := Impl.Mail_Verify_Date;
             Copy.Payment_Date := Impl.Payment_Date;
             Copy.Status := Impl.Status;
-            Copy.Ada_Europe := Impl.Ada_Europe;
+            Copy.Membership := Impl.Membership;
             Copy.Salt := Impl.Salt;
             Copy.Update_Date := Impl.Update_Date;
             Copy.Subscription_Deadline := Impl.Subscription_Deadline;
@@ -1222,8 +1226,8 @@ package body Adafr.Members.Models is
          Object.Clear_Modified (15);
       end if;
       if Object.Is_Modified (16) then
-         Stmt.Save_Field (Name  => COL_15_2_NAME, --  ada_europe
-                          Value => Object.Ada_Europe);
+         Stmt.Save_Field (Name  => COL_15_2_NAME, --  membership
+                          Value => Integer (Member_Type'Enum_Rep (Object.Membership)));
          Object.Clear_Modified (16);
       end if;
       if Object.Is_Modified (17) then
@@ -1318,8 +1322,8 @@ package body Adafr.Members.Models is
                         Value => Object.Payment_Date);
       Query.Save_Field (Name  => COL_14_2_NAME, --  status
                         Value => Integer (Status_Type'Enum_Rep (Object.Status)));
-      Query.Save_Field (Name  => COL_15_2_NAME, --  ada_europe
-                        Value => Object.Ada_Europe);
+      Query.Save_Field (Name  => COL_15_2_NAME, --  membership
+                        Value => Integer (Member_Type'Enum_Rep (Object.Membership)));
       Query.Save_Field (Name  => COL_16_2_NAME, --  salt
                         Value => Object.Salt);
       Query.Save_Field (Name  => COL_17_2_NAME, --  update_date
@@ -1401,8 +1405,8 @@ package body Adafr.Members.Models is
          end if;
       elsif Name = "status" then
          return Status_Type_Objects.To_Object (Impl.Status);
-      elsif Name = "ada_europe" then
-         return Util.Beans.Objects.To_Object (Impl.Ada_Europe);
+      elsif Name = "membership" then
+         return Member_Type_Objects.To_Object (Impl.Membership);
       elsif Name = "salt" then
          return Util.Beans.Objects.To_Object (Impl.Salt);
       elsif Name = "update_date" then
@@ -1442,7 +1446,7 @@ package body Adafr.Members.Models is
       Object.Mail_Verify_Date := Stmt.Get_Nullable_Time (12);
       Object.Payment_Date := Stmt.Get_Nullable_Time (13);
       Object.Status := Status_Type'Enum_Val (Stmt.Get_Integer (14));
-      Object.Ada_Europe := Stmt.Get_Boolean (15);
+      Object.Membership := Member_Type'Enum_Val (Stmt.Get_Integer (15));
       Object.Salt := Stmt.Get_Unbounded_String (16);
       Object.Update_Date := Stmt.Get_Time (17);
       Object.Subscription_Deadline := Stmt.Get_Nullable_Time (18);
@@ -1580,8 +1584,8 @@ package body Adafr.Members.Models is
          return Util.Beans.Objects.To_Object (From.Last_Name);
       elsif Name = "status" then
          return Status_Type_Objects.To_Object (From.Status);
-      elsif Name = "ada_europe" then
-         return Util.Beans.Objects.To_Object (From.Ada_Europe);
+      elsif Name = "membership" then
+         return Member_Type_Objects.To_Object (From.Membership);
       elsif Name = "create_date" then
          return Util.Beans.Objects.Time.To_Object (From.Create_Date);
       elsif Name = "payment_date" then
@@ -1635,8 +1639,8 @@ package body Adafr.Members.Models is
          Item.Last_Name := Util.Beans.Objects.To_Unbounded_String (Value);
       elsif Name = "status" then
          Item.Status := Status_Type_Objects.To_Value (Value);
-      elsif Name = "ada_europe" then
-         Item.Ada_Europe := Util.Beans.Objects.To_Boolean (Value);
+      elsif Name = "membership" then
+         Item.Membership := Member_Type_Objects.To_Value (Value);
       elsif Name = "create_date" then
          Item.Create_Date := Util.Beans.Objects.Time.To_Time (Value);
       elsif Name = "payment_date" then
@@ -1698,7 +1702,7 @@ package body Adafr.Members.Models is
          Into.First_Name := Stmt.Get_Unbounded_String (1);
          Into.Last_Name := Stmt.Get_Unbounded_String (2);
          Into.Status := Status_Type'Enum_Val (Stmt.Get_Integer (3));
-         Into.Ada_Europe := Stmt.Get_Boolean (4);
+         Into.Membership := Member_Type'Enum_Val (Stmt.Get_Integer (4));
          Into.Create_Date := Stmt.Get_Time (5);
          Into.Payment_Date := Stmt.Get_Nullable_Time (6);
          Into.Subscription_Deadline := Stmt.Get_Nullable_Time (7);
@@ -1748,12 +1752,8 @@ package body Adafr.Members.Models is
          end if;
       elsif Name = "status" then
          return Status_Type_Objects.To_Object (From.Status);
-      elsif Name = "ada_europe" then
-         if From.Ada_Europe.Is_Null then
-            return Util.Beans.Objects.Null_Object;
-         else
-            return Util.Beans.Objects.To_Object (From.Ada_Europe.Value);
-         end if;
+      elsif Name = "membership" then
+         return Member_Type_Objects.To_Object (From.Membership);
       elsif Name = "create_date" then
          if From.Create_Date.Is_Null then
             return Util.Beans.Objects.Null_Object;
@@ -1813,11 +1813,8 @@ package body Adafr.Members.Models is
          end if;
       elsif Name = "status" then
          Item.Status := Status_Type_Objects.To_Value (Value);
-      elsif Name = "ada_europe" then
-         Item.Ada_Europe.Is_Null := Util.Beans.Objects.Is_Null (Value);
-         if not Item.Ada_Europe.Is_Null then
-            Item.Ada_Europe.Value := Util.Beans.Objects.To_Boolean (Value);
-         end if;
+      elsif Name = "membership" then
+         Item.Membership := Member_Type_Objects.To_Value (Value);
       elsif Name = "create_date" then
          Item.Create_Date.Is_Null := Util.Beans.Objects.Is_Null (Value);
          if not Item.Create_Date.Is_Null then
@@ -1876,7 +1873,7 @@ package body Adafr.Members.Models is
          Into.First_Name := Stmt.Get_Nullable_String (1);
          Into.Last_Name := Stmt.Get_Nullable_String (2);
          Into.Status := Status_Type'Enum_Val (Stmt.Get_Integer (3));
-         Into.Ada_Europe := Stmt.Get_Nullable_Boolean (4);
+         Into.Membership := Member_Type'Enum_Val (Stmt.Get_Integer (4));
          Into.Create_Date := Stmt.Get_Nullable_Time (5);
          Into.Payment_Date := Stmt.Get_Nullable_Time (6);
          Into.Subscription_Deadline := Stmt.Get_Nullable_Time (7);
@@ -2058,8 +2055,8 @@ package body Adafr.Members.Models is
          end if;
       elsif Name = "status" then
          Item.Set_Status (Status_Type_Objects.To_Value (Value));
-      elsif Name = "ada_europe" then
-         Item.Set_Ada_Europe (Util.Beans.Objects.To_Boolean (Value));
+      elsif Name = "membership" then
+         Item.Set_Membership (Member_Type_Objects.To_Value (Value));
       elsif Name = "salt" then
          Item.Set_Salt (Util.Beans.Objects.To_String (Value));
       elsif Name = "update_date" then

@@ -24,7 +24,7 @@ HAVE_SETUP=yes
 
 # Model generation arguments with Dynamo
 # --package XXX.XXX.Models db uml/xxx.zargo
-DYNAMO_ARGS=--package Adafr.Members.Models db uml/ada-france.zargo
+DYNAMO_ARGS=--package Adafr.Members.Models db awa/uml/awa.zargo uml/ada-france.yaml
 
 ROOTDIR=.
 
@@ -42,14 +42,10 @@ package:
 
 setup::
 
-build-dynamo: bin/dynamo awa/dynamo/config/uml/AWA.xmi
+build-dynamo: bin/dynamo
 
 bin/dynamo:
 	$(BUILD_COMMAND) $(GPRFLAGS) $(MAKE_ARGS)
-
-# Install the AWA UML model in Dynamo UML search path
-awa/dynamo/config/uml/AWA.xmi: awa/uml/awa.zargo
-	unzip -cq awa/uml/awa.zargo awa.xmi > awa/dynamo/config/uml/AWA.xmi
 
 # Give information about GPR path and Dynamo.xml files identified for the project
 # => this indicates the search paths used to search for files (Ada, but also HTML, CSS, JS, SQL)
