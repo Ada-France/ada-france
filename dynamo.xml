@@ -1,8 +1,8 @@
 <project>
     <name>adafr</name>
-    <property name="model_version">1</property>
+    <property name="model_version">2</property>
     <property name="author_email">Stephane.Carrez@gmail.com</property>
-    <property name="search_dirs">.;awa/plugins/awa-easymde;awa/plugins/awa-flotcharts;awa/plugins/awa-trumbowyg;awa/plugins/awa-markedit;awa/plugins/awa-setup;awa/plugins/awa-wikis;awa/plugins/awa-blogs;awa/plugins/awa-counters;awa/plugins/awa-images;awa/plugins/awa-jobs;awa/plugins/awa-storages;awa/plugins/awa-tags;awa/plugins/awa-comments;awa/plugins/awa-mail;awa/plugins/awa-workspaces;awa;awa/dynamo;awa/ada-ado;awa/ada-asf;awa/ada-servlet;awa/ada-security;awa/ada-keystore;awa/ada-util</property>
+    <property name="search_dirs">.;awa/plugins/awa-easymde;awa/plugins/awa-flotcharts;awa/plugins/awa-trumbowyg;awa/plugins/awa-markedit;awa/plugins/awa-setup;awa/plugins/awa-blogs;awa/plugins/awa-wikis;awa/plugins/awa-images;awa/plugins/awa-storages;awa/plugins/awa-jobs;awa/plugins/awa-tags;awa/plugins/awa-counters;awa/plugins/awa-comments;awa/plugins/awa-mail;awa/plugins/awa-workspaces;awa;awa/dynamo;awa/ada-ado;awa/ada-asf;awa/ada-servlet;awa/ada-security;awa/ada-keystore;awa/ada-util</property>
     <property name="is_ado">FALSE</property>
     <property name="license">apache</property>
     <property name="is_gtk">FALSE</property>
