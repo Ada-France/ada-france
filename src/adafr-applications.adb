@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  adafr-applications -- Ada France application
---  Copyright (C) 2017, 2019, 2020 Ada France
+--  Copyright (C) 2017, 2019, 2020, 2026 Ada France
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -91,6 +91,11 @@ package body Adafr.Applications is
                 Name   => AWA.Mail.Modules.NAME,
                 URI    => "mail",
                 Module => App.Mail_Module'Access);
+
+      Register (App    => App.Self.all'Access,
+                Name   => AWA.SEO.Modules.NAME,
+                URI    => "sitemaps",
+                Module => App.Seo_Module'Access);
 
       Register (App    => App.Self.all'Access,
                 Name   => AWA.Comments.Modules.NAME,

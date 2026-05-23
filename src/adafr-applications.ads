@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  adafr-applications -- Ada France application
---  Copyright (C) 2017, 2019, 2020 Ada France
+--  Copyright (C) 2017, 2019, 2020, 2026 Ada France
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -40,6 +40,7 @@ with AWA.Images.Modules;
 with AWA.Counters.Modules;
 with AWA.Services.Filters;
 with AWA.Converters.Dates;
+with AWA.SEO.Modules;
 with Adafr.Members.Modules;
 package Adafr.Applications is
 
@@ -91,6 +92,7 @@ private
       --  The application modules.
       User_Module       : aliased AWA.Users.Modules.User_Module;
       Workspace_Module  : aliased AWA.Workspaces.Modules.Workspace_Module;
+      Seo_Module        : aliased AWA.SEO.Modules.SEO_Module;
       Blog_Module       : aliased AWA.Blogs.Modules.Blog_Module;
       Mail_Module       : aliased AWA.Mail.Modules.Mail_Module;
       Comment_Module    : aliased AWA.Comments.Modules.Comment_Module;

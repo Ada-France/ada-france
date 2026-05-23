@@ -20,6 +20,7 @@ with "awa_images";
 with "awa_wikis";
 with "awa_blogs";
 with "awa_setup";
+with "awa_seo";
 with "excel-writer/excel_out";
 
 project adafr_server is

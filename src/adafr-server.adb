@@ -1,6 +1,6 @@
 -----------------------------------------------------------------------
 --  Adafr-server -- Application server
---  Copyright (C) 2020, 2021, 2022, 2023 Ada France
+--  Copyright (C) 2020, 2021, 2022, 2023, 2026 Ada France
 --  Written by Stephane Carrez (Stephane.Carrez@gmail.com)
 --
 --  Licensed under the Apache License, Version 2.0 (the "License");
@@ -27,6 +27,7 @@ with AWA.Commands.List;
 with AWA.Commands.Info;
 with AWA.Commands.Migrate;
 with AWA.Commands.User;
+with AWA.Commands.Permission;
 
 with ADO.Mysql;
 with ADO.Sqlite;
@@ -45,10 +46,11 @@ procedure Adafr.Server is
    package Info_Command is new AWA.Commands.Info (Server_Commands);
    package Migrate_Command is new AWA.Commands.Migrate (Server_Commands);
    package User_Command is new AWA.Commands.User (Server_Commands);
+   package Permission_Command is new AWA.Commands.Permission (Server_Commands);
    package Setup_Command is new AWA.Commands.Setup (Start_Command);
 
    pragma Unreferenced (List_Command, Info_Command, Start_Command, Stop_Command,
-                        Migrate_Command, User_Command, Setup_Command);
+                        Migrate_Command, User_Command, Permission_Command, Setup_Command);
 
    WS        : Servlet.Server.Web.AWS_Container renames Server_Commands.WS;
    Context   : AWA.Commands.Context_Type;
