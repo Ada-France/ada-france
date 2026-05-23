@@ -288,7 +288,8 @@ CREATE TABLE IF NOT EXISTS awa_session (
   `user_auth_id` BIGINT ,
   PRIMARY KEY (`id`)
 );
-/* The User entity represents a user that can access and use the application. */
+/* The User entity represents a user that can access and use the application.
+- */
 CREATE TABLE IF NOT EXISTS awa_user (
   /* the user first name. */
   `first_name` VARCHAR(255) NOT NULL,
@@ -308,32 +309,32 @@ CREATE TABLE IF NOT EXISTS awa_user (
   `email_id` BIGINT NOT NULL,
   PRIMARY KEY (`id`)
 );
-INSERT OR IGNORE INTO ado_entity_type (name) VALUES ("awa_audit");
-INSERT OR IGNORE INTO ado_entity_type (name) VALUES ("awa_audit_field");
-INSERT OR IGNORE INTO ado_entity_type (name) VALUES ("awa_message");
-INSERT OR IGNORE INTO ado_entity_type (name) VALUES ("awa_message_type");
-INSERT OR IGNORE INTO ado_entity_type (name) VALUES ("awa_queue");
-INSERT OR IGNORE INTO ado_entity_type (name) VALUES ("awa_application");
-INSERT OR IGNORE INTO ado_entity_type (name) VALUES ("awa_callback");
-INSERT OR IGNORE INTO ado_entity_type (name) VALUES ("awa_oauth_session");
-INSERT OR IGNORE INTO ado_entity_type (name) VALUES ("awa_acl");
-INSERT OR IGNORE INTO ado_entity_type (name) VALUES ("awa_permission");
-INSERT OR IGNORE INTO ado_entity_type (name) VALUES ("awa_access_key");
-INSERT OR IGNORE INTO ado_entity_type (name) VALUES ("awa_authenticate");
-INSERT OR IGNORE INTO ado_entity_type (name) VALUES ("awa_email");
-INSERT OR IGNORE INTO ado_entity_type (name) VALUES ("awa_session");
-INSERT OR IGNORE INTO ado_entity_type (name) VALUES ("awa_user");
+INSERT OR IGNORE INTO ado_entity_type (name) VALUES ('awa_audit');
+INSERT OR IGNORE INTO ado_entity_type (name) VALUES ('awa_audit_field');
+INSERT OR IGNORE INTO ado_entity_type (name) VALUES ('awa_message');
+INSERT OR IGNORE INTO ado_entity_type (name) VALUES ('awa_message_type');
+INSERT OR IGNORE INTO ado_entity_type (name) VALUES ('awa_queue');
+INSERT OR IGNORE INTO ado_entity_type (name) VALUES ('awa_application');
+INSERT OR IGNORE INTO ado_entity_type (name) VALUES ('awa_callback');
+INSERT OR IGNORE INTO ado_entity_type (name) VALUES ('awa_oauth_session');
+INSERT OR IGNORE INTO ado_entity_type (name) VALUES ('awa_acl');
+INSERT OR IGNORE INTO ado_entity_type (name) VALUES ('awa_permission');
+INSERT OR IGNORE INTO ado_entity_type (name) VALUES ('awa_access_key');
+INSERT OR IGNORE INTO ado_entity_type (name) VALUES ('awa_authenticate');
+INSERT OR IGNORE INTO ado_entity_type (name) VALUES ('awa_email');
+INSERT OR IGNORE INTO ado_entity_type (name) VALUES ('awa_session');
+INSERT OR IGNORE INTO ado_entity_type (name) VALUES ('awa_user');
 INSERT OR IGNORE INTO awa_audit_field (entity_type, name)
-  VALUES ((SELECT id FROM ado_entity_type WHERE name = "awa_user"), "first_name");
+  VALUES ((SELECT id FROM ado_entity_type WHERE name = 'awa_user'), 'first_name');
 INSERT OR IGNORE INTO awa_audit_field (entity_type, name)
-  VALUES ((SELECT id FROM ado_entity_type WHERE name = "awa_user"), "last_name");
+  VALUES ((SELECT id FROM ado_entity_type WHERE name = 'awa_user'), 'last_name');
 INSERT OR IGNORE INTO awa_audit_field (entity_type, name)
-  VALUES ((SELECT id FROM ado_entity_type WHERE name = "awa_user"), "country");
+  VALUES ((SELECT id FROM ado_entity_type WHERE name = 'awa_user'), 'country');
 INSERT OR IGNORE INTO awa_audit_field (entity_type, name)
-  VALUES ((SELECT id FROM ado_entity_type WHERE name = "awa_user"), "name");
+  VALUES ((SELECT id FROM ado_entity_type WHERE name = 'awa_user'), 'name');
 INSERT OR IGNORE INTO awa_audit_field (entity_type, name)
-  VALUES ((SELECT id FROM ado_entity_type WHERE name = "awa_user"), "status");
-INSERT OR IGNORE INTO ado_version (name, version) VALUES ("awa", 3);
+  VALUES ((SELECT id FROM ado_entity_type WHERE name = 'awa_user'), 'status');
+INSERT OR IGNORE INTO ado_version (name, version) VALUES ('awa', 3);
 /* Copied from awa-workspaces-sqlite.sql*/
 /* File generated automatically by dynamo */
 /*  */
@@ -403,11 +404,11 @@ CREATE TABLE IF NOT EXISTS awa_workspace_member (
   `workspace_id` BIGINT NOT NULL,
   PRIMARY KEY (`id`)
 );
-INSERT OR IGNORE INTO ado_entity_type (name) VALUES ("awa_invitation");
-INSERT OR IGNORE INTO ado_entity_type (name) VALUES ("awa_workspace");
-INSERT OR IGNORE INTO ado_entity_type (name) VALUES ("awa_workspace_feature");
-INSERT OR IGNORE INTO ado_entity_type (name) VALUES ("awa_workspace_member");
-INSERT OR IGNORE INTO ado_version (name, version) VALUES ("awa-workspaces", 1);
+INSERT OR IGNORE INTO ado_entity_type (name) VALUES ('awa_invitation');
+INSERT OR IGNORE INTO ado_entity_type (name) VALUES ('awa_workspace');
+INSERT OR IGNORE INTO ado_entity_type (name) VALUES ('awa_workspace_feature');
+INSERT OR IGNORE INTO ado_entity_type (name) VALUES ('awa_workspace_member');
+INSERT OR IGNORE INTO ado_version (name, version) VALUES ('awa-workspaces', 1);
 /* Copied from awa-comments-sqlite.sql*/
 /* File generated automatically by dynamo */
 /* The Comment table records a user comment associated with a database entity.
@@ -433,14 +434,14 @@ CREATE TABLE IF NOT EXISTS awa_comment (
   `author_id` BIGINT NOT NULL,
   PRIMARY KEY (`id`)
 );
-INSERT OR IGNORE INTO ado_entity_type (name) VALUES ("awa_comment");
+INSERT OR IGNORE INTO ado_entity_type (name) VALUES ('awa_comment');
 INSERT OR IGNORE INTO awa_audit_field (entity_type, name)
-  VALUES ((SELECT id FROM ado_entity_type WHERE name = "awa_comment"), "message");
+  VALUES ((SELECT id FROM ado_entity_type WHERE name = 'awa_comment'), 'message');
 INSERT OR IGNORE INTO awa_audit_field (entity_type, name)
-  VALUES ((SELECT id FROM ado_entity_type WHERE name = "awa_comment"), "status");
+  VALUES ((SELECT id FROM ado_entity_type WHERE name = 'awa_comment'), 'status');
 INSERT OR IGNORE INTO awa_audit_field (entity_type, name)
-  VALUES ((SELECT id FROM ado_entity_type WHERE name = "awa_comment"), "format");
-INSERT OR IGNORE INTO ado_version (name, version) VALUES ("awa-comments", 1);
+  VALUES ((SELECT id FROM ado_entity_type WHERE name = 'awa_comment'), 'format');
+INSERT OR IGNORE INTO ado_version (name, version) VALUES ('awa-comments', 1);
 /* Copied from awa-counters-sqlite.sql*/
 /* File generated automatically by dynamo */
 /*  */
@@ -481,10 +482,10 @@ CREATE TABLE IF NOT EXISTS awa_visit (
   `definition_id` BIGINT NOT NULL,
   PRIMARY KEY (`object_id`, `user`, `definition_id`)
 );
-INSERT OR IGNORE INTO ado_entity_type (name) VALUES ("awa_counter");
-INSERT OR IGNORE INTO ado_entity_type (name) VALUES ("awa_counter_definition");
-INSERT OR IGNORE INTO ado_entity_type (name) VALUES ("awa_visit");
-INSERT OR IGNORE INTO ado_version (name, version) VALUES ("awa-counters", 1);
+INSERT OR IGNORE INTO ado_entity_type (name) VALUES ('awa_counter');
+INSERT OR IGNORE INTO ado_entity_type (name) VALUES ('awa_counter_definition');
+INSERT OR IGNORE INTO ado_entity_type (name) VALUES ('awa_visit');
+INSERT OR IGNORE INTO ado_version (name, version) VALUES ('awa-counters', 1);
 /* Copied from awa-tags-sqlite.sql*/
 /* File generated automatically by dynamo */
 /* The tag definition. */
@@ -508,9 +509,9 @@ Date: 2013-02-23the database entity to which the tag is associated */
   `tag_id` BIGINT NOT NULL,
   PRIMARY KEY (`id`)
 );
-INSERT OR IGNORE INTO ado_entity_type (name) VALUES ("awa_tag");
-INSERT OR IGNORE INTO ado_entity_type (name) VALUES ("awa_tagged_entity");
-INSERT OR IGNORE INTO ado_version (name, version) VALUES ("awa-tags", 1);
+INSERT OR IGNORE INTO ado_entity_type (name) VALUES ('awa_tag');
+INSERT OR IGNORE INTO ado_entity_type (name) VALUES ('awa_tagged_entity');
+INSERT OR IGNORE INTO ado_version (name, version) VALUES ('awa-tags', 1);
 /* Copied from awa-jobs-sqlite.sql*/
 /* File generated automatically by dynamo */
 /* The job is associated with a dispatching queue. */
@@ -545,8 +546,8 @@ CREATE TABLE IF NOT EXISTS awa_job (
   `session_id` BIGINT ,
   PRIMARY KEY (`id`)
 );
-INSERT OR IGNORE INTO ado_entity_type (name) VALUES ("awa_job");
-INSERT OR IGNORE INTO ado_version (name, version) VALUES ("awa-jobs", 1);
+INSERT OR IGNORE INTO ado_entity_type (name) VALUES ('awa_job');
+INSERT OR IGNORE INTO ado_version (name, version) VALUES ('awa-jobs', 1);
 /* Copied from awa-storages-sqlite.sql*/
 /* File generated automatically by dynamo */
 /* The uri member holds the URI if the storage type is URL.
@@ -634,11 +635,11 @@ CREATE TABLE IF NOT EXISTS awa_store_local (
   `storage_id` BIGINT ,
   PRIMARY KEY (`id`)
 );
-INSERT OR IGNORE INTO ado_entity_type (name) VALUES ("awa_storage");
-INSERT OR IGNORE INTO ado_entity_type (name) VALUES ("awa_storage_data");
-INSERT OR IGNORE INTO ado_entity_type (name) VALUES ("awa_storage_folder");
-INSERT OR IGNORE INTO ado_entity_type (name) VALUES ("awa_store_local");
-INSERT OR IGNORE INTO ado_version (name, version) VALUES ("awa-storages", 1);
+INSERT OR IGNORE INTO ado_entity_type (name) VALUES ('awa_storage');
+INSERT OR IGNORE INTO ado_entity_type (name) VALUES ('awa_storage_data');
+INSERT OR IGNORE INTO ado_entity_type (name) VALUES ('awa_storage_folder');
+INSERT OR IGNORE INTO ado_entity_type (name) VALUES ('awa_store_local');
+INSERT OR IGNORE INTO ado_version (name, version) VALUES ('awa-storages', 1);
 /* Copied from awa-images-sqlite.sql*/
 /* File generated automatically by dynamo */
 /* - The workspace contains one or several folders.
@@ -672,8 +673,8 @@ CREATE TABLE IF NOT EXISTS awa_image (
   `storage_id` BIGINT NOT NULL,
   PRIMARY KEY (`id`)
 );
-INSERT OR IGNORE INTO ado_entity_type (name) VALUES ("awa_image");
-INSERT OR IGNORE INTO ado_version (name, version) VALUES ("awa-images", 1);
+INSERT OR IGNORE INTO ado_entity_type (name) VALUES ('awa_image');
+INSERT OR IGNORE INTO ado_version (name, version) VALUES ('awa-images', 1);
 /* Copied from awa-wikis-sqlite.sql*/
 /* File generated automatically by dynamo */
 /*  */
@@ -748,24 +749,24 @@ CREATE TABLE IF NOT EXISTS awa_wiki_space (
   `workspace_id` BIGINT NOT NULL,
   PRIMARY KEY (`id`)
 );
-INSERT OR IGNORE INTO ado_entity_type (name) VALUES ("awa_wiki_content");
-INSERT OR IGNORE INTO ado_entity_type (name) VALUES ("awa_wiki_page");
-INSERT OR IGNORE INTO ado_entity_type (name) VALUES ("awa_wiki_space");
+INSERT OR IGNORE INTO ado_entity_type (name) VALUES ('awa_wiki_content');
+INSERT OR IGNORE INTO ado_entity_type (name) VALUES ('awa_wiki_page');
+INSERT OR IGNORE INTO ado_entity_type (name) VALUES ('awa_wiki_space');
 INSERT OR IGNORE INTO awa_audit_field (entity_type, name)
-  VALUES ((SELECT id FROM ado_entity_type WHERE name = "awa_wiki_page"), "name");
+  VALUES ((SELECT id FROM ado_entity_type WHERE name = 'awa_wiki_page'), 'name');
 INSERT OR IGNORE INTO awa_audit_field (entity_type, name)
-  VALUES ((SELECT id FROM ado_entity_type WHERE name = "awa_wiki_page"), "last_version");
+  VALUES ((SELECT id FROM ado_entity_type WHERE name = 'awa_wiki_page'), 'last_version');
 INSERT OR IGNORE INTO awa_audit_field (entity_type, name)
-  VALUES ((SELECT id FROM ado_entity_type WHERE name = "awa_wiki_page"), "is_public");
+  VALUES ((SELECT id FROM ado_entity_type WHERE name = 'awa_wiki_page'), 'is_public');
 INSERT OR IGNORE INTO awa_audit_field (entity_type, name)
-  VALUES ((SELECT id FROM ado_entity_type WHERE name = "awa_wiki_page"), "title");
+  VALUES ((SELECT id FROM ado_entity_type WHERE name = 'awa_wiki_page'), 'title');
 INSERT OR IGNORE INTO awa_audit_field (entity_type, name)
-  VALUES ((SELECT id FROM ado_entity_type WHERE name = "awa_wiki_space"), "name");
+  VALUES ((SELECT id FROM ado_entity_type WHERE name = 'awa_wiki_space'), 'name');
 INSERT OR IGNORE INTO awa_audit_field (entity_type, name)
-  VALUES ((SELECT id FROM ado_entity_type WHERE name = "awa_wiki_space"), "is_public");
+  VALUES ((SELECT id FROM ado_entity_type WHERE name = 'awa_wiki_space'), 'is_public');
 INSERT OR IGNORE INTO awa_audit_field (entity_type, name)
-  VALUES ((SELECT id FROM ado_entity_type WHERE name = "awa_wiki_space"), "format");
-INSERT OR IGNORE INTO ado_version (name, version) VALUES ("awa-wikis", 1);
+  VALUES ((SELECT id FROM ado_entity_type WHERE name = 'awa_wiki_space'), 'format');
+INSERT OR IGNORE INTO ado_version (name, version) VALUES ('awa-wikis', 1);
 /* Copied from awa-blogs-sqlite.sql*/
 /* File generated automatically by dynamo */
 /*  */
@@ -826,33 +827,33 @@ CREATE TABLE IF NOT EXISTS awa_post (
   `image_id` BIGINT ,
   PRIMARY KEY (`id`)
 );
-INSERT OR IGNORE INTO ado_entity_type (name) VALUES ("awa_blog");
-INSERT OR IGNORE INTO ado_entity_type (name) VALUES ("awa_post");
+INSERT OR IGNORE INTO ado_entity_type (name) VALUES ('awa_blog');
+INSERT OR IGNORE INTO ado_entity_type (name) VALUES ('awa_post');
 INSERT OR IGNORE INTO awa_audit_field (entity_type, name)
-  VALUES ((SELECT id FROM ado_entity_type WHERE name = "awa_blog"), "name");
+  VALUES ((SELECT id FROM ado_entity_type WHERE name = 'awa_blog'), 'name');
 INSERT OR IGNORE INTO awa_audit_field (entity_type, name)
-  VALUES ((SELECT id FROM ado_entity_type WHERE name = "awa_blog"), "uid");
+  VALUES ((SELECT id FROM ado_entity_type WHERE name = 'awa_blog'), 'uid');
 INSERT OR IGNORE INTO awa_audit_field (entity_type, name)
-  VALUES ((SELECT id FROM ado_entity_type WHERE name = "awa_blog"), "url");
+  VALUES ((SELECT id FROM ado_entity_type WHERE name = 'awa_blog'), 'url');
 INSERT OR IGNORE INTO awa_audit_field (entity_type, name)
-  VALUES ((SELECT id FROM ado_entity_type WHERE name = "awa_blog"), "format");
+  VALUES ((SELECT id FROM ado_entity_type WHERE name = 'awa_blog'), 'format');
 INSERT OR IGNORE INTO awa_audit_field (entity_type, name)
-  VALUES ((SELECT id FROM ado_entity_type WHERE name = "awa_blog"), "default_image_url");
+  VALUES ((SELECT id FROM ado_entity_type WHERE name = 'awa_blog'), 'default_image_url');
 INSERT OR IGNORE INTO awa_audit_field (entity_type, name)
-  VALUES ((SELECT id FROM ado_entity_type WHERE name = "awa_post"), "title");
+  VALUES ((SELECT id FROM ado_entity_type WHERE name = 'awa_post'), 'title');
 INSERT OR IGNORE INTO awa_audit_field (entity_type, name)
-  VALUES ((SELECT id FROM ado_entity_type WHERE name = "awa_post"), "uri");
+  VALUES ((SELECT id FROM ado_entity_type WHERE name = 'awa_post'), 'uri');
 INSERT OR IGNORE INTO awa_audit_field (entity_type, name)
-  VALUES ((SELECT id FROM ado_entity_type WHERE name = "awa_post"), "publish_date");
+  VALUES ((SELECT id FROM ado_entity_type WHERE name = 'awa_post'), 'publish_date');
 INSERT OR IGNORE INTO awa_audit_field (entity_type, name)
-  VALUES ((SELECT id FROM ado_entity_type WHERE name = "awa_post"), "status");
+  VALUES ((SELECT id FROM ado_entity_type WHERE name = 'awa_post'), 'status');
 INSERT OR IGNORE INTO awa_audit_field (entity_type, name)
-  VALUES ((SELECT id FROM ado_entity_type WHERE name = "awa_post"), "allow_comments");
+  VALUES ((SELECT id FROM ado_entity_type WHERE name = 'awa_post'), 'allow_comments');
 INSERT OR IGNORE INTO awa_audit_field (entity_type, name)
-  VALUES ((SELECT id FROM ado_entity_type WHERE name = "awa_post"), "summary");
+  VALUES ((SELECT id FROM ado_entity_type WHERE name = 'awa_post'), 'summary');
 INSERT OR IGNORE INTO awa_audit_field (entity_type, name)
-  VALUES ((SELECT id FROM ado_entity_type WHERE name = "awa_post"), "format");
-INSERT OR IGNORE INTO ado_version (name, version) VALUES ("awa-blogs", 1);
+  VALUES ((SELECT id FROM ado_entity_type WHERE name = 'awa_post'), 'format');
+INSERT OR IGNORE INTO ado_version (name, version) VALUES ('awa-blogs', 1);
 /* Copied from adafr-sqlite.sql*/
 /* File generated automatically by dynamo */
 /* The Member table holds the list of Ada France members with the necessary
