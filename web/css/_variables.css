@@ -1,0 +1,66 @@
+/**
+ * _variables.css - CSS Color Variables for AWA
+ * Copyright (C) 2024 Stephane Carrez
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ */
+
+:root {
+  /* Primary color palette */
+  --primary-color: #47C;
+  --primary-dark: #333;
+  --primary-light: #f0f0f0;
+
+  /* Secondary colors */
+  --secondary-color: #777;
+  --secondary-light: #ddd;
+  --secondary-dark: #888;
+
+  /* Accent colors */
+  --accent-orange: #F91;
+  --accent-teal: #81CFB7;
+  --accent-green: green;
+  --accent-red: red;
+
+  /* Background colors */
+  --bg-body: #f0f0f0;
+  --bg-header: #333;
+  --bg-content: #fff;
+  --bg-hover: #666;
+  --bg-active: #FFC;
+  --bg-highlight: #E8F0FF;
+  --bg-notif: #DFEFFC;
+  --bg-code: #e8f0ff;
+
+  /* Text colors */
+  --text-dark: #333;
+  --text-light: #888;
+  --text-medium: #777;
+  --text-error: red;
+  --text-link: #47C;
+  --text-title: #333;
+  --text-menu: #333;
+
+  /* Border colors */
+  --border-light: #ccc;
+  --border-medium: #aaa;
+  --border-dark: #333;
+  --border-accent: orange;
+  --border-separator: #A6C9E2;
+
+  /* State colors */
+  --color-error: red;
+  --color-success: green;
+  --color-warning: orange;
+  --color-info: #346;
+
+  /* UI component colors */
+  --button-bg: #47C;
+  --button-text: white;
+  --button-border: #47C;
+  --button-hover: #e6e6e3;
+
+  /* Form colors */
+  --form-label: #555;
+  --form-border: #ccc;
+  --form-bg: #fff;
+}

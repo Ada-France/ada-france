@@ -4,6 +4,9 @@ body {
     line-height: 1.42857143;
     background-color: #fff;
 }
+#awa-hdr {
+    height: 53px;
+}
 footer {
     background: #e7e7e7;
     margin-top: 0;
@@ -12,7 +15,7 @@ footer {
     height: auto;
 }
 .navbar {
-    margin-bottom: 0px;
+    margin-bottom: 0;
     border-bottom: 1px solid #979797;
     min-height: auto;
 }
@@ -41,7 +44,7 @@ footer {
     height: auto;
 }
 .navbar .navbar-header {
-    padding-left: 0px;
+    padding-left: 0;
     list-style-type: none;
 }
 .navbar .navbar-header li {
@@ -65,12 +68,11 @@ footer {
 .awa-side-menu:checked ~ nav li {
     display: block;
 }
-.adafr-index #nav-index,
-.page-wiki #nav-resources,
-.page-contact #nav-index,
-.page-news #nav-news,
-.page-blog #nav-index,
-.page-jobs #nav-jobs,
+.adafr-index #awa-hdr #nav-index a,
+.page-wiki #awa-hdr #nav-resources a,
+.page-news #awa-hdr #nav-news a,
+.page-blog #awa-hdr #nav-index a,
+.page-jobs #awa-hdr #nav-jobs a,
 .page-members #nav-member,
 .page-contact #nav-contact {
     color: #111;
@@ -466,6 +468,10 @@ div.post-text pre.moz-quote-pre {
     border: none;
     font-family: inherit;
 }
+pre {
+    background: none;
+    border-color: transparent;
+}
 .tagedit-list li.tagedit-listelement-old {
     background-color: #eee;
 }
@@ -539,6 +545,14 @@ ul.openid-invite li {
     float: left;
     margin-top: 5em;
     width: 100%;
+}
+@media (max-width: 768px) {
+  .awa-side-nav {
+    top: 0;
+  }
+  #awa-hdr {
+    height: auto;
+  }
 }
 @media screen and (max-width: 600px) {
     @-ms-viewport { width: 320px; }

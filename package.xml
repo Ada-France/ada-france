@@ -40,8 +40,10 @@
      </install>
      <install mode='copy' dir='web'>
        <fileset dir="web">
-          <include name="**/*.xhtml"/> 
+          <include name="**/*.xhtml"/>
+          <include name="**/*.xml"/>
           <include name="**/*.html"/> 
+          <include name="**/*.gif"/>
           <include name="**/*.pdf"/>
           <include name="**/*.svg"/>
           <include name="**/*.png"/>
@@ -68,37 +70,34 @@
        <include name="bin/*-server"/>
      </install>
      <install mode='exec' dir='web'>
-       <command slow='true'>closure --warning_level QUIET --charset UTF-8 #{src} --js_output_file #{dst}</command>
+       <command slow='true'>esbuild --log-level=warning #{src} --minify --outfile=#{dst}</command>
        <fileset dir="web">
          <include name="**/*.js"/>
-         <exclude name="js/highlight.pack.js"/>
          <exclude name="js/easymde/easymde.min.js"/>
        </fileset>
      </install>
 
      <install mode='copy' dir='web'>
        <fileset dir="web">
-         <include name="js/highlight.pack.js"/>
-         <include name="js/trumbowyg/trumbowyg.js"/>
          <include name="js/easymde/easymde.min.js"/>
        </fileset>
      </install>
 
      <install mode='exec' dir='web'>
-       <command>yui-compressor --type css --charset UTF-8 -o #{dst} #{src}</command>
+       <command>esbuild --log-level=warning #{src} --minify --outfile=#{dst}</command>
        <fileset dir="web">
          <include name="**/*.css"/>
        </fileset>
      </install>
      <install mode='merge' dir='web' log='info'>
        <property name="contextPath"></property>
-       <property name="jquery.path">/js/jquery-3.7.0.js</property>
-       <property name="jquery.uiCssPath">/css/jquery-ui-1.13.2/</property>
-       <property name="jquery.chosenCssPath">/css/jquery-chosen-2.2.1/chosen.css</property>
-       <property name="jquery.uiPath">/js/jquery-ui-1.13.2/</property>
+       <property name="jquery.path">/js/jquery-4.0.0.js</property>
+       <property name="jquery.uiCssPath">/css/jquery-ui-1.14.2/</property>
+       <property name="jquery.chosenCssPath">/css/jquery-chosen-3.0.0/chosen.css</property>
+       <property name="jquery.uiPath">/js/jquery-ui-1.14.2/</property>
        <replace>
          <from>url("images/</from>
-         <to>url("jquery-ui-1.13.2/images/</to>
+         <to>url("jquery-ui-1.14.2/images/</to>
        </replace>
        <replace>
          <from>url(../../images/</from>

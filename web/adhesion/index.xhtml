@@ -5,7 +5,19 @@
                 xmlns:ajax="http://code.google.com/p/ada-asf/ajax"
                 template="/WEB-INF/layouts/layout.xhtml">
     <ui:param name="title" value="Adhésion Ada France"/>
-    <ui:param name="pageStyle" value="page-contact"/>
+    <ui:param name="pageStyle" value="adafr-index"/>
+    <ui:param name="pageUseJQuery" value="true"/>
+
+    <ui:define name="pageHeader">
+        <ui:include src="/WEB-INF/meta-page.xhtml">
+            <ui:param name="title" value="Ada-France – Adhésion Ada France"/>
+            <ui:param name="pageUrl" value="#{initParam['app_url_base']}/adhesion/index.html"/>
+            <ui:param name="pageDescription" value="Adhésion Ada France et Ada Europe."/>
+            <ui:param name="pageAuthor" value="Ada France"/>
+            <ui:param name="pageDate" value="2026-05-23"/>
+        </ui:include>
+    </ui:define>
+
     <!-- Main page body -->
     <ui:define name="pageBody">
         <f:metadata>

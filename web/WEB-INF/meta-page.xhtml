@@ -1,0 +1,39 @@
+<ui:composition xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:util="http://code.google.com/p/ada-asf/util">
+    <meta name="author" content="#{pageAuthor}"/>
+    <meta name="description" content="#{util:escapeJavaScript(pageDescription)}"/>
+    <link rel="canonical" href="#{pageUrl}"/>
+    <meta property="og:locale" content="fr" />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="#{pageUrl}"/>
+    <meta property="og:title" content="#{title}"/>
+    <meta property="og:site_name" content="#{initParam['app_name']}"/>
+    <meta property="og:image" content="#{initParam['app_url_base']}/images/AdaFrance-logo.png"/>
+    <meta property="og:image:width" content="600"/>
+    <meta property="og:image:height" content="155"/>
+    <meta property="og:image:alt" content="Association francophone des utilisateurs du langage de programmation Ada. Actualités, ressources et événements." />
+    <meta name="twitter:card" content="summary_large_image"/>
+    <meta name="twitter:description" content="#{util:escapeJavaScript(pageDescription)}"/>
+    <meta name="twitter:image" content="#{initParam['app_url_base']}/images/AdaFrance-logo.png" />
+    <meta name="twitter:site" content="@adafrance" />
+    <util:json jtype="WebPage">
+        <util:json-prop name="name" value="#{title}"/>
+        <util:json-prop name="url" value="#{pageUrl}"/>
+        <util:json-prop name="headline" value="#{title}"/>
+        <util:json-prop name="description" value="#{pageDescription}"/>
+        <util:json-obj name="author" jtype="Person">
+            <util:json-prop name="name" value="#{pageAuthor}"/>
+        </util:json-obj>
+        <util:json-prop name="dateCreated" value="#{pageDate}"/>
+        <util:json-prop name="dateModified" value="#{pageDate}"/>
+        <util:json-prop name="datePublished" value="#{pageDate}"/>
+        <util:json-prop name="inLanguage" value="fr"/>
+        <util:json-obj name="mainEntityOfPage" jtype="WebPage" jid="#{pageUrl}"/>
+        <ui:include src="/WEB-INF/ld+json-org.xhtml"/>
+        <util:json-array name="potentialAction">
+            <util:json-obj jtype="ReadAction">
+                <util:json-prop name="target" value="#{pageUrl}"/>
+            </util:json-obj>
+        </util:json-array>
+    </util:json>
+</ui:composition>

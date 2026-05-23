@@ -26,19 +26,16 @@
     <ui:param name="title" value="#{post.title}"/>
 
     <ui:define name="pageHeader">
-        <meta name="author" content="#{post.username}"/>
-        <meta property="og:title" content="#{util:escapeJavaScript(post.title)}"/>
-        <meta property="og:url" content="#{initParam['app_url_base']}/blogs/post.html?post=#{post.uri}"/>
-        <meta property="og:type" content="article"/>
-        <h:panelGroup rendered="#{not empty post.image}">
-        <meta property="og:image" content="#{initParam['app_url_domain']}#{post.image}"/>
-        </h:panelGroup>
-        <meta property="og:description" content="#{util:escapeJavaScript(fn:substring(fn:trim(post.description),1,128))}"/>
-        <link media="screen" type="text/css" rel="stylesheet" href="#{contextPath}/css/highlight/idea.css"/>
+        <ui:include src="/WEB-INF/meta-post.xhtml">
+           <ui:param name="pageUrl" value="#{initParam['app_url_base']}/blogs/posts/#{post.uri}"/>
+           <ui:param name="pageDescription" value="#{fn:substring(fn:trim(post.description),1,200)}"/>
+         </ui:include>
+
         <f:metadata>
             <f:viewParam id='post' value='#{post.uri}' required='false'/>
             <f:viewAction action='#{post.load}'/>
         </f:metadata>
+        <link media="screen" type="text/css" rel="stylesheet" href="#{contextPath}/css/highlight/idea.css"/>
     </ui:define>
 
     <!-- Main page body -->
@@ -46,8 +43,8 @@
       <div class='awa-columns'>
         <div class='awa-grid-9'>
           <div class='blog-post' id="p_#{post.id}">
-            <div class='post-title'>
-              <h1><a href="#{contextPath}/blogs/post.html?post=#{post.uri}">#{post.title}</a></h1>
+            <header class='post-title'>
+              <h2><a href="#{contextPath}/blogs/posts/#{post.uri}">#{post.title}</a></h2>
               <p>
                 <h:outputFormat value="#{blogMsg.blog_post_author}">
                   <f:param value="#{post.username}"/>
@@ -58,28 +55,29 @@
                   <f:param value="#{postComments.count}"/>
                 </h:outputFormat>
               </p>
-            </div>
+            </header>
             <awa:tagList value='#{post.tags}' id='qtags' styleClass="tagedit-list"
-                         tagLink="#{contextPath}/blogs/tagged.html?tag=#{util:urlEncode(tagName)}"
+                         tagLink="#{contextPath}/blogs/tags/#{util:urlEncode(tagName)}"
                          var="tagName"
                          tagClass="tagedit-listelement tagedit-listelement-old"/>
 
+            <section class='post-article'>
             <awa:wiki rendered="#{not empty post.summary}"
                       styleClass='post-text'
                       value="#{post.summary}"
                       links="#{postList.links}"
                       format="#{post.format}"/>
-
             <awa:wiki styleClass='post-text'
                       value="#{post.text}"
                       links="#{post.links}"
                       format="#{post.format}"/>
+            </section>
             <!-- Increment the post read counter but do not display anything -->
             <awa:counter value="#{post.counter}" hidden="true"/>
             <div class='adafr-disqus'><div id="disqus_thread"></div></div>
             <script>
               var disqus_config = function () {
-                 this.page.url = "https://www.ada-france.org#{contextPath}/blogs/post.html?post=#{post.uri}"; // Replace PAGE_URL with your page's canonical URL variable
+                 this.page.url = "https://www.ada-france.org#{contextPath}/blogs/posts/#{post.uri}"; // Replace PAGE_URL with your page's canonical URL variable
                  this.page.identifier = "#{post.uri}"; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
               };
               (function() { // DON'T EDIT BELOW THIS LINE
@@ -125,14 +123,16 @@
     </ui:define>
 
     <ui:define name="pageScript">
-        <script type="text/javascript" src="#{jquery.path}"></script>
-        <script type="text/javascript" src="#{jquery.uiPath}core.js"></script>
-        <script type="text/javascript" src="#{jquery.uiPath}widget.js"></script>
-        <script type="text/javascript" src="#{contextPath}/js/asf.js"></script>
-        <script type="text/javascript" src="#{contextPath}/js/asf-message.js"></script>
-        <script type="text/javascript" src="#{contextPath}/js/awa.js"></script>
         <script type="text/javascript" src="#{contextPath}/js/highlight.pack.js"></script>
         <script>hljs.initHighlightingOnLoad();</script>
+        <c:if test="#{user.isLogged}">
+          <script type="text/javascript" src="#{jquery.path}"></script>
+          <script type="text/javascript" src="#{jquery.uiPath}core.js"></script>
+          <script type="text/javascript" src="#{jquery.uiPath}widget.js"></script>
+          <script type="text/javascript" src="#{contextPath}/js/asf.js"></script>
+          <script type="text/javascript" src="#{contextPath}/js/asf-message.js"></script>
+          <script type="text/javascript" src="#{contextPath}/js/awa.js"></script>
+        </c:if>
     </ui:define>
 
 </ui:composition>

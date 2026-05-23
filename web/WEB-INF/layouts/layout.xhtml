@@ -1,17 +1,19 @@
 <f:view contentType="text/html; charset=UTF-8"
         xmlns:ui="http://java.sun.com/jsf/facelets"
         xmlns:f="http://java.sun.com/jsf/core"
-        xmlns:util="http://code.google.com/p/ada-asf/util"
         xmlns:c="http://java.sun.com/jstl/core"
+        xmlns:util="http://code.google.com/p/ada-asf/util"
 	xmlns:u="http://code.google.com/p/ada-asf/util"
         xmlns:h="http://java.sun.com/jsf/html"><h:doctype rootElement="html"/>
 <html xmlns="http://www.w3.org/1999/xhtml" lang="fr">
 <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta charset="UTF-8"/>
+    <meta name="generator" content="AWA 2.6.0"/>
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
     <!-- DYNAMO-MERGE-START link=#{contextPath}/css/adafr-1.css -->
     <link media="screen" type="text/css" rel="stylesheet" href="#{contextPath}/css/bootstrap.min.css"/>
     <link media="screen" type="text/css" rel="stylesheet" href="#{contextPath}/css/grids/fluid_grid.css"/>
+    <link media="screen" type="text/css" rel="stylesheet" href="#{contextPath}/css/_variables.css"/>
     <link media="screen" type="text/css" rel="stylesheet" href="#{contextPath}/css/asf.css"/>
     <link media="screen" type="text/css" rel="stylesheet" href="#{contextPath}/css/awa.css"/>
     <link media="screen" type="text/css" rel="stylesheet" href="#{jquery.uiCssPath}/jquery-ui.structure.css"/>
@@ -30,20 +32,23 @@
     <!-- DYNAMO-MERGE-END -->
     <link rel="icon" type="image/png" sizes="32x32" href="#{contextPath}/images/favicon-32x32.png"/>
     <link rel="icon" type="image/png" sizes="16x16" href="#{contextPath}/images/favicon-16x16.png"/>
+    <link rel="icon" href="#{contextPath}/favicon.ico"/>
     <ui:insert name="pageHeader"/>
-    <title><h:outputText value="#{title}"/></title>
+    <title><ui:insert name="pageTitle"/><h:outputText value="#{title}"/></title>
 </head>
 <body class="#{not empty pageStyle ? pageStyle : 'page-news'}">
 
 <!-- Top header with user account -->
-<ui:include src="top-bar.xhtml"/>
+<header>
+  <ui:include src="top-bar.xhtml"/>
+  <ui:insert name="pageNav"/>
+</header>
 
 <main>
     <ui:insert name="pageBody"/>
-    <div id="awa-clfooter"></div>
 </main>
 <ui:include src="footer.xhtml"/>
-
+<c:if test="#{pageUseJQuery or user.isLogged}">
 <!-- DYNAMO-MERGE-START script=#{contextPath}/js/adafr-1.js -->
 <script type="text/javascript" src="#{jquery.path}"></script>
 <script type="text/javascript" src="#{jquery.uiPath}core.js"></script>
@@ -54,7 +59,6 @@
 <script type="text/javascript" src="#{contextPath}/js/asf-message.js"></script>
 <script type="text/javascript" src="#{contextPath}/js/asf-popup.js"></script>
 <!-- DYNAMO-MERGE-END -->
-<c:if test="#{user.isLogged}">
 <!-- DYNAMO-MERGE-START script=#{contextPath}/js/adafr-2.js -->
 <script type="text/javascript" src="#{jquery.uiPath}draggable.js"></script>
 <script type="text/javascript" src="#{jquery.uiPath}resizable.js"></script>
@@ -80,10 +84,11 @@
 <!-- DYNAMO-MERGE-END -->
 </c:if>
 <ui:insert name="pageScript"/>
-<util:flush/>
+
 <!--DEV_START-->
 <ui:debug/>
 <!--DEV_END-->
+<util:flush/>
 </body>
 </html>
 </f:view>

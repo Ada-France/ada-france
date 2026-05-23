@@ -6,6 +6,16 @@
                 template="/WEB-INF/layouts/anonymous.xhtml">
     <ui:param name="title" value="Ada France"/>
     <ui:param name="pageStyle" value="page-contact"/>
+
+    <ui:define name="pageHeader">
+        <ui:include src="/WEB-INF/meta-page.xhtml">
+            <ui:param name="pageUrl" value="#{initParam['app_url_base']}/contact.html"/>
+            <ui:param name="pageDescription" value="Contacts Ada-France"/>
+            <ui:param name="pageAuthor" value="Ada France"/>
+            <ui:param name="pageDate" value="2026-05-23"/>
+        </ui:include>
+    </ui:define>
+
     <!-- Main page body -->
     <ui:define name="pageBody">
         <f:metadata>

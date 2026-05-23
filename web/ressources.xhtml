@@ -24,11 +24,22 @@
     <ui:param name="title" value="Ressources"/>
     <ui:param name="pageStyle" value="page-wiki"/>
 
-    <!-- Main page body -->
-    <ui:define name="pageBody">
+    <ui:define name="pageHeader">
         <f:metadata>
             <f:viewAction action="#{wikiRessources.load}"/>
         </f:metadata>
+        <meta name="keywords" content="Ada, Ada France, langage Ada, SPARK Ada, programmation sûre, logiciel critique, association Ada, Ada-Europe"/>
+        <ui:include src="/WEB-INF/meta-page.xhtml">
+            <ui:param name="title" value="Ada-France – Ressources pour le développement Ada"/>
+            <ui:param name="pageUrl" value="#{initParam['app_url_base']}/ressources.html"/>
+            <ui:param name="pageDescription" value="Ada-France – Ressources pour le développement Ada"/>
+            <ui:param name="pageAuthor" value="Ada France"/>
+            <ui:param name="pageDate" value="#{wikiRessources.date}"/>
+        </ui:include>
+    </ui:define>
+
+    <!-- Main page body -->
+    <ui:define name="pageBody">
             <div class='col-sm-9'>
                 <h1>En savoir plus sur Ada, SPARK</h1>
                 <div class="wiki-text">

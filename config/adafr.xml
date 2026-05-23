@@ -226,17 +226,12 @@
     <managed-property>
       <property-name>image_prefix</property-name>
       <property-class>String</property-class>
-      <value>#{contextPath}/images/</value>
+      <value>#{contextPath}/images/1/</value>
     </managed-property>
     <managed-property>
       <property-name>page_prefix</property-name>
       <property-class>String</property-class>
-      <value>#{contextPath}/wikis/view/</value>
-    </managed-property>
-    <managed-property>
-      <property-name>page_prefix</property-name>
-      <property-class>String</property-class>
-      <value>#{contextPath}/wikis/view/</value>
+      <value>#{contextPath}/wikis/view/1/</value>
     </managed-property>
   </managed-bean>
 

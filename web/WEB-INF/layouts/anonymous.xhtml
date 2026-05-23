@@ -7,11 +7,13 @@
         xmlns:h="http://java.sun.com/jsf/html"><h:doctype rootElement="html"/>
 <html xmlns="http://www.w3.org/1999/xhtml" lang="fr">
 <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta charset="UTF-8"/>
+    <meta name="generator" content="AWA 2.6.0"/>
     <meta name="viewport" content="width=device-width,initial-scale=1"/>
     <!-- DYNAMO-MERGE-START link=#{contextPath}/css/adafr-1.css -->
     <link media="screen" type="text/css" rel="stylesheet" href="#{contextPath}/css/bootstrap.min.css"/>
     <link media="screen" type="text/css" rel="stylesheet" href="#{contextPath}/css/grids/fluid_grid.css"/>
+    <link media="screen" type="text/css" rel="stylesheet" href="#{contextPath}/css/_variables.css"/>
     <link media="screen" type="text/css" rel="stylesheet" href="#{contextPath}/css/asf.css"/>
     <link media="screen" type="text/css" rel="stylesheet" href="#{contextPath}/css/awa.css"/>
     <link media="screen" type="text/css" rel="stylesheet" href="#{jquery.uiCssPath}/jquery-ui.structure.css"/>
@@ -30,21 +32,27 @@
     <!-- DYNAMO-MERGE-END -->
     <link rel="icon" type="image/png" sizes="32x32" href="#{contextPath}/images/favicon-32x32.png"/>
     <link rel="icon" type="image/png" sizes="16x16" href="#{contextPath}/images/favicon-16x16.png"/>
+    <link rel="icon" href="#{contextPath}/favicon.ico"/>
+    <link rel="me" href="https://bsky.app/profile/adafrance.bsky.social"/>
     <ui:insert name="pageHeader"/>
-    <title><h:outputText value="#{title}"/></title>
+    <title>#{title}</title>
 </head>
 <body class="#{not empty pageStyle ? pageStyle : 'page-news'}">
 
 <!-- Top header with user account -->
-<ui:include src="top-bar.xhtml"/>
-
+<header>
+  <ui:include src="top-bar.xhtml"/>
+  <ui:insert name="pageNav"/>
+</header>
 <main>
     <ui:insert name="pageBody"/>
 </main>
+
 <ui:include src="footer.xhtml"/>
 
 <ui:insert name="pageScript"/>
 <util:flush/>
+
 <!--DEV_START-->
 <ui:debug/>
 <!--DEV_END-->

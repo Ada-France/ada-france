@@ -28,6 +28,12 @@
         <f:metadata>
             <f:viewAction action='#{wikiView.load}'/>
         </f:metadata>
+        <ui:include src="/WEB-INF/meta-page.xhtml">
+            <ui:param name="pageUrl" value="#{initParam['app_url_base']}/wikis/view/#{wikiView.wiki_id}/#{wikiView.name}"/>
+            <ui:param name="pageDescription" value="Association francophone des utilisateurs du langage de programmation Ada. Actualités, ressources et événements."/>
+            <ui:param name="pageAuthor" value="#{wikiView.author}"/>
+            <ui:param name="pageDate" value="#{wikiView.date}"/>
+        </ui:include>
     </ui:define>
 
     <!-- Main page body -->
@@ -42,12 +48,14 @@
         <ui:include src="views/page-view.xhtml"/>
       </h:panelGroup>
       <h:panelGroup rendered="#{not user.isLogged}">
+          <div class='awa-columns'>
         <div class='awa-grid-9'>
           <ui:include src="page-view.xhtml"/>
         </div>
         <div class='awa-grid-3 blog-post-info'>
           <ui:include src="/blogs/lists/post-info.xhtml"/>
         </div>
+          </div>
       </h:panelGroup>
     </ui:define>
 </ui:composition>
