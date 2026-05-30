@@ -17,7 +17,7 @@ Un nouvel article a été publié par #{event.author} sur le site Ada France:
 
 <awa:wiki value="#{event.summary}" format="#{event.format}" output="text"/>
 
-Lien: #{initParam['app_url_base']}/blogs/post.html?post=#{event.uri}
+Lien: #{initParam['app_url_base']}/blogs/posts/#{event.uri}
 
 L'équipe Ada-France
 </ui:define>
@@ -26,7 +26,7 @@ L'équipe Ada-France
   Un nouvel article a été publié par #{event.author} sur le site Ada France:
 </p>
 <p>
-  <a href="#{initParam['app_url_base']}/blogs/post.html?post=#{event.uri}">#{event.title}</a>
+  <a href="#{initParam['app_url_base']}/blogs/posts/#{event.uri}">#{event.title}</a>
 </p>
 <blockquote style="font-style: italic;">
   <awa:wiki value="#{event.summary}" format="#{event.format}"/>

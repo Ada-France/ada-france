@@ -94,7 +94,7 @@
                   <c:otherwise>
                     <h3>#{blogMsg.blog_add_comment}</h3>
                     #{blogMsg.blog_sign_in_add_comment}
-                    <a id="awa-login" rel="nofollow" href="#{contextPath}/auth/login.html?redirect=#{contextPath}/blogs/post.html%3Fpost%3D#{util:urlEncode(post.uri)}%23comment-add">#{blogMsg.blog_sign_in_label}</a>
+                    <a id="awa-login" rel="nofollow" href="#{contextPath}/auth/login.html?redirect=#{contextPath}/blogs/posts/#{util:urlEncode(post.uri)}%23comment-add">#{blogMsg.blog_sign_in_label}</a>
                   </c:otherwise>
                 </c:choose>
               </h:panelGroup>
@@ -108,15 +108,15 @@
     </ui:define>
 
     <ui:define name="pageScript">
-        <script type="text/javascript" src="#{contextPath}/js/highlight.pack.js"></script>
+        <script src="#{contextPath}/js/highlight.pack.js"></script>
         <script>hljs.initHighlightingOnLoad();</script>
         <c:if test="#{user.isLogged}">
-          <script type="text/javascript" src="#{jquery.path}"></script>
-          <script type="text/javascript" src="#{jquery.uiPath}core.js"></script>
-          <script type="text/javascript" src="#{jquery.uiPath}widget.js"></script>
-          <script type="text/javascript" src="#{contextPath}/js/asf.js"></script>
-          <script type="text/javascript" src="#{contextPath}/js/asf-message.js"></script>
-          <script type="text/javascript" src="#{contextPath}/js/awa.js"></script>
+          <script src="#{jquery.path}"></script>
+          <script src="#{jquery.uiPath}core.js"></script>
+          <script src="#{jquery.uiPath}widget.js"></script>
+          <script src="#{contextPath}/js/asf.js"></script>
+          <script src="#{contextPath}/js/asf-message.js"></script>
+          <script src="#{contextPath}/js/awa.js"></script>
         </c:if>
     </ui:define>
 
