@@ -1,13 +1,6 @@
 User-agent: *
-Disallow: *.rpm
-Disallow: *.exe
-Disallow: *.gz
+Sitemap: https://www.ada-france.org/sitemap.xml
+Allow: /
 Disallow: /adafr/storages/*
-
-User-agent: SemrushBot
-Disallow: /
-
-User-agent: SemrushBot-SA
-Disallow: /
 
 

@@ -255,9 +255,7 @@ dl.adafr-version dd {
 }
 #subscribe-steps li {
     float: left;
-    padding: 0.5em;
-    padding-right: 1em;
-    padding-top: 0;
+    padding: 0 1em 0.5em 0.5em;
     width: 20%;
     height: 1.5em;
     text-align: center;
@@ -343,7 +341,7 @@ dl.adafr-version dd {
     background: url(../images/ada-france-icon.png) no-repeat;
     height: 32px;
 }
-.adafr-MEMBER_ADA_EUROPE .member-status {
+.adafr-MEMBER_ADA_EUROPE .member-status, .adafr-MEMBER_ADA_USER_SOCIETY .member-status {
     background: url(../images/ada-europe-icon.png) no-repeat;
     height: 32px;
 }
@@ -355,10 +353,9 @@ dl.adafr-member-inactive input {
 }
 .adafr-expired {
     margin-left: 100px;
-    background: url(../images/icon-expired-32.png) no-repeat;
     height: 32px;
     width: 32px;
-    background-position: 0 -5px;
+    background: url(../images/icon-expired-32.png) no-repeat 0 -5px;
 }
 .adafr-member-expiration .adafr-expired {
     margin-left: 5px;
@@ -457,7 +454,10 @@ div.blog-post div.post-title h2 a:hover {
     color: #337ab7;
 }
 div.blog-post div.post-title {
-    border-color: #333;
+        border-color: #333;
+}
+div.blog-post-tag-info {
+    border: none;
 }
 div.post-text {
     font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
@@ -481,11 +481,10 @@ pre {
 div.blog-post-tag-info, div.blog-post-info h2 {
     width: 100%;
     float: left;
-    background-color: #0043a1;
     color: #fff;
     padding: 0.5em;
     font-weight: bold;
-    background: linear-gradient(to right,#0043a1,#4477cc);
+    background: #0043a1 linear-gradient(to right, #0043a1, #4477cc);
 }
 .blog-post-info nav {
     float: left;
@@ -541,18 +540,13 @@ ul.openid-invite li {
 .adafr-block h3 {
     text-align: center;
 }
-.adafr-disqus {
-    float: left;
-    margin-top: 5em;
-    width: 100%;
-}
 @media (max-width: 768px) {
-  .awa-side-nav {
-    top: 0;
-  }
-  #awa-hdr {
-    height: auto;
-  }
+    .awa-side-nav {
+        top: 0;
+    }
+    #awa-hdr {
+        height: auto;
+    }
 }
 @media screen and (max-width: 600px) {
     @-ms-viewport { width: 320px; }
@@ -587,36 +581,46 @@ ul.openid-invite li {
     .awa-side-nav {
         width: calc(100% - 50px);
     }
+
     .navbar-right {
         margin-right: 0;
         float: right;
         width: 150px;
     }
+
     #nav-contact-li {
         display: none;
     }
+
     .col-md-6 {
         float: left;
     }
+
     .col-md-3 {
         margin-top: 1em;
     }
+
     .tagedit-list li.tagedit-listelement {
         float: right;
     }
+
     .adafr-block {
         width: 90%;
     }
+
     .navbar .navbar-brand {
         padding: 8px 8px;
     }
+
     #nav-contact-footer {
         display: block;
     }
+
     ul.awa-pagination li {
         margin-left: 5%;
         margin-right: 5%;
     }
+
     #subscribe-validate, #subscribe-mode {
         padding-top: 20px;
     }
