@@ -9,6 +9,7 @@
     <meta property="og:url" content="#{pageUrl}"/>
     <meta property="og:title" content="#{util:escapeJavaScript(title)}"/>
     <meta property="og:site_name" content="#{initParam['app_name']}"/>
+    <meta property="og:description" content="#{util:escapeJavaScript(pageDescription)}"/>
     <h:panelGroup rendered="#{not empty post.image}">
       <meta property="og:image" content="#{initParam['app_url_domain']}#{post.image}"/>
       <meta name="twitter:image" content="#{initParam['app_url_domain']}#{post.image}"/>
