@@ -19,7 +19,7 @@ CLEAN_FILES= \
   awa/plugins/awa-*/obj
 
 DYNAMO=alr exec -- dynamo
-BUILD_COMMAND=alr build -- -XSOCKET=openssl
+BUILD_COMMAND=alr --non-interactive build -- -XSOCKET=openssl
 HAVE_SETUP=yes
 
 # Model generation arguments with Dynamo
